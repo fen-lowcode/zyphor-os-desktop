@@ -1,9 +1,20 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u30",
-    date: "Updated On: July 17, 2026 @ 07:01 PM",
+    version: "2.2.1-ada-lovelace-lts-u31",
+    date: "Updated On: July 24, 2026 @ 08:08 PM",
 
     sections: [
+        {
+            "title": "📸 Screenshot Tool Update",
+            "items": [
+                "Removed Flameshot from the default Zyphor OS software stack.",
+                "Replaced Flameshot with Ksnip as the default screenshot and screen capture application.",
+                "Added Ksnip to the default Zyphor OS package dependencies.",
+                "Improved screenshot capture and annotation capabilities with Ksnip.",
+                "Updated the Zyphor OS package configuration to prevent conflicts between Ksnip and Flameshot.",
+                "Users upgrading from previous Zyphor OS releases will transition from Flameshot to Ksnip."
+            ]
+        },
         {
             "title": "✨ Profile Management Improvements",
             "items": [

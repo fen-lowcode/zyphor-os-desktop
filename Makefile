@@ -128,35 +128,26 @@ status:
 	git status
 
 add:
-	git add DOCUMENTATION/PENDINGS.txt
-	git commit -m "docs: updated pending documentation"
+	git add pkg/v2/updater/updates/DEBIAN/control
+	git commit -m "chore: updated zyphor updates package control"
 
-	git add Makefile
-	git commit -m "chore: modified Makefile"
+	git add pkg/v2/updater/zor/DEBIAN/control
+	git commit -m "chore: updated zyphor updater package control"
 
-	git add pkg/v2/zywelcome/init
-	git commit -m "chore: updated zywelcome init script"
+	git add pkg/v2/updater/zor/DEBIAN/postinst
+	git commit -m "chore: updated zyphor updater postinst script"
 
-	git add pkg/v2/zywelcome/main.cpp
-	git commit -m "feat: updated zywelcome application"
+	git add pkg/v2/updater/zwn/DEBIAN/control
+	git commit -m "chore: updated zyphor whats new package control"
 
-	git add pkg/v2/zywelcome/zywelcome/DEBIAN/control
-	git commit -m "chore: updated zywelcome package control"
+	git add pkg/v2/updater/zwn/usr/share/zyphor-whats-new/release.js
+	git commit -m "feat: updated zyphor whats new release notes"
 
-	git add pkg/v2/zywelcome/zywelcome/DEBIAN/postinst
-	git commit -m "chore: updated zywelcome postinst script"
+	git add DOCUMENTATION/overview.xlsx
+	git commit -m "docs: added documentation overview"
 
-	git add pkg/v2/zywelcome/zywelcome/usr/bin/zywelcome
-	git commit -m "feat: updated zywelcome executable"
-
-	git add pkg/v2/zywelcome/zywelcome/usr/share/zywelcome/index.php
-	git commit -m "feat: updated zywelcome welcome page"
-
-	git add pkg/v2/zywelcome/zywelcome/DEBIAN/postrm
-	git commit -m "feat: added zywelcome postrm script"
-
-	git add pkg/v2/zywelcome/zywelcome/usr/local/
-	git commit -m "feat: added zywelcome local resources"
+	git rm DOCUMENTATION/.~lock.overview.xlsx#
+	git commit -m "chore: removed temporary LibreOffice lock file"
 
 	git add Makefile
 	git commit -m "build: update repository automation"
@@ -180,17 +171,17 @@ release:
 # 	zyphor build package pkg/v2/updater/zor
 # 	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
 
-# 	zyphor build package pkg/v2/updater/zwn
-# 	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
+	zyphor build package pkg/v2/updater/zwn
+	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
-	zyphor build package pkg/v2/zywelcome/zywelcome
-	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
+# 	zyphor build package pkg/v2/zywelcome/zywelcome
+# 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
 
 # 	zyphor build package pkg/v2/zylearn/zylearn
 # 	mv pkg/v2/zylearn/zylearn.deb zylearn.deb
 
-# 	zyphor build package pkg/updater/updates
-# 	mv pkg/updater/updates.deb zyphor-updates.deb
+# 	zyphor build package pkg/v2/updater/updates
+# 	mv pkg/v2/updater/updates.deb zyphor-updates.deb
 
 # 	zyphor build package pkg/v2/zcli
 # 	mv pkg/v2/zcli.deb zyphor-cli.deb
@@ -200,7 +191,7 @@ release:
 
 # 	---
 
-# 	mv ./*.deb ../zyphor-os.github.io/v2-ada-lovelace/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/v2-ada-lovelace/pool/main/z --verbose
 
 # BUILD AUTOMATION
 

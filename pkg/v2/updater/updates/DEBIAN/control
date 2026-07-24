@@ -1,5 +1,5 @@
 Package: zyphor-updates
-Version: 7.0.0-r1-stable-release
+Version: 8.0.0-r8-stable-release
 Section: utils
 Priority: optional
 Architecture: all
@@ -29,12 +29,14 @@ Depends: zyphor-os-release,
  guvcview,
  libreoffice,
  vlc,
- flameshot,
  drawing,
  simplescreenrecorder,
  ufw,
+ ksnip,
  zysh,
  zyphor-whats-new,
  zyphor-repo-config
+Conflicts: flameshot
+Replaces: flameshot
 Maintainer: Mark Jason P. Espelita
 Description: Zyphor OS Updates

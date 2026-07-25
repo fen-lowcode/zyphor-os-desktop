@@ -1,5 +1,0 @@
-# ----------------
-# Virtualization (QEMU optimized)
-# ----------------
-qemu-guest-agent
-spice-vdagent

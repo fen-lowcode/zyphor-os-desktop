@@ -35,4 +35,43 @@ Other notes
 - catchy OS method 
 - fedora installer method 
 
-LISTA ko lang para di maka limutan
+LISTA ko lang para di maka limutaon
+
+- Core OS Department (me)
+base system (iso extract)
+kernel debugging testing
+initrd and initrd-gtk installer
+livemode debugging
+
+- Package Ecosystem Department
+.deb packaging
+testing
+publishing
+versioning
+
+===============================
+
+- QA & Security Department
+testing hardware
+testing virtual machine
+security of packages
+
+- Release Department
+iso builds
+release notes
+fb post generation and scheduling
+excel inventory
+
+- Documentation & Social Media Department
+website
+fb page posts
+
+===============================
+
+- Community Department
+educational
+invitation
+communication
+
+- Product & Design
+designs (wallpapers, screen savers, file icons, logo)

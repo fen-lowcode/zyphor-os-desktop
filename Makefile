@@ -129,24 +129,21 @@ status:
 
 add:
 
-	git add -u assets-xfce4/
-	git commit -m "chore: removed legacy XFCE assets"
+	git add pkg/v2/zycamera-launcher/init
+	git commit -m "chore: updated zy camera launcher init script"
 
-	git add -u defaults/
-	git commit -m "chore: removed legacy default configuration"
+	git add pkg/v2/zycamera-launcher/main.cpp
+	git commit -m "feat: updated zy camera launcher application"
 
-	git add -u docs/
-	git commit -m "docs: removed legacy documentation"
+	git add pkg/v2/zycamera-launcher/zycamera-launcher/DEBIAN/control
+	git commit -m "chore: updated zy camera launcher package control"
 
-	git add -u drivers/
-	git commit -m "chore: removed legacy driver documentation"
+	git add pkg/v2/zycamera-launcher/zycamera-launcher/DEBIAN/postinst
+	git commit -m "chore: updated zy camera launcher postinst script"
 
-	git add -u firmwares/
-	git commit -m "chore: removed legacy firmware documentation"
-
-	git add -u wallpapers/
-	git commit -m "chore: removed legacy wallpaper packages"
-
+	git add pkg/v2/zycamera-launcher/zycamera-launcher/usr/bin/zycamera-launcher
+	git commit -m "feat: added zy camera launcher executable
+	"
 	git add Makefile
 	git commit -m "build: update repository automation"
 

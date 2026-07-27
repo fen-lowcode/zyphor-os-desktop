@@ -30,8 +30,25 @@ class OS_INFO_FETCHER {
 
 public:
 
+    OS_INFO_FETCHER() : file(OS_INFO) {
+
+        if(!file.is_open()) {
+            std::cerr << "Failed to open " << OS_INFO;
+            exit(-1);
+        }
+    }
+
+    ~OS_INFO_FETCHER() {
+       file.close();  
+   }
+
     // Class member responsible for fetching each info individually from /etc/os-release
     std::pair<std::string, std::string> get_os_info(std::string key);
 
 private:
+
+   
+    const std::string OS_INFO = "/etc/os-release";
+    std::ifstream file;
+
 };

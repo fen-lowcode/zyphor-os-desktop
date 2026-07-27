@@ -3,14 +3,6 @@
 std::pair<std::string, std::string> 
 OS_INFO_FETCHER::get_os_info(std::string key)  {
 
-    // Reset file pointer to beginning
-    file.clear();
-    file.seekg(0);  
-    
-    // reads and dumps the data written inside /etc/os-release yoyo
-    std::stringstream ss; 
-    ss << file.rdbuf();
-    std::string buffer = ss.str();
 
     // finds the specific keyword in /etc/os-release for example "PRETTY_NAME" inside the string dump
     size_t start_buffer = buffer.find(key);

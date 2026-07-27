@@ -30,12 +30,16 @@ class OS_INFO_FETCHER {
 
 public:
 
-    OS_INFO_FETCHER() : file(OS_INFO) {
+    OS_INFO_FETCHER() : file(OS_INFO), buffer("") {
 
         if(!file.is_open()) {
             std::cerr << "Failed to open " << OS_INFO;
             exit(-1);
         }
+
+        std::stringstream ss; 
+        ss << file.rdbuf();
+        buffer = ss.str();
     }
 
     ~OS_INFO_FETCHER() {
@@ -50,5 +54,6 @@ private:
    
     const std::string OS_INFO = "/etc/os-release";
     std::ifstream file;
+    std::string buffer;
 
 };

@@ -128,22 +128,18 @@ status:
 	git status
 
 add:
-
-	git add pkg/v2/zycamera-launcher/init
-	git commit -m "chore: updated zy camera launcher init script"
-
-	git add pkg/v2/zycamera-launcher/main.cpp
-	git commit -m "feat: updated zy camera launcher application"
-
 	git add pkg/v2/zycamera-launcher/zycamera-launcher/DEBIAN/control
 	git commit -m "chore: updated zy camera launcher package control"
 
 	git add pkg/v2/zycamera-launcher/zycamera-launcher/DEBIAN/postinst
-	git commit -m "chore: updated zy camera launcher postinst script"
+	git commit -m "fix: updated zy camera launcher postinst script"
 
-	git add pkg/v2/zycamera-launcher/zycamera-launcher/usr/bin/zycamera-launcher
-	git commit -m "feat: added zy camera launcher executable
-	"
+	git rm pkg/v2/zycamera-launcher/zycamera-launcher/usr/bin/utility
+	git commit -m "chore: removed obsolete utility executable"
+
+	git add pkg/v2/zycamera-launcher/zycamera-launcher/usr/share/
+	git commit -m "feat: added zy camera launcher shared resources"
+	
 	git add Makefile
 	git commit -m "build: update repository automation"
 
@@ -166,8 +162,8 @@ release:
 # 	zyphor build package pkg/v2/updater/zor
 # 	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
 
-	zyphor build package pkg/v2/updater/zwn
-	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
+#	zyphor build package pkg/v2/updater/zwn
+#	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/zywelcome/zywelcome
 # 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
@@ -183,6 +179,9 @@ release:
 
 # 	zyphor build package pkg/v2/zysh
 # 	mv pkg/v2/zysh.deb zysh.deb
+		
+	zyphor build package pkg/v2/zycamera-launcher/zycamera-launcher
+	mv pkg/v2/zycamera-launcher/zycamera-launcher.deb zycamera-launcher.deb
 
 # 	---
 

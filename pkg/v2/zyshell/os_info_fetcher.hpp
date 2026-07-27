@@ -11,6 +11,8 @@
 // that's the reason why i'll turn each feature of show_os_screen() from the legacy code ./legacy C/shell.c
 // into a modular parts
 
+
+// just a lamda function designed to remove quoates in a string
 inline auto remove_quotes = [](std::string_view data) {
     
     std::stringstream output;

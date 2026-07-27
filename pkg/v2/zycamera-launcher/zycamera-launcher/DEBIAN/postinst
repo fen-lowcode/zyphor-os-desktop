@@ -1,5 +1,7 @@
 #!/bin/sh
 set -e
 
+# Make installed files and directories executable/readable
+chmod -R 555 /usr/share/zyphor-camera
 
 exit 0

@@ -2,6 +2,6 @@
 set -e
 
 # Make installed files and directories executable/readable
-chmod -R 555 /usr/share/zyphor-camera
+chmod -R 555 /usr/bin/zycamera-launcher
 
 exit 0

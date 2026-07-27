@@ -1,5 +1,5 @@
 Package: zycamera-launcher
-Version: 1.0.0
+Version: 1.0.0-r1-stable-release
 Section: utils
 Priority: optional
 Architecture: all

@@ -25,7 +25,7 @@ Old Versions
 **Creator:** Mark Jason Penote Espelita, the Zyphor OS Community, and Contributors  
 **Facebook Account:** https://www.facebook.com/mark.jason.penote.espelita  
 **Facebook Page:** https://www.facebook.com/profile.php?id=61573426796629  
-**Website:** https://zyphor-os.github.io  
+**Website:** https://zyphor-os.vercel.app  
 **Email:** markjasonespelita02@gmail.com  
 **Contact:** 09978972884 | 09203454006  
 **Our Philosophy:** [ZyphorOSPhilosophy.docx](https://github.com/markjasonespelita/zyphor_os/blob/master/DOCUMENTATION/ZyphorOSPhilosophy.docx)  
@@ -40,7 +40,7 @@ Zyphor OS Minimal - https://github.com/zyphor-os/zyphor-os-minimal
 
 Zyphor OS Documentation - https://github.com/zyphor-os/zyphor-os.github.io
 
-Website - https://zyphor-os.github.io
+Website - https://zyphor-os.vercel.app
 
 ---
 

@@ -64,5 +64,6 @@ https://github.com/JanRey36
 
 - Removed AI image watermark in /usr/share/backgrounds/zyphor-grub-bootloader-screensavers/zyphor-full.png
 - Removed AI image watermark in https://zyphor-os.github.io/assets/images/logo.png
+- Creator and Lead Maintainer of Zyphor OS Website and Documentation
 
 ---

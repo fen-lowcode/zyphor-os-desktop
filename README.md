@@ -4,7 +4,7 @@
 
 Download the latest **Zyphor OS ISO** and get started in minutes.
 
-👉 **[Click Here To Download Zyphor Operating System ISO (v2.2.1-2026.08.01-r25)](https://drive.google.com/uc?export=download&id=1OUQJLmKlougYULYgLO4mbCzz8FL4aw3X)** - Main lightweight desktop release  
+👉 **[Click Here To Download Zyphor Operating System ISO (v2.2.1-2026.08.03-r26)](https://drive.google.com/uc?export=download&id=1TaIzRAvV9pNmVTCcXXFkCbxTvsq2w38q)** - Main lightweight desktop release  
 
 👉 **[Click Here To Download Zyphor Horizon ISO (v1.0.0-beta-2026.06.14-r1)](https://drive.google.com/uc?export=download&id=1eRYZQN7W-4aB1hp6SXclQwdO8Qzh31Ko)** - Experimental / futuristic preview release  
 

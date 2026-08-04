@@ -149,7 +149,8 @@ case "$CATEGORY" in
     source /usr/lib/zyphor/setup/dev
     source /usr/lib/zyphor/setup/theme
     source /usr/lib/zyphor/setup/wine
-
+    source /usr/lib/zyphor/setup/pentest
+    
     case "$ACTION" in
       dev)
         zyphor_setup_dev "$@"
@@ -159,6 +160,9 @@ case "$CATEGORY" in
       ;;
       wine)
         zyphor_setup_wine
+      ;;
+      pentest)
+        zyphor_setup_pentest "$@"
       ;;
       *)
         error "setup $ACTION"

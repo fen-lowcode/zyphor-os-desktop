@@ -128,17 +128,26 @@ status:
 	git status
 
 add:
-	git add pkg/v2/zycamera-launcher/zycamera-launcher/DEBIAN/control
-	git commit -m "chore: updated zy camera launcher package control"
+	git add pkg/v2/updater/zor/DEBIAN/control
+	git commit -m "chore: updated zyphor updater package control"
 
-	git add pkg/v2/zycamera-launcher/zycamera-launcher/DEBIAN/postinst
-	git commit -m "fix: updated zy camera launcher postinst script"
+	git add pkg/v2/updater/zor/DEBIAN/postinst
+	git commit -m "chore: updated zyphor updater postinst script"
 
-	git rm pkg/v2/zycamera-launcher/zycamera-launcher/usr/bin/utility
-	git commit -m "chore: removed obsolete utility executable"
+	git add pkg/v2/updater/zwn/DEBIAN/control
+	git commit -m "chore: updated zyphor whats new package control"
 
-	git add pkg/v2/zycamera-launcher/zycamera-launcher/usr/share/
-	git commit -m "feat: added zy camera launcher shared resources"
+	git add pkg/v2/updater/zwn/usr/share/zyphor-whats-new/release.js
+	git commit -m "feat: updated zyphor whats new release notes"
+
+	git add pkg/v2/zcli/DEBIAN/control
+	git commit -m "chore: updated zyphor CLI package control"
+
+	git add pkg/v2/zcli/usr/lib/zyphor/setup/pentest
+	git commit -m "feat: updated zyphor pentest setup"
+
+	git add pkg/v2/zcli/usr/local/bin/zyphor
+	git commit -m "feat: updated zyphor CLI"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"
@@ -159,11 +168,11 @@ switch:
 
 release:
 
-# 	zyphor build package pkg/v2/updater/zor
-# 	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
+	zyphor build package pkg/v2/updater/zor
+	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
 
-#	zyphor build package pkg/v2/updater/zwn
-#	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
+	zyphor build package pkg/v2/updater/zwn
+	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/zywelcome/zywelcome
 # 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
@@ -174,14 +183,14 @@ release:
 # 	zyphor build package pkg/v2/updater/updates
 # 	mv pkg/v2/updater/updates.deb zyphor-updates.deb
 
-# 	zyphor build package pkg/v2/zcli
-# 	mv pkg/v2/zcli.deb zyphor-cli.deb
+	zyphor build package pkg/v2/zcli
+	mv pkg/v2/zcli.deb zyphor-cli.deb
 
 # 	zyphor build package pkg/v2/zysh
 # 	mv pkg/v2/zysh.deb zysh.deb
 		
-	zyphor build package pkg/v2/zycamera-launcher/zycamera-launcher
-	mv pkg/v2/zycamera-launcher/zycamera-launcher.deb zycamera-launcher.deb
+# 	zyphor build package pkg/v2/zycamera-launcher/zycamera-launcher
+# 	mv pkg/v2/zycamera-launcher/zycamera-launcher.deb zycamera-launcher.deb
 
 # 	---
 

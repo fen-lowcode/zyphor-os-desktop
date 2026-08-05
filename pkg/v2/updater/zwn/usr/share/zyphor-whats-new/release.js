@@ -1,11 +1,17 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u32",
-    date: "Updated On: August 04, 2026 @ 10:14 AM",
+    version: "2.2.1-ada-lovelace-lts-u33",
+    date: "Updated On: August 05, 2026 @ 08:57 AM",
 
     sections: [
         {
-            "title": "🛡️ Pentest Toolkit Setup - Latest",
+            "title": "OS Release File Update",
+            "items": [
+                "Change OS Release: HOME_URL, SUPPORT_URL, BUG_REPORT_URL"
+            ]
+        },
+        {
+            "title": "🛡️ Pentest Toolkit Setup",
             "items": [
                 "Added a new `zyphor setup pentest` command for installing security testing tools by category.",
                 "Introduced targets: recon, web, wireless, passwords, sniffing, forensics, exploitation, and full.",

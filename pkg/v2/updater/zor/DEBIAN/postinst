@@ -3,16 +3,16 @@ set -e
 
 # Write Zyphor identity file
 cat > /usr/lib/os-release << 'EOF'
-PRETTY_NAME="Zyphor OS v2.2.1-ada-lovelace-lts-u32"
+PRETTY_NAME="Zyphor OS v2.2.1-ada-lovelace-lts-u33"
 NAME="Zyphor OS GNU/Linux"
 VERSION_ID="2.2.1-ada-lovelace-lts"
 VERSION="2.2.1-ada-lovelace-lts"
 VERSION_CODENAME=zyphor-os
 ID=zyphor-os
 ID_LIKE=debian
-HOME_URL="https://www.facebook.com/profile.php?id=61573426796629"
-SUPPORT_URL="https://www.facebook.com/mark.jason.penote.espelita"
-BUG_REPORT_URL="https://m.me/100009131763374"
+HOME_URL="https://zyphor-os.vercel.app"
+SUPPORT_URL="https://www.facebook.com/profile.php?id=61573426796629"
+BUG_REPORT_URL="https://www.facebook.com/groups/1297494746772755"
 EOF
 
 chmod 644 /usr/lib/os-release

@@ -6,7 +6,13 @@
 #include <string>
 #include <vector>
 
+// needed for posix_spawn()
+#include <spawn.h>
+#include <sys/wait.h>
+
 namespace fs = std::filesystem;
+extern char **environ;
+
 
 const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
 
@@ -235,16 +241,34 @@ int main(int argc, char *argv[])
 
         std::cout << "Extracting ISO...\n";
 
-        std::string cmd =
-            "7z x \"" +
-            file.string() +
-            "\" -o\"" +
-            tmp.string() +
-            "\" >/dev/null";
 
-        if (system(cmd.c_str()) != 0)
+        std::string file_str = file.string();
+        std::string tmp_str  = "-o" + tmp.string(); // 7z expects -o immediately followed
+
+
+        pid_t pid;
+
+        std::vector<char *> cmd = {
+            const_cast<char *>("7z"),
+             const_cast<char *>("x"),
+             const_cast<char *> (file.c_str()),
+             const_cast<char *>(tmp_str.c_str()),
+             nullptr
+        }; 
+
+        if (posix_spawn(&pid, "/usr/bin/7z", NULL, NULL, cmd.data(), environ) != 0)
         {
-            std::cerr << "Failed to extract ISO.\n";
+            std::cerr << "Failed to start extraction process ISO.\n";
+            fs::remove_all(tmp);
+            return 1;
+        }
+
+
+        // 4. MUST wait for 7z to finish, otherwise it runs asynchronously 
+        int status;
+        if (waitpid(pid, &status, 0) == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) 
+        {
+            std::cerr << "7z extraction failed during execution.\n";
             fs::remove_all(tmp);
             return 1;
         }

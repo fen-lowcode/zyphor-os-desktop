@@ -80,11 +80,11 @@ devinit:
 
 devbuild:
 	@echo "\n--- UNMOUNTING ISO FILE READ ONLY MODE ---\n";
-	sudo umount extract/dev/pts
-	sudo umount extract/dev
-	sudo umount extract/proc
-	sudo umount extract/sys
-	sudo umount extract/run
+	@mountpoint -q extract/dev/pts && sudo umount extract/dev/pts || true
+	@mountpoint -q extract/dev     && sudo umount extract/dev     || true
+	@mountpoint -q extract/proc    && sudo umount extract/proc    || true
+	@mountpoint -q extract/sys     && sudo umount extract/sys     || true
+	@mountpoint -q extract/run     && sudo umount extract/run     || true
 	@echo "\n--- REMOVING OLD SQUASHFS FILE ---\n";
 	sudo rm -rf iso/live/filesystem.squashfs --verbose
 	@echo "\n--- REPACKAGING THE INITRD INSTALLERS ---\n";

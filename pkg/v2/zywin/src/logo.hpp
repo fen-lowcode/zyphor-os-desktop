@@ -1,8 +1,48 @@
 #pragma once
 #include <iostream>
 
+#define RESET       "\033[0m"
+#define BOLD        "\033[1m"
+#define CYAN        "\033[36m"
+#define DIM         "\033[2m"
+#define RED         "\033[31m"      
+#define BOLD_RED    "\033[1;31m"    
+#define BRIGHT_RED  "\033[91m"      
 
 const std::string ZYWIN_LOGO =            
+    DIM "              .................              \n" RESET
+    DIM "            .-.................              \n" RESET
+    DIM "            .-.. ..............              \n" RESET
+    DIM "            .-.. ..............              \n" RESET
+        "            .-.. ........." BRIGHT_RED "=##%*              \n" RESET
+        "            .-:. .......-" BRIGHT_RED "######              \n" RESET
+        "            :-" BRIGHT_RED  "#=:" RESET "...." BRIGHT_RED ":*########." RESET "     " CYAN "..:-=." RESET "  \n" RESET
+    CYAN "        :++++++++++****=" BRIGHT_RED "-------." CYAN " .:-----+=.  \n" RESET
+    CYAN "      +***+======++***##:::" BRIGHT_RED "----- " CYAN ".:---+++:   \n" RESET
+    CYAN "    .**+++******#######------=+..:--=++++.   \n" 
+    CYAN "   .*+::.....-=#+-=**----===+**:::=++=:*=    \n" RESET
+    BRIGHT_RED "             :-##==" CYAN "----===+**-::-+++.        \n" RESET
+    BRIGHT_RED "             .-+*-" CYAN "==-===+**-::-+++.          \n" RESET
+    BRIGHT_RED "              :-" CYAN  "==-++=+**:---+++.            \n" RESET
+    CYAN "            .-==:++=+*+---=+++.              \n"
+    "          .-++=++++**-=-=**=:.               \n"
+    "        .=++=**+:--===+**=*.                 \n"
+    "       -+++***..:===**+=+..           .:     \n"
+    "     .+**#**..:+++*****++======-------=:     \n"
+    "    .***##+..+++****#***++++++======++:      \n"
+    "   :***#*-.-+++****########******+++-.       \n"
+    "  .#####- :******+++####*******+=:.          \n" RESET
+    DIM "                     :::                     \n"
+    "                     :::                     \n"
+    "                    .-:::.                   \n" 
+    "                .....:::::::::..             \n"
+    "             :..........:::::::::.           \n"
+    "             .:--::::::::::::-:.             \n" RESET
+;
+
+
+
+const std::string UNCOLORED_ZYWIN_LOGO =            
     "              .................              \n"
     "            .-.................              \n"
     "            .-.. ..............              \n"

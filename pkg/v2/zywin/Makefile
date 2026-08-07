@@ -7,7 +7,7 @@ SRC := src/*.cpp
 
 all: $(TARGET)
 
-$(TARGET): src/main.cpp
+$(TARGET): 
 	mkdir -p $(BUILD)
 	$(COMPILER) $(CXXFLAGS) $(SRC) -o $@
 

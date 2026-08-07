@@ -67,7 +67,7 @@ inline void printHelper() {
     std::cerr << "  zywin installer.msi\n";
     std::cerr << "  zywin cleanup\n\n";
   
-}
+} 
 
 int main(int argc, char *argv[]) {
 

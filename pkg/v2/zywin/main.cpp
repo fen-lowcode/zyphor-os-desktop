@@ -10,25 +10,15 @@
 #include <spawn.h>
 #include <sys/wait.h>
 
+
 namespace fs = std::filesystem;
 extern char **environ;
 
 
 const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
 
-std::string getHome()
-{
-    const char *home = std::getenv("HOME");
 
-    if (!home)
-    {
-        std::cerr << "Unable to determine HOME directory.\n";
-        std::exit(1);
-    }
-
-    return home;
-}
-
+// ? i won't touch this
 std::string sanitizeName(const fs::path &file)
 {
     std::string name = file.stem().string();
@@ -56,13 +46,28 @@ std::string sanitizeName(const fs::path &file)
     return name;
 }
 
+
+// Generates a wine prefix directory
 fs::path getWinePrefix(const fs::path &file)
 {
-    return fs::path(getHome()) /
-           ".local/share/zywin/prefixes" /
-           sanitizeName(file);
+        
+    // ! Gets the value of the HOME directory variable
+    // ? i turned this into a lambda function since this is the only function that call getHomeDirectory
+    auto getHomeDirectory = []() {
+
+        const char *home = std::getenv("HOME");
+        if (!home) {
+            std::cerr << "Unable to determine HOME directory.\n";
+            std::exit(1);
+        }
+        return home;
+    };
+
+    return fs::path(getHomeDirectory()) / ".local/share/zywin/prefixes" / sanitizeName(file);
 }
 
+
+// Makes sure the the prefix exist by checking it's existence and then using wineboot if it's otherwise
 void ensureWinePrefix(const fs::path &prefix)
 {
     if (fs::exists(prefix))
@@ -73,11 +78,7 @@ void ensureWinePrefix(const fs::path &prefix)
     std::cout << "Creating Wine prefix:\n";
     std::cout << "  " << prefix << "\n\n";
 
-    std::string cmd =
-        "WINEPREFIX=\"" +
-        prefix.string() +
-        "\" wineboot >/dev/null 2>&1";
-
+    std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wineboot >/dev/null 2>&1";
     system(cmd.c_str());
 }
 
@@ -117,35 +118,30 @@ void cleanupExtracted()
 
 void runWine(const fs::path &exe, const fs::path &prefix)
 {
+
+     // ? ensures that the directory exists before executing wine on that prefix
     ensureWinePrefix(prefix);
 
-    std::string cmd =
-        "WINEPREFIX=\"" +
-        prefix.string() +
-        "\" wine \"" +
-        exe.string() +
-        "\"";
+    std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wine \"" + exe.string() + "\"";
 
-    std::cout << "\nLaunching:\n";
-    std::cout << cmd << "\n\n";
+    std::cout << "\nLaunching:\n"; std::cout << cmd << "\n\n";
 
+    // ! Dangerous system() shell execution prone to shell injection, this needs a fix
     system(cmd.c_str());
 }
 
 void runMSI(const fs::path &msi, const fs::path &prefix)
 {
+
+    // ? ensures that the directyr exists before executing wine on that prefix
     ensureWinePrefix(prefix);
 
-    std::string cmd =
-        "WINEPREFIX=\"" +
-        prefix.string() +
-        "\" wine msiexec /i \"" +
-        msi.string() +
-        "\"";
+    std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wine msiexec /i \"" + msi.string() + "\"";
 
     std::cout << "\nLaunching:\n";
     std::cout << cmd << "\n\n";
 
+     // ! Dangerous system() shell execution prone to shell injection, this needs a fix
     system(cmd.c_str());
 }
 
@@ -197,9 +193,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // extracts the extention from the input file
     std::string ext = file.extension().string();
-
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
 
     //------------------------------------------------------
     // EXE
@@ -218,7 +215,7 @@ int main(int argc, char *argv[])
 
     if (ext == ".msi")
     {
-        fs::path prefix = getWinePrefix(file);
+        fs::path prefix =  getWinePrefix(file);
 		runMSI(file, prefix);
         return 0;
     }
@@ -264,7 +261,7 @@ int main(int argc, char *argv[])
         }
 
 
-        // 4. MUST wait for 7z to finish, otherwise it runs asynchronously 
+        //  MUST wait for 7z to finish, otherwise it runs asynchronously 
         int status;
         if (waitpid(pid, &status, 0) == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) 
         {

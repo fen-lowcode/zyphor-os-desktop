@@ -9,20 +9,72 @@
 // needed for posix_spawn()
 #include <spawn.h>
 #include <sys/wait.h>
+#include <string.h>
 
 
-namespace fs = std::filesystem;
 extern char **environ;
 
+// seperate namespace for global variables to minimize clugginess
+namespace global_var {
+    const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
+}
 
-const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
+// Class Template dedicated to help anything to do with wine prefixes
+
+class WineHandler {
+
+public:
+
+    void runWine(const std::filesystem::path &file);
+
+private:
+
+    std::string sanitizeFileName(const std::filesystem::path &file);
+    std::filesystem::path getWinePrefix(const std::filesystem::path &file);
+    void ensureWinePrefix(const std::filesystem::path &prefix);
+};
 
 
-// ? i won't touch this
-std::string sanitizeName(const fs::path &file)
+// clean up tool for cleaning /tmp directory
+inline void cleanupExtracted() {
+   
+    if (!std::filesystem::exists("/tmp"))
+        return;
+
+    int removed = 0;
+
+    for (const auto &entry : std::filesystem::directory_iterator("/tmp"))
+    {
+        if (!entry.is_directory())
+            continue;
+
+        std::string name = entry.path().filename().string();
+
+        if (name.rfind(global_var::TMP_PREFIX, 0) == 0)
+        {
+            std::error_code ec;
+            std::filesystem::remove_all(entry.path(), ec);
+
+            if (!ec)
+                removed++;
+        }
+    }
+
+    if (removed > 0)
+    {
+        std::cout << "Removed "
+                  << removed
+                  << " extracted ISO director"
+                  << (removed == 1 ? "y" : "ies")
+                  << ".\n";
+    }
+}
+
+// This function has the same logic from it's former codebase i just placed it in a class
+std::string 
+WineHandler::sanitizeFileName(const std::filesystem::path &file)
 {
     std::string name = file.stem().string();
-
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
     for (char &c : name)
@@ -48,7 +100,7 @@ std::string sanitizeName(const fs::path &file)
 
 
 // Generates a wine prefix directory
-fs::path getWinePrefix(const fs::path &file)
+std::filesystem::path WineHandler::getWinePrefix(const std::filesystem::path &file)
 {
         
     // ! Gets the value of the HOME directory variable
@@ -63,110 +115,81 @@ fs::path getWinePrefix(const fs::path &file)
         return home;
     };
 
-    return fs::path(getHomeDirectory()) / ".local/share/zywin/prefixes" / sanitizeName(file);
+    // return a path which a premade wineprefix is made
+    return std::filesystem::path(getHomeDirectory()) / ".local/share/zywin/prefixes" / sanitizeFileName(file);
 }
 
 
 // Makes sure the the prefix exist by checking it's existence and then using wineboot if it's otherwise
-void ensureWinePrefix(const fs::path &prefix)
+void 
+WineHandler::ensureWinePrefix(const std::filesystem::path &prefix)
 {
-    if (fs::exists(prefix))
-        return;
 
-    fs::create_directories(prefix.parent_path());
+    // Checking for prefix / "system.reg" verifies that the Wine prefix is actually initialized and valid!
+
+    if ( std::filesystem::exists(prefix / "system.reg")) return;
+
 
     std::cout << "Creating Wine prefix:\n";
     std::cout << "  " << prefix << "\n\n";
 
     std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wineboot >/dev/null 2>&1";
-    system(cmd.c_str());
+    int status = system(cmd.c_str());
+
+    // checks if the WINEBOOT prefix is actually initialized by wineboot
+    if (status != 0) {
+        std::cerr << "Error: Failed to initialize Wine prefix at " << prefix << "\n";
+    }
 }
 
-void cleanupExtracted()
-{
-    if (!fs::exists("/tmp"))
-        return;
+// Revised runWine() to avoid shell injection by using posix_spawn() instead of system()
+void 
+WineHandler::runWine(const std::filesystem::path &file) {
+    std::filesystem::path prefix = getWinePrefix(file);
+    ensureWinePrefix(prefix);
 
-    int removed = 0;
+    pid_t pid;
 
-    for (const auto &entry : fs::directory_iterator("/tmp"))
-    {
-        if (!entry.is_directory())
-            continue;
+    // Build argv for wine
+    std::vector<char*> cmd = {
+        const_cast<char *>("wine"),
+        const_cast<char *>(file.c_str()),
+        nullptr
+    };
 
-        std::string name = entry.path().filename().string();
-
-        if (name.rfind(TMP_PREFIX, 0) == 0)
-        {
-            std::error_code ec;
-            fs::remove_all(entry.path(), ec);
-
-            if (!ec)
-                removed++;
+    // Build environment with WINEPREFIX
+    std::string winePrefix = "WINEPREFIX=" + prefix.string();
+    std::vector<char*> env;
+    
+    // copy the contents of winePrefix variable to env to set as the 6th argument for posix_spawn()
+    for (char **e = environ; *e != nullptr; ++e) {
+        if (strncmp(*e, "WINEPREFIX=", 11) != 0) {  // Skip old WINEPREFIX
+            env.push_back(*e);
         }
     }
 
-    if (removed > 0)
-    {
-        std::cout << "Removed "
-                  << removed
-                  << " extracted ISO director"
-                  << (removed == 1 ? "y" : "ies")
-                  << ".\n";
+    env.push_back(const_cast<char *>(winePrefix.c_str()));
+    env.push_back(nullptr);
+
+    std::cout << "Executing wine " << prefix << std::endl;
+ 
+    if (posix_spawn(&pid, "/usr/bin/wine", nullptr, nullptr, cmd.data(), env.data()) != 0) {
+        std::cerr << "Failed to spawn wine process.\n";
+        return;
+    }
+
+    int status;
+    waitpid(pid, &status, 0);
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+        std::cerr << "Wine execution failed.\n";
     }
 }
 
-void runWine(const fs::path &exe, const fs::path &prefix)
-{
 
-     // ? ensures that the directory exists before executing wine on that prefix
-    ensureWinePrefix(prefix);
+int main(int argc, char *argv[]) {
 
-    std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wine \"" + exe.string() + "\"";
+    WineHandler wh;
 
-    std::cout << "\nLaunching:\n"; std::cout << cmd << "\n\n";
-
-    // ! Dangerous system() shell execution prone to shell injection, this needs a fix
-    system(cmd.c_str());
-}
-
-void runMSI(const fs::path &msi, const fs::path &prefix)
-{
-
-    // ? ensures that the directyr exists before executing wine on that prefix
-    ensureWinePrefix(prefix);
-
-    std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wine msiexec /i \"" + msi.string() + "\"";
-
-    std::cout << "\nLaunching:\n";
-    std::cout << cmd << "\n\n";
-
-     // ! Dangerous system() shell execution prone to shell injection, this needs a fix
-    system(cmd.c_str());
-}
-
-std::vector<fs::path> findExecutables(const fs::path &dir)
-{
-    std::vector<fs::path> exes;
-
-    for (const auto &entry : fs::recursive_directory_iterator(dir))
-    {
-        if (!entry.is_regular_file())
-            continue;
-
-        std::string ext = entry.path().extension().string();
-
-        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-
-        if (ext == ".exe")
-            exes.push_back(entry.path());
-    }
-
-    return exes;
-}
-
-int main(int argc, char *argv[])
-{
     if (argc != 2)
     {
         std::cout << "Usage:\n\n";
@@ -177,144 +200,29 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::string arg = argv[1];
-
-    if (arg == "cleanup")
+    if (argv[1] == "cleanup")
     {
         cleanupExtracted();
         return 0;
     }
 
-    fs::path file(arg);
+    std::filesystem::path file(argv[1]);
 
-    if (!fs::exists(file))
+    if (!std::filesystem::exists(file))
     {
         std::cerr << "File not found.\n";
         return 1;
     }
 
-    // extracts the extention from the input file
+     // extracts the extention from the input file
     std::string ext = file.extension().string();
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-
-    //------------------------------------------------------
-    // EXE
-    //------------------------------------------------------
-
-    if (ext == ".exe")
-    {
-        fs::path prefix = getWinePrefix(file);
-		runWine(file, prefix);
-        return 0;
+    if (ext == ".exe") {
+        wh.runWine(file);
+    } else {
+        std::cout << "Work in Progress\n" << std::endl;
     }
 
-    //------------------------------------------------------
-    // MSI
-    //------------------------------------------------------
-
-    if (ext == ".msi")
-    {
-        fs::path prefix =  getWinePrefix(file);
-		runMSI(file, prefix);
-        return 0;
-    }
-
-    //------------------------------------------------------
-    // ISO
-    //------------------------------------------------------
-
-    if (ext == ".iso")
-    {
-        // Remove previous extractions first.
-        cleanupExtracted();
-
-        std::time_t now = std::time(nullptr);
-
-        fs::path tmp =
-            "/tmp/" + TMP_PREFIX + std::to_string(now);
-
-        fs::create_directories(tmp);
-
-        std::cout << "Extracting ISO...\n";
-
-
-        std::string file_str = file.string();
-        std::string tmp_str  = "-o" + tmp.string(); // 7z expects -o immediately followed
-
-
-        pid_t pid;
-
-        std::vector<char *> cmd = {
-            const_cast<char *>("7z"),
-             const_cast<char *>("x"),
-             const_cast<char *> (file.c_str()),
-             const_cast<char *>(tmp_str.c_str()),
-             nullptr
-        }; 
-
-        if (posix_spawn(&pid, "/usr/bin/7z", NULL, NULL, cmd.data(), environ) != 0)
-        {
-            std::cerr << "Failed to start extraction process ISO.\n";
-            fs::remove_all(tmp);
-            return 1;
-        }
-
-
-        //  MUST wait for 7z to finish, otherwise it runs asynchronously 
-        int status;
-        if (waitpid(pid, &status, 0) == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) 
-        {
-            std::cerr << "7z extraction failed during execution.\n";
-            fs::remove_all(tmp);
-            return 1;
-        }
-
-        auto exes = findExecutables(tmp);
-
-        if (exes.empty())
-        {
-            std::cerr << "No executable found.\n";
-            fs::remove_all(tmp);
-            return 1;
-        }
-
-        if (exes.size() == 1)
-        {
-            fs::path prefix = getWinePrefix(file);
-			runWine(exes[0], prefix);
-            return 0;
-        }
-
-        std::cout << "\nExecutables found:\n\n";
-
-        for (size_t i = 0; i < exes.size(); ++i)
-        {
-            std::cout
-                << (i + 1)
-                << ". "
-                << fs::relative(exes[i], tmp)
-                << '\n';
-        }
-
-        std::cout << "\nSelect an exe file: ";
-
-        int choice;
-        std::cin >> choice;
-
-        if (!std::cin ||
-            choice < 1 ||
-            choice > static_cast<int>(exes.size()))
-        {
-            std::cerr << "Invalid selection.\n";
-            return 1;
-        }
-
-        fs::path prefix = getWinePrefix(file);
-		runWine(exes[choice - 1], prefix);
-        return 0;
-    }
-
-    std::cerr << "Unsupported file type.\n";
-    return 1;
+    return 0;
 }

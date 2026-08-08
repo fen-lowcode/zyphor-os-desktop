@@ -109,13 +109,13 @@ WineHandler::runWine(const std::filesystem::path &file) {
     std::cout << CYAN "Executing wine at prefix: " RESET << prefix << std::endl;
  
     if (posix_spawn(&pid, "/usr/bin/wine", nullptr, nullptr, cmd.data(), env.data()) != 0) {
-        std::cerr << "Failed to spawn wine process.\n";
+        std::cerr << BRIGHT_RED "Failed to spawn wine process, please make sure wine software exists in your software\n";
         return;
     }
 
     int status;
     waitpid(pid, &status, 0);
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-        std::cerr << "Wine execution failed.\n";
+        std::cerr << BRIGHT_RED "Wine execution failed, Please make sure the file exists and a valid windows application\n";
     }
 }

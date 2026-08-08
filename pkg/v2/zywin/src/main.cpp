@@ -1,11 +1,15 @@
 #include "logo.hpp"
 #include "winehelper.hpp"
 
-const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
 
 // clean up tool for cleaning /tmp directory
 inline void cleanupExtracted() {
    
+
+    const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
+
+     std::cout << BRIGHT_YELLOW "Cleaning up zywin cached extraction points in /etc/" << TMP_PREFIX << std::endl;
+
     if (!std::filesystem::exists("/tmp"))
         return;
 
@@ -30,11 +34,7 @@ inline void cleanupExtracted() {
 
     if (removed > 0)
     {
-        std::cout << "Removed "
-                  << removed
-                  << " extracted ISO director"
-                  << (removed == 1 ? "y" : "ies")
-                  << ".\n";
+        std::cout << BRIGHT_YELLOW "Removed " << removed << " extracted ISO director" << (removed == 1 ? "y" : "ies") << " in /etc.\n" RESET;
     }
 }
 
@@ -94,11 +94,16 @@ int main(int argc, char *argv[]) {
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
     if (ext == ".exe") {
-        wh.runWine(file);
+        wh.execExe(file);
     } 
     
     if (ext == ".msi") {
-        wh.runMsi(file);    
+        wh.execMsi(file);    
+    }
+
+    if (ext == ".iso") {
+        cleanupExtracted();
+        wh.execIso(file);
     }
 
     return 0;

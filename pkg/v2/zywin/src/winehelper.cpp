@@ -77,8 +77,33 @@ void WineHandler::ensureWinePrefix(const std::filesystem::path &prefix)
     }
 }
 
-// Revised runWine() to avoid shell injection by using posix_spawn() instead of system()
-void  WineHandler::runWine(const std::filesystem::path &file) {
+
+// Class member responsible of traversing an entire directory after extracting from an iso to find executables
+std::vector<std::filesystem::path> 
+WineHandler::findExecutables(const std::filesystem::path &dir) {
+
+    std::vector<std::filesystem::path> executables;
+
+    for(const auto &file : std::filesystem::recursive_directory_iterator(dir)) {
+
+        // skips if a file is not a normal file like if it's a . or .. diectory traversal linux thingy
+        if(!file.is_regular_file()) { continue; }
+
+         // extracts the extention from the input file
+        std::string ext = file.path().extension().string();
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+        if(ext == ".exe") {
+            executables.push_back(file.path());
+        }
+    }
+
+    return executables;
+}
+
+
+// Revised runWine() into execExe() to avoid shell injection by using posix_spawn() instead of system()
+void  WineHandler::execExe(const std::filesystem::path &file) {
 
     std::cout << BRIGHT_YELLOW "Executing a Portable Executable file (.exe) via wine..\n";
 
@@ -125,7 +150,9 @@ void  WineHandler::runWine(const std::filesystem::path &file) {
     }
 }
 
-void WineHandler::runMsi(const std::filesystem::path &file) {
+
+// Revised runMsi() into execMSi() to avoid shell injection
+void WineHandler::execMsi(const std::filesystem::path &file) {
 
     std::cout << BRIGHT_YELLOW "Executing a Microsoft Installer (.msi) via wine..\n";
     
@@ -172,4 +199,15 @@ void WineHandler::runMsi(const std::filesystem::path &file) {
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
         std::cerr << BRIGHT_RED "Wine execution failed, Please make sure the file exists and a valid windows application\n";
     }
+}
+
+void WineHandler::execIso(const std::filesystem::path &file) {
+    const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
+
+    // gets the current time from the system and then convert to local time structure
+    auto time_now = std::time(nullptr);
+
+    std::filesystem::path tmp = "/tmp/" + TMP_PREFIX + std::to_string(time_now);
+    std::filesystem::create_directories(tmp);
+    std::cout << "reached here\n";
 }

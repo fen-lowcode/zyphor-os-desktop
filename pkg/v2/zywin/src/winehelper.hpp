@@ -6,7 +6,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <chrono>
+
 #include "logo.hpp"
+
 
 // needed for posix_spawn()
 #include <spawn.h>
@@ -22,10 +25,13 @@ class WineHandler {
 public:
 
     // Class member that runs files with .exe extension
-    void runWine(const std::filesystem::path &file);
+    void execExe(const std::filesystem::path &file);
 
     // Class member that runs files with .msi extension
-    void runMsi(const std::filesystem::path &file);
+    void execMsi(const std::filesystem::path &file);
+
+    // Class member that extracts an .iso image and looks for an executable file
+    void execIso(const std::filesystem::path &file);
 
 private:
 
@@ -37,4 +43,7 @@ private:
 
     // ensures that the wineprefix is generated
     void ensureWinePrefix(const std::filesystem::path &prefix);
+    
+    // Class member responsible of traversing an entire directory after extracting from an iso to find executables
+    std::vector<std::filesystem::path> findExecutables(const std::filesystem::path &dir);
 };

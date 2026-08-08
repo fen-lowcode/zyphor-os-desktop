@@ -3,6 +3,7 @@
 
 
 // clean up tool for cleaning /tmp directory
+// ! Dangerous it can delete app data from all the spftwares extracted from an iso image
 inline void cleanupExtracted() {
    
 

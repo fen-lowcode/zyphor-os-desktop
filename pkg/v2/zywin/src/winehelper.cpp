@@ -207,8 +207,45 @@ void WineHandler::execIso(const std::filesystem::path &file) {
     // gets the current time from the system and then convert to local time structure
     auto time_now = std::time(nullptr);
 
+    // extrcation point for the iso image
     std::filesystem::path tmp = "/tmp/" + TMP_PREFIX + std::to_string(time_now);
-    std::filesystem::create_directories(tmp);
 
-    
+    // create the extraction point directory
+    std::cout << BRIGHT_YELLOW "Creating a directory at " RESET << tmp << BRIGHT_YELLOW " this will be the extraction point for " RESET << file << "\n";
+    std::filesystem::create_directories(tmp);
+    std::cout << BRIGHT_YELLOW "Directory created: " RESET << tmp << "\n";
+
+    std::cout << BRIGHT_YELLOW "Getting 7zip ready for extracting iso file...\n" RESET;
+
+    // variables needed to execute 7z using posix_spawn()
+    std::string file_str = file.string();
+    std::string tmp_str  = "-o" + tmp.string(); // 7z expects -o immediately followed
+
+    // setting up argument for 7z x command for posic_spawn()
+     std::vector<char *> cmd = {
+        const_cast<char *>("7z"),
+        const_cast<char *>("x"),
+        const_cast<char *> (file.c_str()),
+        const_cast<char *>(tmp_str.c_str()),
+        nullptr
+    }; 
+
+    // spawn a child process using posix_spawnm to execute 7z
+    pid_t pid;
+    if (posix_spawn(&pid, "/usr/bin/7z", NULL, NULL, cmd.data(), environ) != 0)
+    {
+        std::cerr << BRIGHT_RED "Failed to start extraction process ISO.\n" RESET;
+        std::filesystem::remove_all(tmp);
+        std::cerr << BRIGHT_YELLOW "Removed Extraction point: " RESET  << tmp << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+     //  wait for 7z to finish, otherwise it runs asynchronously 
+    int status;
+    if (waitpid(pid, &status, 0) == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) 
+    {
+        std::cerr << BRIGHT_RED "7z extraction failed during execution.\n" RESET;
+        std::filesystem::remove_all(tmp);
+        exit(EXIT_FAILURE);
+    }
 }

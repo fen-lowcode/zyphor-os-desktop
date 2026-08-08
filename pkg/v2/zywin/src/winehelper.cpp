@@ -96,13 +96,14 @@ void  WineHandler::runWine(const std::filesystem::path &file) {
     std::string winePrefix = "WINEPREFIX=" + prefix.string();
     std::vector<char*> env;
     
-    // copy the contents of winePrefix variable to env to set as the 6th argument for posix_spawn()
+    // loop throught the entire enviroment and skips over WINEPREFIX= to diregard old prefix
     for (char **e = environ; *e != nullptr; ++e) {
         if (strncmp(*e, "WINEPREFIX=", 11) != 0) {  // Skip old WINEPREFIX
             env.push_back(*e);
         }
     }
 
+      // place the new WINEPREFIX to environ
     env.push_back(const_cast<char *>(winePrefix.c_str()));
     env.push_back(nullptr);
 
@@ -132,7 +133,7 @@ void WineHandler::runMsi(const std::filesystem::path &file) {
     ensureWinePrefix(prefix);
 
     
-     // Build argv for wine argumnt
+     // Build argv for wine argumnt this is for running msi softwares utilizing msiexec argument
     std::vector<char*> cmd = {
         const_cast<char *>("wine"),
         const_cast<char *>("msiexec"),
@@ -144,13 +145,14 @@ void WineHandler::runMsi(const std::filesystem::path &file) {
     std::string winePrefix = "WINEPREFIX=" + prefix.string();
     std::vector<char*> env;
 
-    // copy the contents of winePrefix variable to env to set as the 6th argument for posix_spawn()
+    // loop throught the entire enviroment and skips over WINEPREFIX= to diregard old prefix
     for (char **e = environ; *e != nullptr; ++e) {
         if (strncmp(*e, "WINEPREFIX=", 11) != 0) {  
             env.push_back(*e);
         }
     }
 
+    // place the new WINEPREFIX to environ
     env.push_back(const_cast<char *>(winePrefix.c_str()));
     env.push_back(nullptr);
 

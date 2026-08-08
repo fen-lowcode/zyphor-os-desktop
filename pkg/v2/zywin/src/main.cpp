@@ -95,8 +95,10 @@ int main(int argc, char *argv[]) {
 
     if (ext == ".exe") {
         wh.runWine(file);
-    } else {
-        std::cout << "Work in Progress\n" << std::endl;
+    } 
+    
+    if (ext == ".msi") {
+        wh.runMsi(file);    
     }
 
     return 0;

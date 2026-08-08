@@ -2,9 +2,10 @@
 #include "colors.hpp"
 
 
+extern char **environ;
+
 // This function has the same logic from it's former codebase i just placed it in a class
-std::string 
-WineHandler::sanitizeFileName(const std::filesystem::path &file)
+std::string  WineHandler::sanitizeFileName(const std::filesystem::path &file)
 {
     std::string name = file.stem().string();
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -53,20 +54,19 @@ std::filesystem::path WineHandler::getWinePrefix(const std::filesystem::path &fi
 
 
 // Makes sure the the prefix exist by checking it's existence and then using wineboot if it's otherwise
-void 
-WineHandler::ensureWinePrefix(const std::filesystem::path &prefix)
+void WineHandler::ensureWinePrefix(const std::filesystem::path &prefix)
 {
 
     // Checking for prefix / "system.reg" verifies that the Wine prefix is actually initialized and valid!
 
     if ( std::filesystem::exists(prefix / "system.reg")) {
 
-        std::cout << CYAN << "Prefix already exist: " RESET << prefix << "\n"; 
+        std::cout << BRIGHT_YELLOW << "Prefix already exist: " RESET << prefix << "\n"; 
         return;
     }
 
 
-    std::cout << CYAN "Creating Wine prefix: " RESET << prefix << "\n";
+    std::cout << BRIGHT_YELLOW "Creating Wine prefix: " RESET << prefix << "\n";
 
     std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wineboot >/dev/null 2>&1";
     int status = system(cmd.c_str());
@@ -78,14 +78,14 @@ WineHandler::ensureWinePrefix(const std::filesystem::path &prefix)
 }
 
 // Revised runWine() to avoid shell injection by using posix_spawn() instead of system()
-void 
-WineHandler::runWine(const std::filesystem::path &file) {
+void  WineHandler::runWine(const std::filesystem::path &file) {
+
+    std::cout << BRIGHT_YELLOW "Executing a Portable Executable file (.exe) via wine..\n";
+
     std::filesystem::path prefix = getWinePrefix(file);
     ensureWinePrefix(prefix);
 
-    pid_t pid;
-
-    // Build argv for wine
+    // Build argv for wine argumnt
     std::vector<char*> cmd = {
         const_cast<char *>("wine"),
         const_cast<char *>(file.c_str()),
@@ -106,8 +106,9 @@ WineHandler::runWine(const std::filesystem::path &file) {
     env.push_back(const_cast<char *>(winePrefix.c_str()));
     env.push_back(nullptr);
 
-    std::cout << CYAN "Executing wine at prefix: " RESET << prefix << std::endl;
+    std::cout << BRIGHT_YELLOW "Executing wine at prefix: " RESET << prefix << std::endl;
  
+    pid_t pid;
     if (posix_spawn(&pid, "/usr/bin/wine", nullptr, nullptr, cmd.data(), env.data()) != 0) {
         std::cerr << BRIGHT_RED "Failed to spawn wine process, please make sure wine software exists in your software\n";
         return;
@@ -115,6 +116,57 @@ WineHandler::runWine(const std::filesystem::path &file) {
 
     int status;
     waitpid(pid, &status, 0);
+
+    // ? checks if the child process (which is posix_spawn() that executes wine) did not exit normally 
+    // ? or if the child process exited normally but retruned a failure
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+        std::cerr << BRIGHT_RED "Wine execution failed, Please make sure the file exists and a valid windows application\n";
+    }
+}
+
+void WineHandler::runMsi(const std::filesystem::path &file) {
+
+    std::cout << BRIGHT_YELLOW "Executing a Microsoft Installer (.msi) via wine..\n";
+    
+    std::filesystem::path prefix = getWinePrefix(file);
+    ensureWinePrefix(prefix);
+
+    
+     // Build argv for wine argumnt
+    std::vector<char*> cmd = {
+        const_cast<char *>("wine"),
+        const_cast<char *>("msiexec"),
+        const_cast<char *>("/i"),
+        const_cast<char *>(file.c_str()),
+        nullptr
+    };
+
+    std::string winePrefix = "WINEPREFIX=" + prefix.string();
+    std::vector<char*> env;
+
+    // copy the contents of winePrefix variable to env to set as the 6th argument for posix_spawn()
+    for (char **e = environ; *e != nullptr; ++e) {
+        if (strncmp(*e, "WINEPREFIX=", 11) != 0) {  
+            env.push_back(*e);
+        }
+    }
+
+    env.push_back(const_cast<char *>(winePrefix.c_str()));
+    env.push_back(nullptr);
+
+    std::cout << BRIGHT_YELLOW "Executing wine at prefix: " RESET << prefix << std::endl;
+    pid_t pid;
+
+    if ( posix_spawn(&pid, "/usr/bin/wine", nullptr, nullptr, cmd.data(), env.data()) != 0) {
+        std::cerr << BRIGHT_RED "Failed to spawn wine process, please make sure wine software exists in your software\n";
+        return;
+    }
+
+    int status;
+    waitpid(pid, &status, 0);
+
+    // ? checks if the child process (which is posix_spawn() that executes wine) did not exit normally 
+    // ? or if the child process exited normally but retruned a failure
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
         std::cerr << BRIGHT_RED "Wine execution failed, Please make sure the file exists and a valid windows application\n";
     }

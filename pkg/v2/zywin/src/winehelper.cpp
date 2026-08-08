@@ -1,4 +1,5 @@
 #include "winehelper.hpp"
+#include "colors.hpp"
 
 
 // This function has the same logic from it's former codebase i just placed it in a class
@@ -58,11 +59,14 @@ WineHandler::ensureWinePrefix(const std::filesystem::path &prefix)
 
     // Checking for prefix / "system.reg" verifies that the Wine prefix is actually initialized and valid!
 
-    if ( std::filesystem::exists(prefix / "system.reg")) return;
+    if ( std::filesystem::exists(prefix / "system.reg")) {
+
+        std::cout << CYAN << "Prefix already exist: " RESET << prefix << "\n"; 
+        return;
+    }
 
 
-    std::cout << "Creating Wine prefix:\n";
-    std::cout << "  " << prefix << "\n\n";
+    std::cout << CYAN "Creating Wine prefix: " RESET << prefix << "\n";
 
     std::string cmd = "WINEPREFIX=\"" + prefix.string() + "\" wineboot >/dev/null 2>&1";
     int status = system(cmd.c_str());
@@ -102,7 +106,7 @@ WineHandler::runWine(const std::filesystem::path &file) {
     env.push_back(const_cast<char *>(winePrefix.c_str()));
     env.push_back(nullptr);
 
-    std::cout << "Executing wine " << prefix << std::endl;
+    std::cout << CYAN "Executing wine at prefix: " RESET << prefix << std::endl;
  
     if (posix_spawn(&pid, "/usr/bin/wine", nullptr, nullptr, cmd.data(), env.data()) != 0) {
         std::cerr << "Failed to spawn wine process.\n";

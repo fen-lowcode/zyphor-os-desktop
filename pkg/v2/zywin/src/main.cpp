@@ -1,10 +1,7 @@
 #include "logo.hpp"
 #include "winehelper.hpp"
 
-extern char **environ;
 const std::string TMP_PREFIX = "zywin-installer-iso-extract-";
-
-
 
 // clean up tool for cleaning /tmp directory
 inline void cleanupExtracted() {
@@ -45,11 +42,6 @@ inline void cleanupExtracted() {
 // this one looks dope !!
 inline void printHelper() {
 
-    #define RESET   "\033[0m"
-    #define BOLD    "\033[1m"
-    #define CYAN    "\033[36m"
-    #define DIM     "\033[2m"
-
     std::cerr << ZYWIN_LOGO << "\n";
     std::cerr << BOLD CYAN "Zyphor Wine Wrapper (zywin)" RESET " - Windows compatibility layer for Zyphor OS\n\n";
     
@@ -73,20 +65,22 @@ int main(int argc, char *argv[]) {
 
     WineHandler wh;
 
-   
+    // Checks if zywin is execuuted without arguments if not it prints a helper
     if (argc != 2)
     {
         printHelper();
         return 1;
     }
 
-    if (argv[1] == "cleanup")
+    std::string arg = argv[1];
+
+    if (arg == "cleanup")
     {
         cleanupExtracted();
         return 0;
     }
 
-    std::filesystem::path file(argv[1]);
+    std::filesystem::path file(arg);
 
     if (!std::filesystem::exists(file))
     {
@@ -94,7 +88,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-     // extracts the extention from the input file
+    // extracts the extention from the input file
     std::string ext = file.extension().string();
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 

@@ -209,5 +209,6 @@ void WineHandler::execIso(const std::filesystem::path &file) {
 
     std::filesystem::path tmp = "/tmp/" + TMP_PREFIX + std::to_string(time_now);
     std::filesystem::create_directories(tmp);
-    std::cout << "reached here\n";
+
+    
 }

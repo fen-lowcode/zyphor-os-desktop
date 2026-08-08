@@ -74,6 +74,7 @@ int main(int argc, char *argv[]) {
 
     std::string arg = argv[1];
 
+    // cleans caches and temporary wrapper in /tmp whenever the command line argument is "cleanup"
     if (arg == "cleanup")
     {
         cleanupExtracted();
@@ -81,10 +82,10 @@ int main(int argc, char *argv[]) {
     }
 
     std::filesystem::path file(arg);
-
     if (!std::filesystem::exists(file))
     {
-        std::cerr << "File not found.\n";
+        printHelper();
+        std::cerr << BRIGHT_RED "File is not found, Please doable check if file exist\n\n";
         return 1;
     }
 

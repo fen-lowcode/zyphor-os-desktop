@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <algorithm>
 
 #include "logo.hpp"
 

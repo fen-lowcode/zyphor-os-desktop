@@ -4,6 +4,14 @@
 
 extern char **environ;
 
+
+// Lamda function that checks if everything in a string is a digit
+auto isDigitOnly = [](const std::string &str) -> bool {
+    return std::all_of(str.begin(), str.end(), [](unsigned char c){
+        return std::isdigit(c);
+    });
+};
+
 // This function has the same logic from it's former codebase i just placed it in a class
 std::string  WineHandler::sanitizeFileName(const std::filesystem::path &file)
 {
@@ -278,7 +286,7 @@ void WineHandler::execIso(const std::filesystem::path &file) {
 
 
     // sets an accurate path to where the iso image contents is extracted and then passing this as argument to findExecutables()
-    // std::string pathToExtractionSite = tmp.string() + "/" + removeFileExtension(file);
+    // std::string pathToExtractionSite = tmp.string() + "/" + removeFileExtension(file); 
 
     std::cout << BRIGHT_YELLOW "Scanning Executables files in " RESET << tmp << "\n" RESET;
     std::vector<std::filesystem::path> executables = findExecutables(tmp);
@@ -299,4 +307,30 @@ void WineHandler::execIso(const std::filesystem::path &file) {
         execExe(executables[0]);
     }
 
+    // executes whenever theres more than 1 executable files inside the extraction site from iso imageeeeeee
+    if(executables.size() > 1) {
+
+        std::cout << BRIGHT_YELLOW "Found a multiple executable files at " RESET + tmp.string() + "\n\n";
+        std::cout << BRIGHT_YELLOW "Please choose from the list:  \n\n" RESET;
+    
+        int fileCount = 0;
+        std::string option;
+
+
+        // this area lacks more error handling when a user picks a number none existing in the list or if the user did not put a number
+        // i'll just continue this the next day and have sir mark to test it instead
+        // time to sleep :>
+
+        for(std::string f: executables) {
+            std::cout << "\t" << CYAN "File Number: " BOLD << fileCount << RESET " " << f << "\n";
+            fileCount++;
+        }
+
+        std::cout <<  BRIGHT_YELLOW "\nPlease select a number: " RESET; std::cin >> option;
+        
+        // checks of the input is a number
+        if(isDigitOnly(option)) {
+            execExe(executables[std::stoi(option)]);
+        }
+    }
 }

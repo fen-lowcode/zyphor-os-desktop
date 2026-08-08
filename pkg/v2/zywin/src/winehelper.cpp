@@ -248,4 +248,55 @@ void WineHandler::execIso(const std::filesystem::path &file) {
         std::filesystem::remove_all(tmp);
         exit(EXIT_FAILURE);
     }
+
+
+    // this function removes the extention from the file name 
+    // althought i have invented a wheel again 
+    // becAUSE I found out about that i can just do file.replace_extension("") 
+    // now i dont need this because i just found it sir mark has written the function
+    // findExecutables() to loop throught nested folders but i wont remove this just incase
+
+    // auto removeFileExtension = [](const std::filesystem::path &file) -> std::string {
+
+    //         std::string buf = file.c_str();
+    //         std::vector<char> fileWithoutExtension;
+
+    //         bool firstCount = true;
+
+    //         for (char c: buf  ) {
+    //             if( c == '.' && firstCount == false) {
+    //                 break;
+    //             } 
+
+    //             fileWithoutExtension.push_back(c);
+    //             firstCount = false;
+    //         }
+
+    //         fileWithoutExtension.push_back('\0');
+    //         return std::string(fileWithoutExtension.begin(), fileWithoutExtension.end());
+    // };
+
+
+    // sets an accurate path to where the iso image contents is extracted and then passing this as argument to findExecutables()
+    // std::string pathToExtractionSite = tmp.string() + "/" + removeFileExtension(file);
+
+    std::cout << BRIGHT_YELLOW "Scanning Executables files in " RESET << tmp << "\n" RESET;
+    std::vector<std::filesystem::path> executables = findExecutables(tmp);
+
+    // checks if there's no executables found
+    if (executables.empty()) {
+        std::cerr << BRIGHT_RED "No executable found in " RESET << tmp << std::endl;
+        std::filesystem::remove_all(tmp);
+         std::cerr << BRIGHT_YELLOW "Removed Extraction point: " RESET  << tmp << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+
+    // if it only contains one exe file inside the extraction area from the iso image it executes it instantly
+    if(executables.size() == 1) {
+        std::cout << BRIGHT_YELLOW "Found an executable file at " RESET + tmp.string() + "\n";
+        std::cout << BRIGHT_YELLOW "Executing " RESET + executables[0].string() + "\n";
+        execExe(executables[0]);
+    }
+
 }

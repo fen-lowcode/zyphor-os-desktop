@@ -120,9 +120,14 @@ void  WineHandler::execExe(const std::filesystem::path &file, const std::filesys
     ensureWinePrefix(prefix);
 
     // Build argv for wine argumnt
+    // fixed a possible memory corruption bug
+
+    std::string wine_str = "wine";
+    std::string file_str = file.string();  // ✅ Persistent!
+
     std::vector<char*> cmd = {
-        const_cast<char *>("wine"),
-        const_cast<char *>(file.c_str()),
+        wine_str.data(),
+        file_str.data(),
         nullptr
     };
 
@@ -138,7 +143,7 @@ void  WineHandler::execExe(const std::filesystem::path &file, const std::filesys
     }
 
       // place the new WINEPREFIX to environ
-    env.push_back(const_cast<char *>(winePrefix.c_str()));
+    env.push_back(winePrefix.data()); // this is safer 
     env.push_back(nullptr);
 
     std::cout << BRIGHT_YELLOW "Executing wine at prefix: " RESET << prefix << std::endl;

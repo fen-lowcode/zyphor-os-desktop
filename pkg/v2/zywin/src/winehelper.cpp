@@ -6,7 +6,7 @@ extern char **environ;
 
 
 // Lamda function that checks if everything in a string is a digit
-auto isDigitOnly = [](const std::string &str) -> bool {
+inline auto isDigitOnly = [](const std::string &str) -> bool {
     return std::all_of(str.begin(), str.end(), [](unsigned char c){
         return std::isdigit(c);
     });

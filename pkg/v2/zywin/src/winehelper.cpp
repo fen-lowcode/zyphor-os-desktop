@@ -330,7 +330,21 @@ void WineHandler::execIso(const std::filesystem::path &file) {
         
         // checks of the input is a number
         if(isDigitOnly(option)) {
-            execExe(executables[std::stoi(option)]);
+
+
+            try {
+                // checks if the selected option is at the right bound
+                executables.at(std::stoi(option));
+                execExe(executables[std::stoi(option)]);
+            
+            } catch(std::out_of_range) {
+
+                std::cout <<  BRIGHT_RED "\nYour selected option is not in the list\n" RESET;
+                exit(EXIT_FAILURE);
+            }
+        } else {
+            std::cout <<  BRIGHT_RED "\nYour selected option is not valid\n" RESET;
+            exit(EXIT_FAILURE);
         }
     }
 }

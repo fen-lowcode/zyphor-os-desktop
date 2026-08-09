@@ -26,7 +26,7 @@ class WineHandler {
 public:
 
     // Class member that runs files with .exe extension
-    void execExe(const std::filesystem::path &file);
+    void execExe(const std::filesystem::path &file, const std::filesystem::path &custome_prefix = "");
 
     // Class member that runs files with .msi extension
     void execMsi(const std::filesystem::path &file);

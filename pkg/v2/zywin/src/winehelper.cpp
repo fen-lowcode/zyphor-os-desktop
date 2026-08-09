@@ -111,11 +111,12 @@ WineHandler::findExecutables(const std::filesystem::path &dir) {
 
 
 // Revised runWine() into execExe() to avoid shell injection by using posix_spawn() instead of system()
-void  WineHandler::execExe(const std::filesystem::path &file) {
+void  WineHandler::execExe(const std::filesystem::path &file, const std::filesystem::path &custom_prefix) {
 
     std::cout << BRIGHT_YELLOW "Executing a Portable Executable file (.exe) via wine..\n";
 
-    std::filesystem::path prefix = getWinePrefix(file);
+    // i've fix the issue with iso prefix inaccurate naming by passing an optional argument to custom_prefix
+    std::filesystem::path prefix = getWinePrefix((custom_prefix == "" ? file: custom_prefix));
     ensureWinePrefix(prefix);
 
     // Build argv for wine argumnt
@@ -313,7 +314,6 @@ void WineHandler::execIso(const std::filesystem::path &file) {
         std::cout << BRIGHT_YELLOW "Found a multiple executable files at " RESET + tmp.string() + "\n\n";
         std::cout << BRIGHT_YELLOW "Please choose from the list:  \n\n" RESET;
     
-        int fileCount = 0;
         std::string option;
 
 
@@ -321,9 +321,9 @@ void WineHandler::execIso(const std::filesystem::path &file) {
         // i'll just continue this the next day and have sir mark to test it instead
         // time to sleep :>
 
-        for(std::string f: executables) {
-            std::cout << "\t" << CYAN "File Number: " BOLD << fileCount << RESET " " << f << "\n";
-            fileCount++;
+        for(size_t i = 0; i < executables.size(); i++) {
+            std::cout << "\t" << CYAN "File Number: " BOLD << 
+            i << RESET " " << std::filesystem::relative(executables[i], tmp) << "\n"; 
         }
 
         std::cout <<  BRIGHT_YELLOW "\nPlease select a number: " RESET; std::cin >> option;
@@ -335,7 +335,7 @@ void WineHandler::execIso(const std::filesystem::path &file) {
             try {
                 // checks if the selected option is at the right bound
                 executables.at(std::stoi(option));
-                execExe(executables[std::stoi(option)]);
+                execExe(executables[std::stoi(option)], file);
             
             } catch(std::out_of_range) {
 

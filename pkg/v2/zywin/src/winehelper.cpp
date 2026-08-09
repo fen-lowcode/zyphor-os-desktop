@@ -175,11 +175,14 @@ void WineHandler::execMsi(const std::filesystem::path &file) {
 
     
      // Build argv for wine argumnt this is for running msi softwares utilizing msiexec argument
+    std::string file_str = file.string();
+
+    // removed possible dangling pointer by moving arguments as a persistent string 
     std::vector<char*> cmd = {
-        const_cast<char *>("wine"),
-        const_cast<char *>("msiexec"),
-        const_cast<char *>("/i"),
-        const_cast<char *>(file.c_str()),
+        "wine",
+        "msiexec",
+        "/i",
+        file_str.data(),
         nullptr
     };
 
@@ -194,7 +197,7 @@ void WineHandler::execMsi(const std::filesystem::path &file) {
     }
 
     // place the new WINEPREFIX to environ
-    env.push_back(const_cast<char *>(winePrefix.c_str()));
+    env.push_back(winePrefix.data());
     env.push_back(nullptr);
 
     std::cout << BRIGHT_YELLOW "Executing wine at prefix: " RESET << prefix << std::endl;
@@ -237,12 +240,12 @@ void WineHandler::execIso(const std::filesystem::path &file) {
 
     // setting up argument for 7z x command for posic_spawn()
      std::vector<char *> cmd = {
-        const_cast<char *>("7z"),
-        const_cast<char *>("x"),
-        const_cast<char *> (file.c_str()),
-        const_cast<char *>(tmp_str.c_str()),
+        "7z",
+        "x",
+        file_str.data(),
+        tmp_str.data(),
         nullptr
-    }; 
+    };
 
     // spawn a child process using posix_spawnm to execute 7z
     pid_t pid;

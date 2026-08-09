@@ -44,8 +44,8 @@ std::string  WineHandler::sanitizeFileName(const std::filesystem::path &file)
 std::filesystem::path WineHandler::getWinePrefix(const std::filesystem::path &file)
 {
         
-    // ! Gets the value of the HOME directory variable
-    // ? i turned this into a lambda function since this is the only function that call getHomeDirectory
+    //  Gets the value of the HOME directory variable
+    // i turned this into a lambda function since this is the only function that call getHomeDirectory
     auto getHomeDirectory = []() {
 
         const char *home = std::getenv("HOME");
@@ -53,7 +53,7 @@ std::filesystem::path WineHandler::getWinePrefix(const std::filesystem::path &fi
             std::cerr << "Unable to determine HOME directory.\n";
             std::exit(1);
         }
-        return home;
+        return std::string(home);   // fixed a critical dangling pointer bug here
     };
 
     // return a path which a premade wineprefix is made

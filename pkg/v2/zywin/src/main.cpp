@@ -55,7 +55,6 @@ inline void printHelper() {
     std::cerr << "  " CYAN "<file.iso>" RESET "\tMount and run a disc image\n";
     std::cerr << "  " CYAN "cleanup"    RESET "\tPurge all extracted iso image directories in /tmp\n\t\t" 
     BRIGHT_YELLOW 
-    "Warning: Purging will delete all app data from any extracted softwares that came from an iso image\n\n" RESET ;
 
     std::cerr << BOLD "EXAMPLES:" RESET "\n";
     std::cerr << "  zywin app.exe\n";

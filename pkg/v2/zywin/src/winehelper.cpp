@@ -179,9 +179,9 @@ void WineHandler::execMsi(const std::filesystem::path &file) {
 
     // removed possible dangling pointer by moving arguments as a persistent string 
     std::vector<char*> cmd = {
-        "wine",
-        "msiexec",
-        "/i",
+        const_cast<char*>("wine"),
+        const_cast<char*>("msiexec"),
+        const_cast<char*>("/i"),
         file_str.data(),
         nullptr
     };
@@ -240,8 +240,8 @@ void WineHandler::execIso(const std::filesystem::path &file) {
 
     // setting up argument for 7z x command for posic_spawn()
      std::vector<char *> cmd = {
-        "7z",
-        "x",
+        const_cast<char*>("7z"),
+        const_cast<char*>("x"),
         file_str.data(),
         tmp_str.data(),
         nullptr

@@ -39,6 +39,7 @@ https://github.com/fen-lowcode
 - Identified and responsibly reported a privilege escalation vulnerability within Zyphor CLI.  
 - Performed reverse engineering and technical assessments to improve system security.  
 - Provided security recommendations that contributed to the hardening of Zyphor OS tools and infrastructure.  
+- Maintained the Zywin package, a Windows application compatibility and execution layer for Zyphor OS.  
 
 ---
 

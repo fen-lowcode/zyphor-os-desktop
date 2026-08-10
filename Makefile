@@ -128,17 +128,11 @@ status:
 	git status
 
 add:
-	git add pkg/v2/zywin/zywin/DEBIAN/control
-	git commit -m "chore: updated zywin package control"
-
-	git rm pkg/v2/zywin/zywin/DEBIAN/postinst
-	git commit -m "chore: removed zywin postinst script"
-
 	git add pkg/v2/zywin/zywin/usr/bin/zywin
-	git commit -m "feat: updated zywin executable"
+	git commit -m "fix: updated zywin executable"
 
 	git add pkg/v2/zywin/zywindow
-	git commit -m "feat: updated zywindow"
+	git commit -m "fix: updated zywindow"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"

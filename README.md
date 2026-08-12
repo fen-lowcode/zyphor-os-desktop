@@ -4,11 +4,11 @@
 
 Download the latest **Zyphor OS ISO** and get started in minutes.
 
-👉 **[Click Here To Download Zyphor Operating System ISO (v2.2.1-2026.08.11-r32)](https://drive.google.com/uc?export=download&id=1Rfp7m5cssqJ-RJ_bsO95vAvWmJD_kvb1)** - Main lightweight desktop release  
+👉 **[Click Here To Download Zyphor Operating System ISO (v2.2.1-2026.08.11-r32)](https://white-opossum-308929.hostingersite.com/zyphor-os-iso/zyphor-os-desktop-v2.2.1-2026.08.11-r32-xfce-amd64.iso)** - Main lightweight desktop release  
 
 👉 **[Click Here To Download Zyphor Horizon ISO (v1.0.0-beta-2026.06.14-r1)](https://drive.google.com/uc?export=download&id=1eRYZQN7W-4aB1hp6SXclQwdO8Qzh31Ko)** - Experimental / futuristic preview release  
 
-> 📦 Hosted on Google Drive  
+> 📦 Hosted on Hostinger  
 > 💿 File Type: ISO Image  
 
 After installing, open the terminal and run this command:

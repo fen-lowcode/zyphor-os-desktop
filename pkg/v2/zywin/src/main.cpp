@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
     if (!std::filesystem::exists(file))
     {
         printHelper();
-        std::cerr << BRIGHT_RED "File is not found, Please doable check if file exist\n\n";
+        std::cerr << BRIGHT_RED "File is not found,  Please doable check if file exist\n\n";
         return 1;
     }
 

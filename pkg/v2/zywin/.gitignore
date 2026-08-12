@@ -1,1 +1,3 @@
-build/
+build/*
+zywindow
+legacy.cpp

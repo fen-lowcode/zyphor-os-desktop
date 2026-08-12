@@ -44,7 +44,7 @@ inline void cleanupExtracted() {
 inline void printHelper() {
 
     std::cerr << ZYWIN_LOGO << "\n";
-    std::cerr << BOLD CYAN "Zyphor Wine Wrapper (zywin)" RESET " - Windows compatibility layer for Zyphor OS\n\n";
+    std::cerr << BOLD CYAN "Zyphor Wine Wrapper (version 1.1.0-stable-release)" RESET " - Windows compatibility layer for Zyphor OS\n\n";
     
     std::cerr << BOLD "USAGE:" RESET "\n";
     std::cerr << "  zywin " CYAN "<target>" RESET "\n\n";
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
     if (!std::filesystem::exists(file))
     {
         printHelper();
-        std::cerr << BRIGHT_RED "File is not found, Please doable check if file exist\n\n";
+        std::cerr << BRIGHT_RED "File is not found,  Please doable check if file exist\n\n";
         return 1;
     }
 

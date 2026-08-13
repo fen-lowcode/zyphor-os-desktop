@@ -59,7 +59,7 @@ Contributors are not limited to software developers. Some collaborators contribu
 | <img src="https://github.com/fen-lowcode.png?size=60" width="60" height="60"> | [Dan Stephen Blanco](https://github.com/fen-lowcode) | Security Tester |
 | <img src="https://github.com/NicoleHonradoErvas.png?size=60" width="60" height="60"> | [Nicole Honrado Ervas](https://github.com/NicoleHonradoErvas) | Graphic Artist |
 | <img src="https://github.com/isojenalyn14.png?size=60" width="60" height="60"> | [Jenalyn Iso](https://github.com/isojenalyn14) | Graphic Artist
-| <img src="https://scontent-mnl1-2.xx.fbcdn.net/v/t39.30808-1/769251933_122164571042654114_4342413136732092581_n.jpg?stp=dst-jpg_tt6&cstp=mx2031x2048&ctp=s100x100&_nc_cat=102&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHuqZgevmP_wxR0luiwZPy76PkEjvkaNM7o-QSO-Ro0ziDcbr8k4UHRudYvCzXs3yB_SQuzHON_63yj98ojgiP6&_nc_ohc=BVwbphBjaQsQ7kNvwGt0m-B&_nc_oc=AdoGmZ1eP_MZxhgCZtlL0FCEQ0MtchArtKliCv_aqfZJyjbs-LJkcalAkamSlaOCYKo&_nc_zt=24&_nc_ht=scontent-mnl1-2.xx&_nc_gid=77FRShsoqWaWxWbLhGlSQQ&_nc_ss=7a2a8&oh=00_AQER-oYMiGFl9Ge3UvqmFbc5-0jmPbBK3bpOCS9im7x9EQ&oe=6A82FA93" width="60" height="60"> | [Louie Nhelson Puno](https://www.facebook.com/profile.php?id=61569623441438) | Graphic Designer |
+| <img src="https://github.com/Dfaulthexa.png?size=60" width="60" height="60"> | [Louie Nhelson Puno](https://github.com/Dfaulthexa) | Graphic Designer |
 | <img src="https://github.com/JanRey36.png?size=60" width="60" height="60"> | [John Rey A. Castillo](https://github.com/JanRey36) | Full Stack Web Developer |
 
 ---

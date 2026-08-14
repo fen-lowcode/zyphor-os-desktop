@@ -128,17 +128,14 @@ status:
 	git status
 
 add:
-	git add pkg/v2/zywin/zywin/DEBIAN/control
-	git commit -m "chore: updated zywin package control"
+	git add pkg/v2/zylearn/main.cpp
+	git commit -m "feat: updated zylearn application"
 
-	git add pkg/v2/zywin/zywin/usr/bin/zywin
-	git commit -m "fix: updated zywin executable"
+	git add pkg/v2/zylearn/zylearn/DEBIAN/control
+	git commit -m "chore: updated zylearn package control"
 
-	git add pkg/v2/zywin/zywindow
-	git commit -m "fix: updated zywindow"
-
-	git add pkg/v2/zywin/zywin/DEBIAN/postinst
-	git commit -m "feat: added zywin postinst script"
+	git add pkg/v2/zylearn/zylearn/usr/
+	git commit -m "feat: added zylearn resources"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"
@@ -165,14 +162,14 @@ release:
 # 	zyphor build package pkg/v2/updater/zwn
 # 	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
-	zyphor build package pkg/v2/zywin/zywin
-	mv pkg/v2/zywin/zywin.deb zywin.deb
+# 	zyphor build package pkg/v2/zywin/zywin
+# 	mv pkg/v2/zywin/zywin.deb zywin.deb
 
 # 	zyphor build package pkg/v2/zywelcome/zywelcome
 # 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
 
-# 	zyphor build package pkg/v2/zylearn/zylearn
-# 	mv pkg/v2/zylearn/zylearn.deb zylearn.deb
+	zyphor build package pkg/v2/zylearn/zylearn
+	mv pkg/v2/zylearn/zylearn.deb zylearn.deb
 
 # 	zyphor build package pkg/v2/updater/updates
 # 	mv pkg/v2/updater/updates.deb zyphor-updates.deb

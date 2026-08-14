@@ -4,18 +4,25 @@
 #include <filesystem>
 #include <unistd.h>
 #include <pwd.h>
+#include <vector>
+#include <spawn.h>
+#include <sys/wait.h>
+
 
 using namespace std;
 
 namespace fs = std::filesystem;
 
 
-const string GIT_BIN_PATH = "/bin/git";
+const char * GIT_BIN_PATH = "/bin/git";
 const string REMOVE_BIN_PATH = "/bin/rm";
-const string GITHUB_REPO_LINK = "https://github.com/zyphor-os/zyphor-os-minimal";
+const char * GITHUB_REPO_LINK = "https://github.com/zyphor-os/zyphor-os-minimal";
 
 const string HISTORY_PATH = "/tmp/zylearn_history.txt";
 
+// this is a special variable that points to process enviroment vraibles
+// pleaseee don't remove this, it is required by posix_spawn()
+char **environ;
 
 void logCommand(int id, int argc, char* argv[])
 {
@@ -40,9 +47,28 @@ void logCommand(int id, int argc, char* argv[])
 }
 
 
-void executeCommand(const string& command)
-{
-    system(command.c_str());
+void executeCommand() {
+
+    // the shell "git clone https://github.com/zyphor-os/zyphor-os-minimal" to pass on posix_spawn()
+    std::vector<char*> cmd = { 
+        const_cast<char*>("git"), 
+        const_cast<char*>("clone"), 
+        const_cast<char*>(GITHUB_REPO_LINK),
+        nullptr 
+    };
+
+    // posix_spawn() needs pid since posix_spawn() behind the scenes is literally just a fork() + execv() behind the scenes
+    // just incase anyone sees this and wonders why posix_spwn() needs pid
+    pid_t pid;
+    posix_spawn(&pid, const_cast<char*>(GIT_BIN_PATH), nullptr, nullptr, cmd.data(), environ);
+
+    // keeps incheck whenever git falls into failure while running
+    // althought this needs abetter error message that i'll write next time
+    int status;
+    waitpid(pid, &status, 0);
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+        std::cerr << "Git has failed while executing\n";
+    }
 }
 
 
@@ -129,11 +155,7 @@ int main(int argc, char* argv[])
                 << "Please wait while required components are configured...\n\n";
 
 
-            executeCommand(
-                GIT_BIN_PATH +
-                " clone " +
-                GITHUB_REPO_LINK
-            );
+            executeCommand();
 
 
         } else {

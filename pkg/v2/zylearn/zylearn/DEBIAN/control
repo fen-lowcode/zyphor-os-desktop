@@ -1,5 +1,9 @@
 Package: zylearn
+<<<<<<< HEAD
 Version: 2.0.1-r2-beta-release
+=======
+Version: 3.0.1-r3-stable-release
+>>>>>>> d4cf356204c564ca1255dbc59e441f8a13364a6f
 Section: utils
 Priority: optional
 Architecture: all

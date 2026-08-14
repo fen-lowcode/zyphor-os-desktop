@@ -4,7 +4,7 @@
 
 Download the latest **Zyphor OS ISO** and get started in minutes.
 
-👉 **[Click Here To Download Zyphor Operating System ISO (v2.2.1-2026.08.12-r33)](https://white-opossum-308929.hostingersite.com/zyphor-os-iso/zyphor-os-desktop-v2.2.1-2026.08.12-r33-xfce-amd64.iso)** - Main lightweight desktop release  
+👉 **[Click Here To Download Zyphor Operating System ISO (v2.2.1-2026.08.14-r35)](https://white-opossum-308929.hostingersite.com/zyphor-os-iso/zyphor-os-desktop-v2.2.1-2026.08.14-r35-xfce-amd64.iso)** - Main lightweight desktop release  
 
 👉 **[Click Here To Download Zyphor Horizon ISO (v1.0.0-beta-2026.06.14-r1)](https://drive.google.com/uc?export=download&id=1eRYZQN7W-4aB1hp6SXclQwdO8Qzh31Ko)** - Experimental / futuristic preview release  
 
@@ -58,7 +58,8 @@ Contributors are not limited to software developers. Some collaborators contribu
 | <img src="https://github.com/semantic-release-bot.png?size=60" width="60" height="60"> | [Semantic Release Bot](https://github.com/semantic-release-bot) | CI/CD Automated Bot |
 | <img src="https://github.com/fen-lowcode.png?size=60" width="60" height="60"> | [Dan Stephen Blanco](https://github.com/fen-lowcode) | Security Tester |
 | <img src="https://github.com/NicoleHonradoErvas.png?size=60" width="60" height="60"> | [Nicole Honrado Ervas](https://github.com/NicoleHonradoErvas) | Graphic Artist |
-| <img src="https://github.com/isojenalyn14.png?size=60" width="60" height="60"> | [Jenalyn Iso](https://github.com/isojenalyn14) | Graphic Artist |
+| <img src="https://github.com/isojenalyn14.png?size=60" width="60" height="60"> | [Jenalyn Iso](https://github.com/isojenalyn14) | Graphic Artist
+| <img src="https://github.com/Dfaulthexa.png?size=60" width="60" height="60"> | [Louie Nhelson Puno](https://github.com/Dfaulthexa) | Graphic Designer |
 | <img src="https://github.com/JanRey36.png?size=60" width="60" height="60"> | [John Rey A. Castillo](https://github.com/JanRey36) | Full Stack Web Developer |
 
 ---

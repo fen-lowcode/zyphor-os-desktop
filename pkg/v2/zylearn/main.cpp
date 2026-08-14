@@ -49,7 +49,7 @@ void executeCommand(const string& command)
 void showHelp()
 {
     cout
-        << "zylearn v2.0.0-r2-beta-release\n\n"
+        << "zylearn v3.0.0-r3-stable-release\n\n"
 
         << "Usage:\n"
         << "  zylearn <command> [options]\n\n"

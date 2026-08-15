@@ -75,7 +75,7 @@ void executeCommand() {
 void showHelp()
 {
     cout
-        << "zylearn v3.0.0-r3-stable-release\n\n"
+        << "zylearn v3.0.2-r4-stable-release\n\n"
 
         << "Usage:\n"
         << "  zylearn <command> [options]\n\n"
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
 
     if (command == "--version") {
 
-        cout << "zylearn version v1.0.0-r1-beta-release\n";
+        cout << "zylearn version v3.0.2-r4-stable-release\n";
 
         return 0;
     }

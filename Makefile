@@ -185,7 +185,7 @@ release:
 
 # 	---
 
-	mv ./*.deb ../zyphor-os.github.io/v2-ada-lovelace/pool/main/z --verbose
+# 	mv ./*.deb ../zyphor-os.github.io/v2-ada-lovelace/pool/main/z --verbose
 
 # BUILD AUTOMATION
 

@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+# set file ownership to root
+chown root:root  /usr/bin/zywin-ui
+
 # Executable file
 chmod 555 /usr/bin/zywin-ui
 

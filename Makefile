@@ -128,11 +128,29 @@ status:
 	git status
 
 add:
-	git add pkg/v2/zcli/DEBIAN/control
-	git commit -m "chore: updated zyphor CLI package control"
+	git add pkg/v2/updater/zor/DEBIAN/control
+	git commit -m "chore: updated zyphor updater package control"
 
-	git add pkg/v2/zcli/usr/lib/zyphor/core/help
-	git commit -m "feat: updated zyphor CLI help"
+	git add pkg/v2/updater/zor/DEBIAN/postinst
+	git commit -m "chore: updated zyphor updater postinst script"
+
+	git add pkg/v2/updater/zwn/DEBIAN/control
+	git commit -m "chore: updated zyphor whats new package control"
+
+	git add pkg/v2/updater/zwn/usr/share/zyphor-whats-new/release.js
+	git commit -m "feat: updated zyphor whats new release notes"
+
+	git add pkg/v2/zywin-ui/main.cpp
+	git commit -m "feat: updated zywin-ui application"
+
+	git add pkg/v2/zywin-ui/zywin-ui/DEBIAN/control
+	git commit -m "chore: updated zywin-ui package control"
+
+	git add pkg/v2/zywin-ui/zywin-ui/DEBIAN/postinst
+	git commit -m "chore: updated zywin-ui postinst"
+
+	git add pkg/v2/zywin-ui/zywin-ui/usr/
+	git commit -m "feat: added zywin-ui resources"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"
@@ -153,14 +171,17 @@ switch:
 
 release:
 
-# 	zyphor build package pkg/v2/updater/zor
-# 	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
+	zyphor build package pkg/v2/updater/zor
+	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
 
-# 	zyphor build package pkg/v2/updater/zwn
-# 	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
+	zyphor build package pkg/v2/updater/zwn
+	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/zywin/zywin
 # 	mv pkg/v2/zywin/zywin.deb zywin.deb
+
+	zyphor build package pkg/v2/zywin-ui/zywin-ui
+	mv pkg/v2/zywin-ui/zywin-ui.deb zywin-ui.deb
 
 # 	zyphor build package pkg/v2/zywelcome/zywelcome
 # 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
@@ -171,8 +192,8 @@ release:
 # 	zyphor build package pkg/v2/updater/updates
 # 	mv pkg/v2/updater/updates.deb zyphor-updates.deb
 
-	zyphor build package pkg/v2/zcli
-	mv pkg/v2/zcli.deb zyphor-cli.deb
+# 	zyphor build package pkg/v2/zcli
+# 	mv pkg/v2/zcli.deb zyphor-cli.deb
 
 # 	zyphor build package pkg/v2/zysh
 # 	mv pkg/v2/zysh.deb zysh.deb

@@ -37,14 +37,14 @@ public:
 private:
 
     // formatting file name into a valid prefix path
-    std::string sanitizeFileName(const std::filesystem::path &file);
+    static std::string sanitizeFileName(const std::filesystem::path &file);
 
     // Generates a wine prefix
-    std::filesystem::path getWinePrefix(const std::filesystem::path &file);
+    static std::filesystem::path getWinePrefix(const std::filesystem::path &file);
 
     // ensures that the wineprefix is generated
-    void ensureWinePrefix(const std::filesystem::path &prefix);
+    static void ensureWinePrefix(const std::filesystem::path &prefix);
     
     // Class member responsible of traversing an entire directory after extracting from an iso to find executables
-    std::vector<std::filesystem::path> findExecutables(const std::filesystem::path &dir);
+    static std::vector<std::filesystem::path> findExecutables(const std::filesystem::path &dir);
 };

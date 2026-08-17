@@ -339,15 +339,22 @@ void WineHandler::execIso(const std::filesystem::path &file) {
         // checks of the input is a number
         if(isDigitOnly(option)) {
 
-
             try {
                 // checks if the selected option is at the right bound
-                executables.at(std::stoi(option));
+                // made a change here where i placed the return value of at() in a const variable that will never be used
+                // to remove g++ warnings
+                const auto &x = executables.at(std::stoi(option));
+
+                // damn the g++ compiler still flags a wanring despite writing [[maybe_unsused]] so 
+                // i'll just cast the variable to nothing
+                (void)x;
+
+
                 execExe(executables[std::stoi(option)], file);
             
-            } catch(std::out_of_range) {
+            } catch(std::out_of_range &e) {
 
-                std::cout <<  BRIGHT_RED "\nYour selected option is not in the list\n" RESET;
+                std::cout <<  BRIGHT_RED "\nYour selected option is not in the list\n" << e.what() << RESET "\n";
                 exit(EXIT_FAILURE);
             }
         } else {

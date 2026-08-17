@@ -108,12 +108,17 @@ case "$CATEGORY" in
     source /usr/lib/zyphor/smb/mount
     source /usr/lib/zyphor/smb/disk-list
     source /usr/lib/zyphor/smb/disk-mount
-
+    source /usr/lib/zyphor/smb/share-add
+    source /usr/lib/zyphor/smb/share-list
+    source /usr/lib/zyphor/smb/share-remove
     case "$ACTION" in
-      list)       zyphor_smb_list "$@" ;;
-      mount)      zyphor_smb_mount "$@" ;;
-      disk-list)  zyphor_smb_disk_list "$@" ;;
-      disk-mount) zyphor_smb_disk_mount "$@" ;;
+      list)         zyphor_smb_list "$@" ;;
+      mount)        zyphor_smb_mount "$@" ;;
+      disk-list)    zyphor_smb_disk_list "$@" ;;
+      disk-mount)   zyphor_smb_disk_mount "$@" ;;
+      share-add)    zyphor_smb_share_add "$@" ;;
+      share-list)   zyphor_smb_share_list "$@" ;;
+      share-remove) zyphor_smb_share_remove "$@" ;;
       *) error "smb $ACTION" ;;
     esac
   ;;

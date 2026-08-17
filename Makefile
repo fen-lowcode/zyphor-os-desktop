@@ -165,14 +165,14 @@ release:
 # 	zyphor build package pkg/v2/updater/zwn
 # 	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
-# 	zyphor build package pkg/v2/zywin/zywin
-# 	mv pkg/v2/zywin/zywin.deb zywin.deb
+	zyphor build package pkg/v2/zywin/zywin
+	mv pkg/v2/zywin/zywin.deb zywin.deb
 
 # 	zyphor build package pkg/v2/zywelcome/zywelcome
 # 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
 
-	zyphor build package pkg/v2/zylearn/zylearn
-	mv pkg/v2/zylearn/zylearn.deb zylearn.deb
+# 	zyphor build package pkg/v2/zylearn/zylearn
+# 	mv pkg/v2/zylearn/zylearn.deb zylearn.deb
 
 # 	zyphor build package pkg/v2/updater/updates
 # 	mv pkg/v2/updater/updates.deb zyphor-updates.deb
@@ -188,7 +188,7 @@ release:
 
 # 	---
 
-# 	mv ./*.deb ../zyphor-os.github.io/v2-ada-lovelace/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/v2-ada-lovelace/pool/main/z --verbose
 
 # BUILD AUTOMATION
 

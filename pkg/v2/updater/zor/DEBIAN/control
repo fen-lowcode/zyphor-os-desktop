@@ -1,5 +1,5 @@
 Package: zyphor-os-release
-Version: 35.0.0-r19-stable-release
+Version: 36.0.0-r20-stable-release
 Section: utils
 Priority: optional
 Architecture: all

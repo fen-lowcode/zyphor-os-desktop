@@ -43,6 +43,9 @@ chmod 555 /usr/lib/zyphor/smb/disk-mount
 chmod 555 /usr/lib/zyphor/smb/ensure
 chmod 555 /usr/lib/zyphor/smb/list
 chmod 555 /usr/lib/zyphor/smb/mount
+chmod 555 /usr/lib/zyphor/smb/share-add
+chmod 555 /usr/lib/zyphor/smb/share-list
+chmod 555 /usr/lib/zyphor/smb/share-remove
 
 chmod 555 /usr/lib/zyphor/ssh/cmd
 chmod 555 /usr/lib/zyphor/ssh/connect

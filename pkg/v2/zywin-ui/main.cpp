@@ -23,8 +23,8 @@ public:
         : QWidget(parent)
     {
         setWindowTitle("ZyWin Installer");
-        setMinimumSize(800, 500);
-        resize(900, 550);
+        setMinimumSize(800, 700);
+        resize(900, 750);
 
         createUI();
     }
@@ -56,7 +56,7 @@ private:
         // Header
         // -------------------------------------------------
 
-        QLabel *title = new QLabel("ZyWin");
+        QLabel *title = new QLabel("ZyWin UI");
 
         title->setStyleSheet(
             "font-size: 36px;"
@@ -65,7 +65,7 @@ private:
 
 
         QLabel *subtitle =
-            new QLabel("Windows Application Installer");
+            new QLabel("Install and run Windows applications on Zyphor OS");
 
         subtitle->setStyleSheet(
             "font-size: 17px;"

@@ -128,14 +128,17 @@ status:
 	git status
 
 add:
-	git add pkg/v2/zylearn/main.cpp
-	git commit -m "feat: updated zylearn application"
+	git add pkg/v2/zywin/.gitignore
+	git commit -m "chore: updated gitignore"
 
-	git add pkg/v2/zylearn/zylearn/DEBIAN/control
-	git commit -m "chore: updated zylearn package control"
+	git add pkg/v2/zywin/src/main.cpp
+	git commit -m "feat: updated zywin source"
 
-	git add pkg/v2/zylearn/zylearn/usr/bin/zylearn
-	git commit -m "fix: updated zylearn executable"
+	git add pkg/v2/zywin/zywin/usr/bin/zywin
+	git commit -m "fix: updated zywin executable"
+
+	git add pkg/v2/zywin/zywindow
+	git commit -m "fix: updated zywindow"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"

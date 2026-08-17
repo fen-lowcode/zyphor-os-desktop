@@ -1,5 +1,21 @@
 #!/bin/sh
 set -e
 
+# Executable file
+chmod 555 /usr/bin/zywin-ui
+
+# Desktop launcher
+DESKTOP_FILE="/usr/share/applications/zywin-ui.desktop"
+
+if [ -n "$SUDO_USER" ] && [ "$SUDO_USER" != "root" ]; then
+    USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+    DESKTOP_DIR="$USER_HOME/Desktop"
+
+    if [ -d "$DESKTOP_DIR" ] && [ -f "$DESKTOP_FILE" ]; then
+        cp "$DESKTOP_FILE" "$DESKTOP_DIR/ZyWin-UI.desktop"
+        chown "$SUDO_USER:$SUDO_USER" "$DESKTOP_DIR/ZyWin-UI.desktop"
+        chmod +x "$DESKTOP_DIR/ZyWin-UI.desktop"
+    fi
+fi
 
 exit 0

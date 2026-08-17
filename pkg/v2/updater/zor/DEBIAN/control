@@ -1,5 +1,5 @@
 Package: zyphor-os-release
-Version: 33.0.0-r17-stable-release
+Version: 34.0.0-r18-stable-release
 Section: utils
 Priority: optional
 Architecture: all

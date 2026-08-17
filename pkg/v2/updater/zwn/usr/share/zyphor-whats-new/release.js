@@ -1,9 +1,20 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u35",
-    date: "Updated On: August 17, 2026 @ 03:21 PM",
+    version: "2.2.1-ada-lovelace-lts-u36",
+    date: "Updated On: August 17, 2026 @ 09:55 PM",
 
     sections: [
+        {
+            "title": "ZyWin-UI Package",
+            "items": [
+                "Added a graphical user interface for installing Windows applications on Zyphor OS",
+                "Added file browser support for selecting EXE, MSI, and ISO application installers",
+                "Added installation status and progress feedback while ZyWin is running",
+                "Added automatic desktop launcher creation for ZyWin-UI",
+                "Added ZyWin-UI application icon and desktop menu integration",
+                "Added support for launching ZyWin directly from the graphical installer"
+            ]
+        },
         {
             "title": "SMB Module — Samba Sharing - Latest",
             "items": [

@@ -53,10 +53,13 @@ help() {
   # ================= NETWORK / STORAGE =================
   echo "NETWORK / STORAGE"
   echo "----------------------------------"
-  printf "  %-30s %s\n" "smb list"        "List SMB shares from a server"
-  printf "  %-30s %s\n" "smb mount"       "Mount SMB shared folder"
-  printf "  %-30s %s\n" "smb disk-list"   "List available disks"
-  printf "  %-30s %s\n" "smb disk-mount"  "Mount local disk (NTFS)"
+  printf "  %-30s %s\n" "smb list"          "List SMB shares from a server"
+  printf "  %-30s %s\n" "smb mount"         "Mount SMB shared folder"
+  printf "  %-30s %s\n" "smb disk-list"     "List available disks"
+  printf "  %-30s %s\n" "smb disk-mount"    "Mount local disk (NTFS)"
+  printf "  %-30s %s\n" "smb share-add"     "Share a local folder over SMB"
+  printf "  %-30s %s\n" "smb share-list"    "List configured SMB shares"
+  printf "  %-30s %s\n" "smb share-remove"  "Remove a configured SMB share"
   echo ""
 
   # ================= FTP =================

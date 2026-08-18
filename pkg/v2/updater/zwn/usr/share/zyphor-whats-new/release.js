@@ -1,9 +1,15 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u36",
-    date: "Updated On: August 17, 2026 @ 09:55 PM",
+    version: "2.2.1-ada-lovelace-lts-u37",
+    date: "Updated On: August 18, 2026 @ 08:35 AM",
 
     sections: [
+        {
+            "title": "ZyWin-UI Package Security",
+            "items": [
+                "Added post-installation file ownership configuration to ensure /usr/bin/zywin-ui is owned by root"
+            ]
+        },
         {
             "title": "ZyWin-UI Package",
             "items": [
@@ -16,7 +22,7 @@ const releaseNotes = {
             ]
         },
         {
-            "title": "SMB Module — Samba Sharing - Latest",
+            "title": "SMB Module — Samba Sharing",
             "items": [
                 "Added zyphor smb share-add to publish a local folder as a Samba share, with folder/user validation and automatic smbd restart",
                 "Added zyphor smb share-list to display all configured shares from smb.conf",
@@ -24,16 +30,6 @@ const releaseNotes = {
                 "Extended zyphor_smb_ensure to check for and install the samba package alongside smbclient, cifs-utils, and ntfs-3g",
                 "share-add now skips re-prompting for a Samba password if the user already has one set via pdbedit",
                 "share-add prints the ready-to-use Windows UNC path after a successful share creation"
-            ]
-        },
-        {
-            "title": "ZyWin Package Update",
-            "items": [
-                "Adjusted how the return value of std::vector::at() is handled inside execIso to remove compiler warnings",
-                "Changed sanitizeFileName to a static class member",
-                "Changed getWinePrefix to a static class member",
-                "Changed ensureWinePrefix to a static class member",
-                "Changed findExecutables to a static class member"
             ]
         },
     ]

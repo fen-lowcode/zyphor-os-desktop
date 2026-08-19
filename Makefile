@@ -132,7 +132,7 @@ add:
 	git commit -m "chore: updated zyphor updater package control"
 
 	git add pkg/v2/updater/zor/DEBIAN/postinst
-	git commit -m "chore: updated zyphor updater postinst script"
+	git commit -m "chore: updated zyphor updater postinst"
 
 	git add pkg/v2/updater/zwn/DEBIAN/control
 	git commit -m "chore: updated zyphor whats new package control"
@@ -143,8 +143,23 @@ add:
 	git add pkg/v2/zcli/DEBIAN/control
 	git commit -m "chore: updated zyphor CLI package control"
 
-	git add pkg/v2/zcli/usr/lib/zyphor/build/repo
-	git commit -m "feat: updated zyphor repository build"
+	git add pkg/v2/zcli/usr/lib/zyphor/pkg/cache
+	git commit -m "feat: updated package cache command"
+
+	git add pkg/v2/zcli/usr/lib/zyphor/pkg/list
+	git commit -m "feat: updated package list command"
+
+	git add pkg/v2/zcli/usr/lib/zyphor/pkg/remove
+	git commit -m "feat: updated package remove command"
+
+	git add pkg/v2/zcli/usr/lib/zyphor/pkg/search
+	git commit -m "feat: updated package search command"
+
+	git add pkg/v2/zrc/DEBIAN/control
+	git commit -m "chore: updated zyphor repo config package control"
+
+	git add pkg/v2/zrc/DEBIAN/postinst
+	git commit -m "chore: updated zyphor repo config postinst"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"
@@ -189,6 +204,9 @@ release:
 	zyphor build package pkg/v2/zcli
 	mv pkg/v2/zcli.deb zyphor-cli.deb
 
+	zyphor build package pkg/v2/zrc
+	mv pkg/v2/zrc.deb zyphor-repo-config.deb
+
 # 	zyphor build package pkg/v2/zysh
 # 	mv pkg/v2/zysh.deb zysh.deb
 		
@@ -197,7 +215,7 @@ release:
 
 # 	---
 
-	mv ./*.deb ../zyphor-os.github.io/v2-ada-lovelace/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
 
 # BUILD AUTOMATION
 

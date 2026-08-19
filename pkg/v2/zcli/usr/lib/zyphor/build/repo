@@ -8,16 +8,25 @@ zyphor_build_repo() {
     exit 1
   fi
 
-  mkdir -p dists/stable/main/binary-amd64
+  read -rp "[zyphor] Enter LTS codename: " codename
 
-  dpkg-scanpackages pool /dev/null > dists/stable/main/binary-amd64/Packages
+  if [ -z "$codename" ]; then
+    echo "[error] LTS codename cannot be empty"
+    exit 1
+  fi
+
+  mkdir -p "dists/$codename/main/binary-amd64"
+
+  dpkg-scanpackages pool /dev/null > "dists/$codename/main/binary-amd64/Packages"
 
   if [ $? -ne 0 ]; then
     echo "[error] Failed to generate Packages file"
     exit 1
   fi
 
-  gzip -k dists/stable/main/binary-amd64/Packages
+  gzip -kf "dists/$codename/main/binary-amd64/Packages"
 
   echo "[zyphor] Repository metadata generated"
+  echo "[zyphor] LTS codename: $codename"
+  echo "[zyphor] Repository: dists/$codename/main/binary-amd64"
 }

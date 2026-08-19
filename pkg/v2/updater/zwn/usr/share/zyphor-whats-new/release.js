@@ -1,9 +1,15 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u37",
-    date: "Updated On: August 18, 2026 @ 08:35 AM",
+    version: "2.2.1-ada-lovelace-lts-u38",
+    date: "Updated On: August 19, 2026 @ 01:40 PM",
 
     sections: [
+        { 
+            "title": "Zyphor Repository Build",
+            "items": [
+                "Added LTS codename input to the zyphor build repo command for generating package repository metadata under the selected LTS codename"
+            ]
+        },
         {
             "title": "ZyWin-UI Package Security",
             "items": [

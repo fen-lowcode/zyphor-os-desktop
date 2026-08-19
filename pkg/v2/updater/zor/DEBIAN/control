@@ -1,5 +1,5 @@
 Package: zyphor-os-release
-Version: 38.0.0-r22-stable-release
+Version: 39.0.0-r23-stable-release
 Section: utils
 Priority: optional
 Architecture: all

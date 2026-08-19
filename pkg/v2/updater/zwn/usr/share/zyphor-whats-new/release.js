@@ -5,9 +5,11 @@ const releaseNotes = {
 
     sections: [
         { 
-            "title": "Zyphor Repository Build",
+            "title": "Zyphor Repository Build & Configuration",
             "items": [
-                "Added LTS codename input to the zyphor build repo command for generating package repository metadata under the selected LTS codename"
+                "Added LTS codename input to the zyphor build repo command for generating package repository metadata under the selected LTS codename",
+                "Updated the App Registry JSON repository URL from https://zyphor-os.github.io/v2-ada-lovelace/registry/registry.json to https://zyphor-os.github.io/ada-lovelace-lts/registry/registry.json",
+                "Updated the Zyphor APT repository from https://zyphor-os.github.io/v2-ada-lovelace stable main to https://zyphor-os.github.io/ada-lovelace-lts ada-lovelace main"
             ]
         },
         {

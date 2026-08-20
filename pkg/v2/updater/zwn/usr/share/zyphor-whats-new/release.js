@@ -1,9 +1,18 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u38",
-    date: "Updated On: August 19, 2026 @ 01:40 PM",
+    version: "2.2.1-ada-lovelace-lts-u40",
+    date: "Updated On: August 20, 2026 @ 00:00 PM",
 
     sections: [
+        {
+            "title": "Zyphor CLI Setup Dev Environment Update",
+            "items": [
+                "Added android-studio target to zyphor setup dev for provisioning Android Studio + Flutter",
+                "Installs base dependencies (git, curl, unzip, zip, default-jdk, adb, fastboot) via apt",
+                "Locates downloaded Android Studio and Flutter archives (checking ~/Downloads first) and extracts them to /opt",
+                "Appends Flutter/Android SDK PATH exports to the real user's shell rc file (.zshrc or .bashrc), guarded against duplicate entries on re-run"
+            ]
+        },
         { 
             "title": "Zyphor Repository Build & Configuration",
             "items": [

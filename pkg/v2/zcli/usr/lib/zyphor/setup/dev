@@ -3,7 +3,7 @@
 # zyphor_setup_dev — dev environment bootstrapper for Zyphor OS
 #
 # Usage: zyphor setup dev <target>
-# Targets: php, git, node, composer
+# Targets: php, git, node, composer, android-studio (with flutter)
 #
 
 # ======================================================================
@@ -55,6 +55,215 @@ _zyphor_resolve_real_user() {
 _zyphor_user_home() {
   local user="$1"
   eval echo "~$user"
+}
+
+# zyphor_setup_dev — android-studio target
+#
+# Add this block to zyphor_setup_dev.sh (same file as _zyphor_setup_php /
+# _zyphor_setup_git). Also wire it into the main dispatcher's case
+# statement — see bottom of this file.
+#
+
+# ======================================================================
+# HELPERS (new — add alongside _zyphor_resolve_real_user / _zyphor_user_home)
+# ======================================================================
+
+# Looks for a matching downloaded archive in common locations for the
+# real user (Downloads first, since that's where browsers default to).
+_zyphor_find_archive() {
+  local home="$1" pattern="$2"
+  local dir match
+  for dir in "$home/Downloads" "$home" "/tmp"; do
+    match="$(find "$dir" -maxdepth 1 -iname "$pattern" 2>/dev/null | sort -V | tail -n1)"
+    if [ -n "$match" ]; then
+      echo "$match"
+      return 0
+    fi
+  done
+}
+
+# Picks the real user's shell rc file (.zshrc vs .bashrc) so PATH
+# exports land where that user's shell will actually read them.
+_zyphor_resolve_rc_file() {
+  local user="$1" home="$2"
+  local shell
+  shell="$(getent passwd "$user" 2>/dev/null | cut -d: -f7)"
+  case "$shell" in
+    */zsh) echo "$home/.zshrc" ;;
+    *)     echo "$home/.bashrc" ;;
+  esac
+}
+
+# ======================================================================
+# ANDROID STUDIO + FLUTTER TARGET
+# ======================================================================
+
+_zyphor_setup_android_studio() {
+  _zyphor_require_root "android-studio" || return 1
+
+  echo ""
+  echo "Zyphor: 🚀 Setting up Android Studio + Flutter development environment"
+  echo ""
+
+  echo "Zyphor: Installing base dependencies..."
+  apt update -qq
+  apt install -y git curl unzip zip default-jdk adb fastboot || {
+    echo "Zyphor: ✖ Failed installing dependencies"
+    return 1
+  }
+  echo "Zyphor: ✔ Dependencies installed"
+
+  # ------------------------------------------------------------------
+  # Resolve real user/home, same pattern as the git target
+  # ------------------------------------------------------------------
+  local ORIGINAL_USER ORIGINAL_HOME
+  ORIGINAL_USER="$(_zyphor_resolve_real_user)"
+  ORIGINAL_HOME="$(_zyphor_user_home "$ORIGINAL_USER")"
+
+  echo ""
+  echo "Zyphor: Detected target user → $ORIGINAL_USER"
+  echo "Zyphor: Detected home dir   → $ORIGINAL_HOME"
+  echo ""
+
+  if [ "$ORIGINAL_USER" = "root" ] || [ -z "$ORIGINAL_HOME" ] || [ ! -d "$ORIGINAL_HOME" ]; then
+    echo "Zyphor: ⚠ Could not confidently resolve a non-root user/home."
+    read -rp "Continue using '$ORIGINAL_USER' ($ORIGINAL_HOME)? [y/N]: " CONFIRM_USER
+    case "$CONFIRM_USER" in
+      y|Y) ;;
+      *)
+        echo "Zyphor: ✖ Aborting — re-run as: sudo -u <youruser> zyphor setup dev android-studio"
+        return 1
+        ;;
+    esac
+  fi
+
+  # ------------------------------------------------------------------
+  # Android Studio
+  # ------------------------------------------------------------------
+  if [ -d /opt/android-studio ]; then
+    echo ""
+    echo "Zyphor: ⚠ /opt/android-studio already exists"
+    read -rp "Reinstall Android Studio? [y/N]: " REINSTALL_AS
+    case "$REINSTALL_AS" in
+      y|Y) rm -rf /opt/android-studio ;;
+      *)   echo "Zyphor: Skipping Android Studio install" ;;
+    esac
+  fi
+
+  if [ ! -d /opt/android-studio ]; then
+    local AS_ARCHIVE
+    AS_ARCHIVE="$(_zyphor_find_archive "$ORIGINAL_HOME" "android-studio-*-linux.tar.gz")"
+
+    if [ -z "$AS_ARCHIVE" ]; then
+      echo ""
+      echo "Zyphor: 📘 Android Studio archive not found"
+      echo "Download it from: https://developer.android.com/studio"
+      echo "(save android-studio-*-linux.tar.gz into $ORIGINAL_HOME/Downloads)"
+      echo ""
+      read -rp "Press ENTER once downloaded (or paste the full path to the archive): " AS_ARCHIVE_INPUT
+      if [ -n "$AS_ARCHIVE_INPUT" ] && [ -f "$AS_ARCHIVE_INPUT" ]; then
+        AS_ARCHIVE="$AS_ARCHIVE_INPUT"
+      else
+        AS_ARCHIVE="$(_zyphor_find_archive "$ORIGINAL_HOME" "android-studio-*-linux.tar.gz")"
+      fi
+    fi
+
+    if [ -z "$AS_ARCHIVE" ] || [ ! -f "$AS_ARCHIVE" ]; then
+      echo "Zyphor: ✖ Could not locate Android Studio archive"
+      return 1
+    fi
+
+    echo "Zyphor: Extracting $(basename "$AS_ARCHIVE")..."
+    tar -xzf "$AS_ARCHIVE" -C /tmp || {
+      echo "Zyphor: ✖ Failed extracting Android Studio"
+      return 1
+    }
+    mv /tmp/android-studio /opt/ || {
+      echo "Zyphor: ✖ Failed moving Android Studio to /opt"
+      return 1
+    }
+    ln -sf /opt/android-studio/bin/studio.sh /usr/local/bin/android-studio
+    echo "Zyphor: ✔ Android Studio installed → /opt/android-studio"
+  fi
+
+  # ------------------------------------------------------------------
+  # Flutter
+  # ------------------------------------------------------------------
+  if [ -d /opt/flutter ]; then
+    echo ""
+    echo "Zyphor: ⚠ /opt/flutter already exists"
+    read -rp "Reinstall Flutter? [y/N]: " REINSTALL_FL
+    case "$REINSTALL_FL" in
+      y|Y) rm -rf /opt/flutter ;;
+      *)   echo "Zyphor: Skipping Flutter install" ;;
+    esac
+  fi
+
+  if [ ! -d /opt/flutter ]; then
+    local FL_ARCHIVE
+    FL_ARCHIVE="$(_zyphor_find_archive "$ORIGINAL_HOME" "flutter_linux_*.tar.xz")"
+
+    if [ -z "$FL_ARCHIVE" ]; then
+      echo ""
+      echo "Zyphor: 📘 Flutter archive not found"
+      echo "Download it from: https://docs.flutter.dev/get-started/install/linux"
+      echo "(save flutter_linux_*.tar.xz into $ORIGINAL_HOME/Downloads)"
+      echo ""
+      read -rp "Press ENTER once downloaded (or paste the full path to the archive): " FL_ARCHIVE_INPUT
+      if [ -n "$FL_ARCHIVE_INPUT" ] && [ -f "$FL_ARCHIVE_INPUT" ]; then
+        FL_ARCHIVE="$FL_ARCHIVE_INPUT"
+      else
+        FL_ARCHIVE="$(_zyphor_find_archive "$ORIGINAL_HOME" "flutter_linux_*.tar.xz")"
+      fi
+    fi
+
+    if [ -z "$FL_ARCHIVE" ] || [ ! -f "$FL_ARCHIVE" ]; then
+      echo "Zyphor: ✖ Could not locate Flutter archive"
+      return 1
+    fi
+
+    echo "Zyphor: Extracting $(basename "$FL_ARCHIVE")..."
+    tar -xf "$FL_ARCHIVE" -C /tmp || {
+      echo "Zyphor: ✖ Failed extracting Flutter"
+      return 1
+    }
+    mv /tmp/flutter /opt/ || {
+      echo "Zyphor: ✖ Failed moving Flutter to /opt"
+      return 1
+    }
+    chown -R "$ORIGINAL_USER:$ORIGINAL_USER" /opt/flutter
+    echo "Zyphor: ✔ Flutter installed → /opt/flutter"
+  fi
+
+  # ------------------------------------------------------------------
+  # Shell PATH / env exports — written to the real user's rc file,
+  # guarded so re-running the target doesn't duplicate the block
+  # ------------------------------------------------------------------
+  local RC_FILE
+  RC_FILE="$(_zyphor_resolve_rc_file "$ORIGINAL_USER" "$ORIGINAL_HOME")"
+
+  echo ""
+  echo "Zyphor: Updating $RC_FILE ..."
+
+  if ! grep -q "# ZYPHOR: android-studio/flutter" "$RC_FILE" 2>/dev/null; then
+    sudo -u "$ORIGINAL_USER" bash -c "cat >> '$RC_FILE'" <<'EOF'
+
+# ZYPHOR: android-studio/flutter
+export PATH="$PATH:/opt/flutter/bin"
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+EOF
+    echo "Zyphor: ✔ PATH exports added to $RC_FILE"
+  else
+    echo "Zyphor: PATH exports already present in $RC_FILE — skipping"
+  fi
+
+  echo ""
+  echo "Zyphor: ✔ Android Studio + Flutter environment ready"
+  echo "Zyphor: Run 'source $RC_FILE' or open a new terminal, then:"
+  echo "  android-studio      # launch the IDE"
+  echo "  flutter doctor      # verify the Flutter/Android toolchain"
+  echo ""
 }
 
 # ======================================================================
@@ -294,10 +503,11 @@ zyphor_setup_dev() {
   echo ""
 
   case "$TARGET" in
-    php)      _zyphor_setup_php ;;
-    git)      _zyphor_setup_git ;;
-    node)     _zyphor_setup_node ;;
-    composer) _zyphor_setup_composer ;;
+    php)             _zyphor_setup_php ;;
+    git)             _zyphor_setup_git ;;
+    node)            _zyphor_setup_node ;;
+    composer)        _zyphor_setup_composer ;;
+    android-studio)  _zyphor_setup_android_studio ;;
     *)
       echo ""
       echo "Zyphor: ✖ Unknown dev target → $TARGET"

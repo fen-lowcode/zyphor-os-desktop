@@ -120,6 +120,12 @@ help() {
   echo "  zyphor setup theme light"
   echo "  zyphor setup theme dark"
   echo ""
+  echo "----------------------------------"
+  echo "NOTE"
+  echo "----------------------------------"
+  echo "  You can use 'zy' instead of 'zyphor' as a shortcut."
+  echo "  Example: zy system upgrade"
+  echo ""
 
   echo "=================================="
   echo ""

@@ -1,9 +1,17 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u40",
-    date: "Updated On: August 20, 2026 @ 07:04 PM",
+    version: "2.2.1-ada-lovelace-lts-u41",
+    date: "Updated On: August 22, 2026 @ 01:50 PM",
 
     sections: [
+        {
+            "title": "Zyphor CLI Command Shortcut Update",
+            "items": [
+                "Added the 'zy' command as a shortcut alias for 'zyphor'",
+                "You can now use 'zy' instead of 'zyphor' for faster command execution",
+                "All existing Zyphor CLI commands can be used with the 'zy' shortcut"
+            ]
+        },
         {
             "title": "Zyphor CLI Setup Dev Environment Update",
             "items": [
@@ -36,17 +44,6 @@ const releaseNotes = {
                 "Added automatic desktop launcher creation for ZyWin-UI",
                 "Added ZyWin-UI application icon and desktop menu integration",
                 "Added support for launching ZyWin directly from the graphical installer"
-            ]
-        },
-        {
-            "title": "SMB Module — Samba Sharing",
-            "items": [
-                "Added zyphor smb share-add to publish a local folder as a Samba share, with folder/user validation and automatic smbd restart",
-                "Added zyphor smb share-list to display all configured shares from smb.conf",
-                "Added zyphor smb share-remove to delete an existing share and restart smbd",
-                "Extended zyphor_smb_ensure to check for and install the samba package alongside smbclient, cifs-utils, and ntfs-3g",
-                "share-add now skips re-prompting for a Samba password if the user already has one set via pdbedit",
-                "share-add prints the ready-to-use Windows UNC path after a successful share creation"
             ]
         },
     ]

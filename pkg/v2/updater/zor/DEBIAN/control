@@ -1,5 +1,5 @@
 Package: zyphor-os-release
-Version: 41.0.0-r25-stable-release
+Version: 42.0.0-r26-stable-release
 Section: utils
 Priority: optional
 Architecture: all

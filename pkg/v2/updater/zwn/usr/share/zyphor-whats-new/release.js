@@ -1,9 +1,19 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u42",
-    date: "Updated On: August 24, 2026 @ 07:29 PM",
+    version: "2.2.1-ada-lovelace-lts-u44",
+    date: "Updated On: August 24, 2026 @ 07:59 PM",
 
     sections: [
+        {
+            "title": "Zyphor System Upgrade — Progress Visibility",
+            "items": [
+                "Fixed 'zyphor system upgrade' appearing to hang during step [1/4]",
+                "Removed the '-qq' quiet flag from 'apt update' so real package-list output streams to the user",
+                "'apt full-upgrade -y' output is no longer suppressed, showing live download/install progress",
+                "Prevents users from mistaking a slow-but-active update for a frozen process",
+                "Fallback: quiet steps can use a Braille-spinner helper ('zyphor_spinner') for visual feedback when output must stay suppressed"
+            ]
+        },
         {
             "title": "Zyphor Refresh Command",
             "items": [
@@ -38,12 +48,6 @@ const releaseNotes = {
                 "Updated the App Registry JSON repository URL from https://zyphor-os.github.io/v2-ada-lovelace/registry/registry.json to https://zyphor-os.github.io/ada-lovelace-lts/registry/registry.json",
                 "Updated the Zyphor APT repository from https://zyphor-os.github.io/v2-ada-lovelace stable main to https://zyphor-os.github.io/ada-lovelace-lts ada-lovelace main"
             ]
-        },
-        {
-            "title": "ZyWin-UI Package Security",
-            "items": [
-                "Added post-installation file ownership configuration to ensure /usr/bin/zywin-ui is owned by root"
-            ]
-        },
+        }
     ]
 };

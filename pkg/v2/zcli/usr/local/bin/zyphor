@@ -3,6 +3,7 @@
 # ================= CORE =================
 source /usr/lib/zyphor/core/help
 source /usr/lib/zyphor/core/error
+source /usr/lib/zyphor/core/refresh
 
 CATEGORY="$1"
 ACTION="$2"
@@ -177,6 +178,7 @@ case "$CATEGORY" in
 
   # ================= META =================
   help|"") help ;;
+  refresh|"") refresh ;;
   *) error "$CATEGORY" ;;
 
 esac

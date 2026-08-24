@@ -98,6 +98,7 @@ help() {
   echo "CORE"
   echo "----------------------------------"
   printf "  %-30s %s\n" "help"    "Show this help menu"
+  printf "  %-30s %s\n" "refresh"    "Restore and refresh Zyphor OS defaults"
   echo ""
 
   # ================= EXAMPLES =================

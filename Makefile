@@ -139,6 +139,12 @@ add:
 
 	git add pkg/v2/updater/zwn/usr/share/zyphor-whats-new/release.js
 	git commit -m "feat: updated zyphor whats new release notes"
+
+	git add pkg/v2/zcli/DEBIAN/control
+	git commit -m "chore: updated zyphor CLI package control"
+
+	git add pkg/v2/zcli/usr/lib/zyphor/system/upgrade
+	git commit -m "feat: updated zyphor system upgrade"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"
@@ -180,8 +186,8 @@ release:
 # 	zyphor build package pkg/v2/updater/updates
 # 	mv pkg/v2/updater/updates.deb zyphor-updates.deb
 
-# 	zyphor build package pkg/v2/zcli
-# 	mv pkg/v2/zcli.deb zyphor-cli.deb
+	zyphor build package pkg/v2/zcli
+	mv pkg/v2/zcli.deb zyphor-cli.deb
 
 # 	zyphor build package pkg/v2/zrc
 # 	mv pkg/v2/zrc.deb zyphor-repo-config.deb

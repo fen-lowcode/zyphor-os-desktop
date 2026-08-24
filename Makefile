@@ -143,11 +143,14 @@ add:
 	git add pkg/v2/zcli/DEBIAN/control
 	git commit -m "chore: updated zyphor CLI package control"
 
-	git add pkg/v2/zcli/DEBIAN/postinst
-	git commit -m "chore: updated zyphor CLI postinst"
-
 	git add pkg/v2/zcli/usr/lib/zyphor/core/help
 	git commit -m "feat: updated zyphor CLI help"
+
+	git add pkg/v2/zcli/usr/local/bin/zyphor
+	git commit -m "feat: updated zyphor CLI"
+
+	git add pkg/v2/zcli/usr/lib/zyphor/core/refresh
+	git commit -m "feat: added zyphor refresh command"
 	
 	git add Makefile
 	git commit -m "build: update repository automation"

@@ -19,7 +19,7 @@ zyphor_system_upgrade() {
   # ===== Step 1: Update package list =====
   echo ""
   echo "Zyphor: [1/4] Updating package lists..."
-  if ! apt update -qq; then
+  if ! apt update; then
     echo "Zyphor: ✖ Failed to update package lists"
     return 1
   fi

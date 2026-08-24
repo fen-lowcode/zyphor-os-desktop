@@ -1,9 +1,18 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u41",
-    date: "Updated On: August 22, 2026 @ 01:50 PM",
+    version: "2.2.1-ada-lovelace-lts-u42",
+    date: "Updated On: August 24, 2026 @ 10:54 AM",
 
     sections: [
+        {
+            "title": "Zyphor Defaults Reset Command",
+            "items": [
+                "Added 'zyphor defaults' command to reset the system to first-boot state",
+                "Automatically detects the current logged-in user without requiring sudo",
+                "Removes the '.zyphor_firstboot_done' marker file so the setup wizard runs again on next boot",
+                "Reboots the system automatically after the reset"
+            ]
+        },
         {
             "title": "Zyphor CLI Command Shortcut Update",
             "items": [
@@ -33,17 +42,6 @@ const releaseNotes = {
             "title": "ZyWin-UI Package Security",
             "items": [
                 "Added post-installation file ownership configuration to ensure /usr/bin/zywin-ui is owned by root"
-            ]
-        },
-        {
-            "title": "ZyWin-UI Package",
-            "items": [
-                "Added a graphical user interface for installing Windows applications on Zyphor OS",
-                "Added file browser support for selecting EXE, MSI, and ISO application installers",
-                "Added installation status and progress feedback while ZyWin is running",
-                "Added automatic desktop launcher creation for ZyWin-UI",
-                "Added ZyWin-UI application icon and desktop menu integration",
-                "Added support for launching ZyWin directly from the graphical installer"
             ]
         },
     ]

@@ -1,5 +1,5 @@
 Package: zyphor-cli
-Version: 9.0.0-r14-stable-release
+Version: 10.0.0-r15-stable-release
 Section: utils
 Priority: optional
 Architecture: all

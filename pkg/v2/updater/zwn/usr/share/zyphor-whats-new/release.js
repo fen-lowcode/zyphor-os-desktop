@@ -1,16 +1,17 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
     version: "2.2.1-ada-lovelace-lts-u42",
-    date: "Updated On: August 24, 2026 @ 10:54 AM",
+    date: "Updated On: August 24, 2026 @ 07:29 PM",
 
     sections: [
         {
-            "title": "Zyphor Defaults Reset Command",
+            "title": "Zyphor Refresh Command",
             "items": [
-                "Added 'zyphor defaults' command to reset the system to first-boot state",
+                "Added 'zyphor refresh' command to reset the system to first-boot state",
                 "Automatically detects the current logged-in user without requiring sudo",
                 "Removes the '.zyphor_firstboot_done' marker file so the setup wizard runs again on next boot",
-                "Reboots the system automatically after the reset"
+                "Reboots the system automatically after the reset",
+                "Correction: The command name is zyphor refresh, not zyphor defaults."
             ]
         },
         {

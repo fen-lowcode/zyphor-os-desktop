@@ -134,8 +134,8 @@ add:
 	git add pkg/staging/zysh.deb
 	git commit -m "chore: updated zysh package"
 
-	git add pkg/v2/zysh/usr/share/zysh/prompt.zsh
-	git commit -m "feat: updated zysh prompt"
+	git add pkg/v2/zysh/DEBIAN/control
+	git commit -m "chore: updated zysh package control"
 
 push:
 	git push origin $(branch)

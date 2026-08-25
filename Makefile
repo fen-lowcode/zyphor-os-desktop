@@ -131,14 +131,20 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/staging/zysh.deb
-	git commit -m "chore: update zysh package"
+	git add pkg/v2/updater/zor/DEBIAN/control
+	git commit -m "chore: update zyphor updater control"
+
+	git add pkg/v2/updater/zor/DEBIAN/postinst
+	git commit -m "chore: update zyphor updater postinst"
+
+	git add pkg/v2/updater/zwn/DEBIAN/control
+	git commit -m "chore: update zyphor whats-new control"
+
+	git add pkg/v2/updater/zwn/usr/share/zyphor-whats-new/release.js
+	git commit -m "feat: update zyphor whats-new release notes"
 
 	git add pkg/v2/zysh/DEBIAN/control
 	git commit -m "chore: update zysh package control"
-
-	git add pkg/v2/zysh/usr/share/zysh/prompt.zsh
-	git commit -m "feat: update zysh prompt"
 
 push:
 	git push origin $(branch)
@@ -156,11 +162,11 @@ switch:
 
 release:
 
-# 	zyphor build package pkg/v2/updater/zor
-# 	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
+	zyphor build package pkg/v2/updater/zor
+	mv pkg/v2/updater/zor.deb zyphor-os-release.deb
 
-# 	zyphor build package pkg/v2/updater/zwn
-# 	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
+	zyphor build package pkg/v2/updater/zwn
+	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/zywin/zywin
 # 	mv pkg/v2/zywin/zywin.deb zywin.deb
@@ -191,9 +197,9 @@ release:
 
 # 	---
 
-# 	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
 
-	mv ./*.deb pkg/staging --verbose
+# 	mv ./*.deb pkg/staging --verbose
 
 # BUILD AUTOMATION
 

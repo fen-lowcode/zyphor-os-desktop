@@ -1,9 +1,18 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u44",
-    date: "Updated On: August 24, 2026 @ 07:59 PM",
+    version: "2.2.1-ada-lovelace-lts-u45",
+    date: "Updated On: August 25, 2026 @ 10:54 AM",
 
     sections: [
+        {
+            "title": "Zyphor Release Banner — Build Identification",
+            "items": [
+                "Updated the system banner to dynamically display the OS release name from '/etc/os-release'",
+                "Added a 'Latest Build' indicator below the release banner",
+                "Displays the current build identifier (2026.08.22-r41) for easier release and troubleshooting reference",
+                "Improved banner readability by separating the OS release information from the build number"
+            ]
+        },
         {
             "title": "Zyphor System Upgrade — Progress Visibility",
             "items": [
@@ -39,14 +48,6 @@ const releaseNotes = {
                 "Installs base dependencies (git, curl, unzip, zip, default-jdk, adb, fastboot) via apt",
                 "Locates downloaded Android Studio and Flutter archives (checking ~/Downloads first) and extracts them to /opt",
                 "Appends Flutter/Android SDK PATH exports to the real user's shell rc file (.zshrc or .bashrc), guarded against duplicate entries on re-run"
-            ]
-        },
-        { 
-            "title": "Zyphor Repository Build & Configuration",
-            "items": [
-                "Added LTS codename input to the zyphor build repo command for generating package repository metadata under the selected LTS codename",
-                "Updated the App Registry JSON repository URL from https://zyphor-os.github.io/v2-ada-lovelace/registry/registry.json to https://zyphor-os.github.io/ada-lovelace-lts/registry/registry.json",
-                "Updated the Zyphor APT repository from https://zyphor-os.github.io/v2-ada-lovelace stable main to https://zyphor-os.github.io/ada-lovelace-lts ada-lovelace main"
             ]
         }
     ]

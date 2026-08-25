@@ -28,4 +28,5 @@ configure_prompt() {
 configure_prompt
 
 figlet -f term "$(grep '^PRETTY_NAME=' /etc/os-release | cut -d= -f2- | tr -d '"')" | lolcat
+figlet -f term v2.2.1-2026.08.22-r41 | lolcat
 echo ""

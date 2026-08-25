@@ -1,5 +1,5 @@
 Package: zyphor-os-release
-Version: 44.0.0-r28-stable-release
+Version: 45.0.0-r29-stable-release
 Section: utils
 Priority: optional
 Architecture: all

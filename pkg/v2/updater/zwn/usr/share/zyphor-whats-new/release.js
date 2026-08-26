@@ -1,9 +1,18 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u45",
-    date: "Updated On: August 25, 2026 @ 10:54 AM",
+    version: "2.2.1-ada-lovelace-lts-u46",
+    date: "Updated On: August 26, 2026 @ 09:38 AM",
 
     sections: [
+        {
+            "title": "Zyphor System Upgrade — Linux Kernel 7.1.5",
+            "items": [
+                "Updated 8 packages, including hyperv-daemons, Linux kernel components, zyphor-os-release, zyphor-whats-new, and zysh",
+                "Installed 7 new kernel-related dependencies required for Linux kernel 7.1.5+kali-amd64",
+                "Updated Linux kernel image, modules, headers, and build components",
+                "Completed the full upgrade with 0 packages removed and 0 packages left unupgraded"
+            ]
+        },
         {
             "title": "Zyphor Release Banner — Build Identification",
             "items": [
@@ -39,15 +48,6 @@ const releaseNotes = {
                 "Added the 'zy' command as a shortcut alias for 'zyphor'",
                 "You can now use 'zy' instead of 'zyphor' for faster command execution",
                 "All existing Zyphor CLI commands can be used with the 'zy' shortcut"
-            ]
-        },
-        {
-            "title": "Zyphor CLI Setup Dev Environment Update",
-            "items": [
-                "Added android-studio target to zyphor setup dev for provisioning Android Studio + Flutter",
-                "Installs base dependencies (git, curl, unzip, zip, default-jdk, adb, fastboot) via apt",
-                "Locates downloaded Android Studio and Flutter archives (checking ~/Downloads first) and extracts them to /opt",
-                "Appends Flutter/Android SDK PATH exports to the real user's shell rc file (.zshrc or .bashrc), guarded against duplicate entries on re-run"
             ]
         }
     ]

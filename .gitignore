@@ -44,3 +44,5 @@ vmInit
 
 # virtual machines
 /new-iso/*.qcow2
+
+/mail

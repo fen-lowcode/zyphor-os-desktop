@@ -1,5 +1,5 @@
 Package: zysh
-Version: 4.0.0-r4-stable-release
+Version: 5.0.0-r5-stable-release
 Section: utils
 Architecture: all
 Replaces: zyshell

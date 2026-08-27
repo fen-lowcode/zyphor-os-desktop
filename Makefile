@@ -131,20 +131,11 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v2/zcli/DEBIAN/control
-	git commit -m "chore: update zyphor CLI package control"
-
-	git add pkg/v2/zcli/usr/lib/zyphor/build/repo
-	git commit -m "feat: update repository build"
-
 	git add pkg/v2/zrc/DEBIAN/control
 	git commit -m "chore: update zyphor repo config control"
 
 	git add pkg/v2/zrc/DEBIAN/postinst
 	git commit -m "chore: update zyphor repo config postinst"
-
-	git add pkg/v2/zyphor-archive-keyring/
-	git commit -m "feat: add zyphor archive keyring package"
 
 push:
 	git push origin $(branch)
@@ -186,11 +177,11 @@ release:
 # 	zyphor build package pkg/v2/zcli
 # 	mv pkg/v2/zcli.deb zyphor-cli.deb
 
-# 	zyphor build package pkg/v2/zrc
-# 	mv pkg/v2/zrc.deb zyphor-repo-config.deb
+	zyphor build package pkg/v2/zrc
+	mv pkg/v2/zrc.deb zyphor-repo-config.deb
 
-	zyphor build package pkg/v2/zyphor-archive-keyring
-	mv pkg/v2/zyphor-archive-keyring.deb zyphor-archive-keyring.deb
+# 	zyphor build package pkg/v2/zyphor-archive-keyring
+# 	mv pkg/v2/zyphor-archive-keyring.deb zyphor-archive-keyring.deb
 
 # 	zyphor build package pkg/v2/zysh
 # 	mv pkg/v2/zysh.deb zysh.deb
@@ -200,7 +191,8 @@ release:
 
 # 	---
 
-	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
+# 	cp ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-test/pool/main/z --verbose
 
 # 	mv ./*.deb pkg/staging --verbose
 

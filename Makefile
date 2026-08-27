@@ -183,11 +183,11 @@ release:
 # 	zyphor build package pkg/v2/updater/updates
 # 	mv pkg/v2/updater/updates.deb zyphor-updates.deb
 
-	zyphor build package pkg/v2/zcli
-	mv pkg/v2/zcli.deb zyphor-cli.deb
+# 	zyphor build package pkg/v2/zcli
+# 	mv pkg/v2/zcli.deb zyphor-cli.deb
 
-	zyphor build package pkg/v2/zrc
-	mv pkg/v2/zrc.deb zyphor-repo-config.deb
+# 	zyphor build package pkg/v2/zrc
+# 	mv pkg/v2/zrc.deb zyphor-repo-config.deb
 
 	zyphor build package pkg/v2/zyphor-archive-keyring
 	mv pkg/v2/zyphor-archive-keyring.deb zyphor-archive-keyring.deb

@@ -1,9 +1,19 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u46",
-    date: "Updated On: August 26, 2026 @ 09:38 AM",
+    version: "2.2.1-ada-lovelace-lts-u47",
+    date: "Updated On: August 27, 2026 @ 02:48 PM",
 
     sections: [
+        {
+            "title": "Zyphor Package Repository Signing",
+            "items": [
+                "Added cryptographic GPG signing for the official Zyphor OS APT repository",
+                "Implemented signed InRelease and Release.gpg repository metadata",
+                "Added the official Zyphor OS archive keyring for APT repository verification",
+                "APT now verifies repository authenticity using the Zyphor archive signing key instead of relying on trusted=yes",
+                "Added automated repository signature generation and verification to the Zyphor build process"
+            ]
+        },
         {
             "title": "Zyphor System Upgrade — Linux Kernel 7.1.5",
             "items": [
@@ -40,14 +50,6 @@ const releaseNotes = {
                 "Removes the '.zyphor_firstboot_done' marker file so the setup wizard runs again on next boot",
                 "Reboots the system automatically after the reset",
                 "Correction: The command name is zyphor refresh, not zyphor defaults."
-            ]
-        },
-        {
-            "title": "Zyphor CLI Command Shortcut Update",
-            "items": [
-                "Added the 'zy' command as a shortcut alias for 'zyphor'",
-                "You can now use 'zy' instead of 'zyphor' for faster command execution",
-                "All existing Zyphor CLI commands can be used with the 'zy' shortcut"
             ]
         }
     ]

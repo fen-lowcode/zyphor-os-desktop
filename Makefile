@@ -131,11 +131,11 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v2/zrc/DEBIAN/control
-	git commit -m "chore: update zyphor repo config control"
+	git add pkg/v2/zyphor-archive-keyring/DEBIAN/control
+	git commit -m "chore: update archive keyring package control"
 
-	git add pkg/v2/zrc/DEBIAN/postinst
-	git commit -m "chore: update zyphor repo config postinst"
+	git add pkg/v2/zyphor-archive-keyring/DEBIAN/postinst
+	git commit -m "feat: add archive keyring package postinst"
 
 push:
 	git push origin $(branch)

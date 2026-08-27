@@ -1,5 +1,5 @@
 Package: zyphor-archive-keyring
-Version: 1.0.0-beta-release
+Version: 2.0.0-r2-stable-release
 Section: utils
 Priority: optional
 Architecture: all

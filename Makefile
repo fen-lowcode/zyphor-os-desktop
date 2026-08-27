@@ -131,11 +131,23 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v2/zyphor-archive-keyring/DEBIAN/control
-	git commit -m "chore: update archive keyring package control"
+	git add pkg/v2/updater/zor/DEBIAN/control
+	git commit -m "chore: update zyphor updater control"
 
-	git add pkg/v2/zyphor-archive-keyring/DEBIAN/postinst
-	git commit -m "feat: add archive keyring package postinst"
+	git add pkg/v2/updater/zor/DEBIAN/postinst
+	git commit -m "chore: update zyphor updater postinst"
+
+	git add pkg/v2/updater/zwn/DEBIAN/control
+	git commit -m "chore: update zyphor whats-new control"
+
+	git add pkg/v2/updater/zwn/usr/share/zyphor-whats-new/release.js
+	git commit -m "feat: update zyphor whats-new release notes"
+
+	git add pkg/v2/zrc/DEBIAN/control
+	git commit -m "chore: update zyphor repo config control"
+
+	git add pkg/v2/zrc/DEBIAN/postinst
+	git commit -m "chore: update zyphor repo config postinst"
 
 push:
 	git push origin $(branch)
@@ -191,8 +203,7 @@ release:
 
 # 	---
 
-# 	cp ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
-	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-test/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
 
 # 	mv ./*.deb pkg/staging --verbose
 

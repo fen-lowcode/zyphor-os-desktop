@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
     std::string ext = file.extension().string();
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-    cleanupExtracted();
+    // cleanupExtracted();
     if (ext == ".exe") {
         wh.execExe(file);
     } 

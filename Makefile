@@ -143,14 +143,8 @@ add:
 	git add pkg/v2/updater/zwn/usr/share/zyphor-whats-new/release.js
 	git commit -m "feat: update zyphor whats-new release notes"
 
-	git add pkg/v2/zywin-ui/main.cpp
-	git commit -m "feat: update zywin-ui source"
-
-	git add pkg/v2/zywin-ui/zywin-ui/DEBIAN/control
-	git commit -m "chore: update zywin-ui package control"
-
-	git add pkg/v2/zywin-ui/zywin-ui/DEBIAN/postinst
-	git commit -m "chore: update zywin-ui package postinst"
+	git add pkg/v2/zywin/zywin/usr/bin/zywin
+	git commit -m "feat: update zywin executable"
 
 push:
 	git push origin $(branch)
@@ -174,11 +168,11 @@ release:
 	zyphor build package pkg/v2/updater/zwn
 	mv pkg/v2/updater/zwn.deb zyphor-whats-new.deb
 
-# 	zyphor build package pkg/v2/zywin/zywin
-# 	mv pkg/v2/zywin/zywin.deb zywin.deb
+	zyphor build package pkg/v2/zywin/zywin
+	mv pkg/v2/zywin/zywin.deb zywin.deb
 
-	zyphor build package pkg/v2/zywin-ui/zywin-ui
-	mv pkg/v2/zywin-ui/zywin-ui.deb zywin-ui.deb
+# 	zyphor build package pkg/v2/zywin-ui/zywin-ui
+# 	mv pkg/v2/zywin-ui/zywin-ui.deb zywin-ui.deb
 
 # 	zyphor build package pkg/v2/zywelcome/zywelcome
 # 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb

@@ -1,9 +1,17 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u47",
-    date: "Updated On: August 27, 2026 @ 02:48 PM",
+    version: "2.2.1-ada-lovelace-lts-u48",
+    date: "Updated On: August 28, 2026 @ 08:54 AM",
 
     sections: [
+        {
+            "title": "ZyWin UI Installer",
+            "items": [
+                "Added a Wine configuration check on launch that detects whether Wine is set up and prompts the user to run \"sudo zyphor setup wine\" if it isn't",
+                "Application installs are handed off to the zywin CLI, with live status updates and error reporting surfaced in the UI",
+                "Added a dark, Zyphor-branded interface consistent with the rest of the desktop"
+            ]
+        },
         {
             "title": "Zyphor Package Repository Signing",
             "items": [
@@ -40,16 +48,6 @@ const releaseNotes = {
                 "'apt full-upgrade -y' output is no longer suppressed, showing live download/install progress",
                 "Prevents users from mistaking a slow-but-active update for a frozen process",
                 "Fallback: quiet steps can use a Braille-spinner helper ('zyphor_spinner') for visual feedback when output must stay suppressed"
-            ]
-        },
-        {
-            "title": "Zyphor Refresh Command",
-            "items": [
-                "Added 'zyphor refresh' command to reset the system to first-boot state",
-                "Automatically detects the current logged-in user without requiring sudo",
-                "Removes the '.zyphor_firstboot_done' marker file so the setup wizard runs again on next boot",
-                "Reboots the system automatically after the reset",
-                "Correction: The command name is zyphor refresh, not zyphor defaults."
             ]
         }
     ]

@@ -14,6 +14,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDebug>
+#include <QTimer>
 
 class ZyWinUI : public QWidget
 {
@@ -23,10 +24,13 @@ public:
         : QWidget(parent)
     {
         setWindowTitle("ZyWin Installer");
-        setMinimumSize(800, 700);
-        resize(900, 750);
+        setMinimumSize(800, 780);
+        resize(900, 830);
 
         createUI();
+
+        // Kick off the Wine configuration check once the UI is up.
+        QTimer::singleShot(0, this, [this]() { checkWineConfigured(); });
     }
 
 private:
@@ -38,7 +42,15 @@ private:
     QLabel *statusIcon;
     QProgressBar *progressBar;
 
+    // Wine check widgets
+    QFrame *winePanel;
+    QLabel *wineStatusIcon;
+    QLabel *wineStatusLabel;
+    QLabel *wineHintLabel;
+    QProgressBar *wineCheckSpinner;
+
     QString selectedFile;
+    bool wineConfigured = false;
 
     void createUI()
     {
@@ -83,6 +95,90 @@ private:
 
 
         mainLayout->addLayout(headerLayout);
+
+
+        // -------------------------------------------------
+        // Wine configuration check panel
+        // -------------------------------------------------
+
+        winePanel = new QFrame();
+
+        winePanel->setObjectName("panel");
+
+
+        QVBoxLayout *wineLayout =
+            new QVBoxLayout(winePanel);
+
+        wineLayout->setContentsMargins(25, 25, 25, 25);
+        wineLayout->setSpacing(15);
+
+
+        QLabel *wineTitle =
+            new QLabel("Wine Configuration");
+
+        wineTitle->setStyleSheet(
+            "font-size: 20px;"
+            "font-weight: bold;"
+        );
+
+
+        QHBoxLayout *wineStatusRow =
+            new QHBoxLayout();
+
+        wineStatusRow->setSpacing(12);
+
+
+        wineStatusIcon =
+            new QLabel("●");
+
+        wineStatusIcon->setStyleSheet(
+            "font-size: 20px;"
+            "color: #3b82f6;"
+        );
+
+
+        wineStatusLabel =
+            new QLabel("Checking if Wine is configured...");
+
+        wineStatusLabel->setStyleSheet(
+            "font-size: 15px;"
+            "color: #d6dce5;"
+        );
+
+
+        wineStatusRow->addWidget(wineStatusIcon);
+        wineStatusRow->addWidget(wineStatusLabel);
+        wineStatusRow->addStretch();
+
+
+        wineCheckSpinner = new QProgressBar();
+
+        wineCheckSpinner->setRange(0, 0);
+        wineCheckSpinner->setTextVisible(false);
+
+
+        wineHintLabel =
+            new QLabel(
+                "Wine isn't set up yet. Open a terminal and run "
+                "\"sudo zyphor setup wine\", then relaunch ZyWin."
+            );
+
+        wineHintLabel->setStyleSheet(
+            "color: #f59e0b;"
+            "font-size: 13px;"
+        );
+
+        wineHintLabel->setWordWrap(true);
+        wineHintLabel->setVisible(false);
+
+
+        wineLayout->addWidget(wineTitle);
+        wineLayout->addLayout(wineStatusRow);
+        wineLayout->addWidget(wineCheckSpinner);
+        wineLayout->addWidget(wineHintLabel);
+
+
+        mainLayout->addWidget(winePanel);
 
 
         // -------------------------------------------------
@@ -142,6 +238,9 @@ private:
             new QPushButton("Browse...");
 
         browseButton->setMinimumWidth(120);
+
+        // Disabled until the Wine check completes successfully.
+        browseButton->setEnabled(false);
 
 
         fileInputLayout->addWidget(filePathEdit);
@@ -259,7 +358,7 @@ private:
 
 
         QLabel *versionLabel =
-            new QLabel("ZyWin Installer v1.0.0");
+            new QLabel("ZyWin Installer");
 
         versionLabel->setStyleSheet(
             "color: #7f8a9a;"
@@ -368,11 +467,123 @@ private:
 
 
     // -----------------------------------------------------
+    // Check whether Wine has been configured via
+    // "sudo zyphor setup wine". We look for the wine
+    // binary on PATH; ZyWin can't do anything useful
+    // without it.
+    // -----------------------------------------------------
+
+    void checkWineConfigured()
+    {
+        wineCheckSpinner->setVisible(true);
+        wineHintLabel->setVisible(false);
+
+        wineStatusIcon->setStyleSheet(
+            "font-size: 20px;"
+            "color: #3b82f6;"
+        );
+
+        wineStatusLabel->setText(
+            "Checking if Wine is configured..."
+        );
+
+
+        QProcess *checkProcess = new QProcess(this);
+
+        connect(
+            checkProcess,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(
+                &QProcess::finished
+            ),
+            this,
+            [this, checkProcess](int exitCode, QProcess::ExitStatus exitStatus)
+            {
+                onWineCheckFinished(
+                    exitStatus == QProcess::NormalExit && exitCode == 0
+                );
+
+                checkProcess->deleteLater();
+            }
+        );
+
+        connect(
+            checkProcess,
+            &QProcess::errorOccurred,
+            this,
+            [this, checkProcess](QProcess::ProcessError)
+            {
+                Q_UNUSED(checkProcess);
+
+                onWineCheckFinished(false);
+            }
+        );
+
+        // "which wine" exits 0 if a wine binary is on PATH.
+        checkProcess->start("which", QStringList() << "wine");
+    }
+
+
+    void onWineCheckFinished(bool configured)
+    {
+        wineConfigured = configured;
+
+        wineCheckSpinner->setVisible(false);
+
+        if (wineConfigured)
+        {
+            wineStatusIcon->setStyleSheet(
+                "font-size: 20px;"
+                "color: #22c55e;"
+            );
+
+            wineStatusLabel->setText(
+                "Wine is configured."
+            );
+
+            wineHintLabel->setVisible(false);
+
+            browseButton->setEnabled(true);
+
+            // Install button re-enables once a file is selected.
+        }
+        else
+        {
+            wineStatusIcon->setStyleSheet(
+                "font-size: 20px;"
+                "color: #ef4444;"
+            );
+
+            wineStatusLabel->setText(
+                "Wine is not configured."
+            );
+
+            wineHintLabel->setVisible(true);
+
+            browseButton->setEnabled(false);
+            installButton->setEnabled(false);
+        }
+    }
+
+
+    // -----------------------------------------------------
     // Select application
     // -----------------------------------------------------
 
     void selectApplication()
     {
+        if (!wineConfigured)
+        {
+            QMessageBox::warning(
+                this,
+                "Wine Not Configured",
+                "Wine isn't set up yet.\n\n"
+                "Run \"sudo zyphor setup wine\" in a terminal, "
+                "then relaunch ZyWin UI."
+            );
+
+            return;
+        }
+
         QString filePath =
             QFileDialog::getOpenFileName(
                 this,
@@ -431,6 +642,19 @@ private:
 
     void installApplication()
     {
+        if (!wineConfigured)
+        {
+            QMessageBox::warning(
+                this,
+                "Wine Not Configured",
+                "Wine isn't set up yet.\n\n"
+                "Run \"sudo zyphor setup wine\" in a terminal, "
+                "then relaunch ZyWin."
+            );
+
+            return;
+        }
+
         if (selectedFile.isEmpty())
         {
             return;

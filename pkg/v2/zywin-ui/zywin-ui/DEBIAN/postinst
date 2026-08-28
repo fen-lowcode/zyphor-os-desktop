@@ -2,7 +2,7 @@
 set -e
 
 # set file ownership to root
-chown root:root  /usr/bin/zywin-ui
+chown root:root /usr/bin/zywin-ui
 
 # Executable file
 chmod 555 /usr/bin/zywin-ui
@@ -13,11 +13,30 @@ DESKTOP_FILE="/usr/share/applications/zywin-ui.desktop"
 if [ -n "$SUDO_USER" ] && [ "$SUDO_USER" != "root" ]; then
     USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
     DESKTOP_DIR="$USER_HOME/Desktop"
+    USER_DESKTOP_FILE="$DESKTOP_DIR/ZyWin-UI.desktop"
 
     if [ -d "$DESKTOP_DIR" ] && [ -f "$DESKTOP_FILE" ]; then
-        cp "$DESKTOP_FILE" "$DESKTOP_DIR/ZyWin-UI.desktop"
-        chown "$SUDO_USER:$SUDO_USER" "$DESKTOP_DIR/ZyWin-UI.desktop"
-        chmod +x "$DESKTOP_DIR/ZyWin-UI.desktop"
+        if [ -f "$USER_DESKTOP_FILE" ]; then
+            # Icon already exists on the Desktop — refresh it so it
+            # picks up any changes shipped in this version.
+            echo "Refreshing existing ZyWin-UI desktop icon..."
+        else
+            # No icon yet — create it.
+            echo "Creating ZyWin-UI desktop icon..."
+        fi
+
+        cp "$DESKTOP_FILE" "$USER_DESKTOP_FILE"
+        chown "$SUDO_USER:$SUDO_USER" "$USER_DESKTOP_FILE"
+        chmod +x "$USER_DESKTOP_FILE"
+
+        # Some file managers (e.g. Nautilus, XFCE desktop) mark
+        # launchers dropped onto the Desktop as untrusted until the
+        # "trusted" metadata attribute is set, otherwise the user has
+        # to right-click -> "Allow Launching" manually. Set it if the
+        # tool is available so a refreshed icon stays launchable.
+        if command -v gio >/dev/null 2>&1; then
+            sudo -u "$SUDO_USER" gio set "$USER_DESKTOP_FILE" metadata::trusted true >/dev/null 2>&1 || true
+        fi
     fi
 fi
 

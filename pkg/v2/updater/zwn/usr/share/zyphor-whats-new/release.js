@@ -1,15 +1,16 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u48",
-    date: "Updated On: August 28, 2026 @ 08:54 AM",
+    version: "2.2.1-ada-lovelace-lts-u49",
+    date: "Updated On: August 28, 2026 @ 09:42 AM",
 
     sections: [
         {
-            "title": "ZyWin UI Installer",
+            "title": "ZyWin UI Installer and Zywin Configuration",
             "items": [
                 "Added a Wine configuration check on launch that detects whether Wine is set up and prompts the user to run \"sudo zyphor setup wine\" if it isn't",
                 "Application installs are handed off to the zywin CLI, with live status updates and error reporting surfaced in the UI",
-                "Added a dark, Zyphor-branded interface consistent with the rest of the desktop"
+                "Added a dark, Zyphor-branded interface consistent with the rest of the desktop",
+                "zywin CLI now ensures the Wine prefix directory (~/.local/zywin/prefixes/) exists before use, creating it automatically if missing"
             ]
         },
         {

@@ -44,7 +44,7 @@ inline void cleanupExtracted() {
 inline void printHelper() {
 
     std::cerr << ZYWIN_LOGO << "\n";
-    std::cerr << BOLD CYAN "Zyphor Wine Wrapper (version 1.1.2-stable-release)" RESET " - Windows compatibility layer for Zyphor OS\n\n";
+    std::cerr << BOLD CYAN "Zyphor Wine Wrapper (version 1.1.3-stable-release)" RESET " - Windows compatibility layer for Zyphor OS\n\n";
     
     std::cerr << BOLD "USAGE:" RESET "\n";
     std::cerr << "  zywin " CYAN "<target>" RESET "\n\n";

@@ -39,7 +39,6 @@ std::string  WineHandler::sanitizeFileName(const std::filesystem::path &file)
     return name;
 }
 
-
 // Generates a wine prefix directory
 std::filesystem::path WineHandler::getWinePrefix(const std::filesystem::path &file)
 {
@@ -56,8 +55,40 @@ std::filesystem::path WineHandler::getWinePrefix(const std::filesystem::path &fi
         return std::string(home);   // fixed a critical dangling pointer bug here
     };
 
+    auto wineprefix = std::filesystem::path(getHomeDirectory()) / ".local/share/zywin/prefixes" / sanitizeFileName(file);
+
+    // i've set this up to convert prefix directory filesystem::apth to C style char* for the posix_spawn() function
+    std::string temp = wineprefix.string();
+    char* supplytoMkdir = temp.data();
+
+    std::vector<char*> cmd = {
+
+        const_cast<char*>("mkdir"),
+        const_cast<char*>("-p"),
+        supplytoMkdir,
+        nullptr
+    };
+
+    // spawn a child process using posix_spawnm to execute mkdir -p
+    pid_t pid;
+    if (posix_spawn(&pid, "/usr/bin/mkdir", NULL, NULL, cmd.data(), environ) != 0)
+    {
+        std::cerr << BRIGHT_RED "Failed to create wineprefix directory: \n" RESET << temp << std::endl;
+        exit(EXIT_FAILURE);
+    } else {
+        std::cerr << CYAN "Wineprefix directory succesfully created or verified: " RESET << temp << std::endl;
+    }
+
+    //  wait for mkdir to finish, otherwise it runs asynchronously 
+    int status;
+    if (waitpid(pid, &status, 0) == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) 
+    {
+        std::cerr << BRIGHT_RED "mkdir extraction failed during execution.\n" RESET;
+        exit(EXIT_FAILURE);
+    }
+
     // return a path which a premade wineprefix is made
-    return std::filesystem::path(getHomeDirectory()) / ".local/share/zywin/prefixes" / sanitizeFileName(file);
+    return wineprefix;
 }
 
 
@@ -70,6 +101,9 @@ void WineHandler::ensureWinePrefix(const std::filesystem::path &prefix)
     if ( std::filesystem::exists(prefix / "system.reg")) {
 
         std::cout << BRIGHT_YELLOW << "Prefix already exist: " RESET << prefix << "\n"; 
+        return;
+    } else {
+        std::cout << BRIGHT_YELLOW << "Prefix Don't exist: " RESET << prefix << "\n"; 
         return;
     }
 

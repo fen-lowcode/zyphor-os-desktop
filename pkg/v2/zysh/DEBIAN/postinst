@@ -55,12 +55,16 @@ EOF
     fi
 fi
 
-# Set ownership
+# -------------------------
+# 3. PROTECT ZYSH FILES
+# -------------------------
 
-chown root:root /usr/share/zysh/prompt.zsh
+# Set entire zysh directory to root:root
+if [ -d /usr/share/zysh ]; then
+    chown -R root:root /usr/share/zysh
 
-# Executable file
-
-chmod 555 /usr/share/zysh/prompt.zsh
+    # Make directory and all contents read/execute only
+    chmod -R 555 /usr/share/zysh
+fi
 
 exit 0

@@ -1,6 +1,6 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u50",
+    version: "2.2.1-ada-lovelace-lts-u51",
     date: "Updated On: August 29, 2026 @ 09:00 AM",
 
     sections: [

@@ -1,5 +1,5 @@
 Package: zyphor-os-release
-Version: 49.0.0-r32-stable-release
+Version: 50.0.0-r33-stable-release
 Section: utils
 Priority: optional
 Architecture: all

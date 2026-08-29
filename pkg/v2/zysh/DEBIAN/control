@@ -1,5 +1,5 @@
 Package: zysh
-Version: 6.0.0-r6-stable-release
+Version: 6.0.1-r7-stable-release
 Section: utils
 Architecture: all
 Replaces: zyshell

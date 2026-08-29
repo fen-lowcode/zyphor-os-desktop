@@ -1,9 +1,20 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u49",
-    date: "Updated On: August 28, 2026 @ 09:42 AM",
+    version: "2.2.1-ada-lovelace-lts-u50",
+    date: "Updated On: August 29, 2026 @ 09:00 AM",
 
     sections: [
+        {
+            "title": "Package Updates",
+            "items": [
+                "Upgraded 10 packages, including zyphor-cli, zyphor-os-release, zyphor-repo-config, zyphor-whats-new, zysh, zywin, exfatprogs, ksnip, nano, and libmsgraph-1-1",
+                "Installed 3 new dependencies: libkcolorpicker-qt6-0, libkimageannotator-qt6-0, and zyphor-archive-keyring",
+                "Added zyphor-archive-keyring to provide the official Zyphor OS repository signing key for package authenticity verification",
+                "Removed 6 obsolete packages, including older Qt5 dependencies and linux-base-7.0.12+kali-amd64 and linux-binary-7.0.12+kali-amd64",
+                "Removed dependencies associated with older Linux kernel versions 6.19.14 and 7.0.12",
+                "Cleaned up obsolete kernel dependencies and packages that are no longer required by the current Zyphor OS installation"
+            ]
+        },
         {
             "title": "ZyWin UI Installer and Zywin Configuration",
             "items": [
@@ -39,16 +50,6 @@ const releaseNotes = {
                 "Added a 'Latest Build' indicator below the release banner",
                 "Displays the current build identifier (2026.08.22-r41) for easier release and troubleshooting reference",
                 "Improved banner readability by separating the OS release information from the build number"
-            ]
-        },
-        {
-            "title": "Zyphor System Upgrade — Progress Visibility",
-            "items": [
-                "Fixed 'zyphor system upgrade' appearing to hang during step [1/4]",
-                "Removed the '-qq' quiet flag from 'apt update' so real package-list output streams to the user",
-                "'apt full-upgrade -y' output is no longer suppressed, showing live download/install progress",
-                "Prevents users from mistaking a slow-but-active update for a frozen process",
-                "Fallback: quiet steps can use a Braille-spinner helper ('zyphor_spinner') for visual feedback when output must stay suppressed"
             ]
         }
     ]

@@ -1,5 +1,5 @@
 Package: grub-screensaver-1
-Version: 4.0.1-r3-stable-release
+Version: 5.0.0-r4-stable-release
 Section: utils
 Priority: optional
 Architecture: all

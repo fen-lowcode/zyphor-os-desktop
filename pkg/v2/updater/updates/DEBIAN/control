@@ -1,5 +1,5 @@
 Package: zyphor-updates
-Version: 8.0.0-r8-stable-release
+Version: 9.0.0-r9-stable-release
 Section: utils
 Priority: optional
 Architecture: all
@@ -35,7 +35,8 @@ Depends: zyphor-os-release,
  ksnip,
  zysh,
  zyphor-whats-new,
- zyphor-repo-config
+ zyphor-repo-config,
+ zyphor-grub-theme
 Conflicts: flameshot
 Replaces: flameshot
 Maintainer: Mark Jason P. Espelita

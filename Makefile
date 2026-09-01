@@ -131,11 +131,11 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v2/zywin-ui/zywin-ui/DEBIAN/control
-	git commit -m "chore: update zywin-ui control"
+	git add pkg/v2/zou/grub-screensaver-1/DEBIAN/control
+	git commit -m "chore: update grub-screensaver package control"
 
-	git add pkg/v2/zywin-ui/zywin-ui/DEBIAN/postinst
-	git commit -m "chore: update zywin-ui postinst"
+	git add pkg/v2/zou/grub-screensaver-1/boot/zyphor/splash.png
+	git commit -m "feat: update grub-screensaver splash"
 
 push:
 	git push origin $(branch)
@@ -162,8 +162,8 @@ release:
 # 	zyphor build package pkg/v2/zywin/zywin
 # 	mv pkg/v2/zywin/zywin.deb zywin.deb
 
-	zyphor build package pkg/v2/zywin-ui/zywin-ui
-	mv pkg/v2/zywin-ui/zywin-ui.deb zywin-ui.deb
+# 	zyphor build package pkg/v2/zywin-ui/zywin-ui
+# 	mv pkg/v2/zywin-ui/zywin-ui.deb zywin-ui.deb
 
 # 	zyphor build package pkg/v2/zywelcome/zywelcome
 # 	mv pkg/v2/zywelcome/zywelcome.deb zywelcome.deb
@@ -188,6 +188,9 @@ release:
 		
 # 	zyphor build package pkg/v2/zycamera-launcher/zycamera-launcher
 # 	mv pkg/v2/zycamera-launcher/zycamera-launcher.deb zycamera-launcher.deb
+
+	zyphor build package pkg/v2/zou/grub-screensaver-1
+	mv pkg/v2/zou/grub-screensaver-1.deb grub-screensaver-1.deb
 
 # 	---
 

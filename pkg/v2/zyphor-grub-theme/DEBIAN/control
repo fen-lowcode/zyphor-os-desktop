@@ -1,0 +1,6 @@
+Package: zyphor-grub-theme
+Version: 1.0.0-r1-stable-release
+Section: utils
+Architecture: all
+Maintainer: Mark Jason P. Espelita
+Description: Zyphor OS Zyphor Grub Theme

@@ -1,9 +1,20 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u51",
-    date: "Updated On: August 29, 2026 @ 09:00 AM",
+    version: "2.2.1-ada-lovelace-lts-u52",
+    date: "Updated On: September 1, 2026 @ 10:28 AM",
 
     sections: [
+        {
+            "title": "GRUB Bootloader Theme",
+            "items": [
+                "Updated the GRUB bootloader theme with the new Zyphor OS visual design",
+                "Replaced the default Kali GRUB background with the Zyphor OS splash screen",
+                "Added the Zyphor OS splash image as the GRUB desktop background",
+                "Improved the OS selection menu layout with centered positioning and cleaner spacing",
+                "Updated boot menu colors and selection styling for better readability",
+                "Added a boot countdown message showing the remaining seconds before automatic boot"
+            ]
+        },
         {
             "title": "Package Updates",
             "items": [
@@ -41,15 +52,6 @@ const releaseNotes = {
                 "Installed 7 new kernel-related dependencies required for Linux kernel 7.1.5+kali-amd64",
                 "Updated Linux kernel image, modules, headers, and build components",
                 "Completed the full upgrade with 0 packages removed and 0 packages left unupgraded"
-            ]
-        },
-        {
-            "title": "Zyphor Release Banner — Build Identification",
-            "items": [
-                "Updated the system banner to dynamically display the OS release name from '/etc/os-release'",
-                "Added a 'Latest Build' indicator below the release banner",
-                "Displays the current build identifier (2026.08.22-r41) for easier release and troubleshooting reference",
-                "Improved banner readability by separating the OS release information from the build number"
             ]
         }
     ]

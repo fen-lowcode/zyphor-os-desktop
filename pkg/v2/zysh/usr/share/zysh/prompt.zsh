@@ -27,6 +27,12 @@ configure_prompt() {
 
 configure_prompt
 
-figlet -f term "$(grep '^PRETTY_NAME=' /etc/os-release | cut -d= -f2- | tr -d '"')" | lolcat
-printf "\033[1;37mLatest Build: %s\033[0m\n" "2026.09.01-r44"
+OS_NAME="$(grep '^PRETTY_NAME=' /etc/os-release | cut -d= -f2- | tr -d '"')"
+BUILD="2026.09.01-r44"
+
+echo ""
+figlet -f term "$OS_NAME" | lolcat
+printf "\033[1;37m\n  Build: \033[1;36m%s\033[0m\n" "$BUILD"
+printf "\033[1;37m  Update: \033[1;32msudo zyphor system upgrade\033[0m\n"
+printf "\033[1;30m  Alternative: sudo zy system upgrade\033[0m\n"
 echo ""

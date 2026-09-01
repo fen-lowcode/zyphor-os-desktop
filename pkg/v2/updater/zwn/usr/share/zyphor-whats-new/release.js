@@ -1,9 +1,18 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u52",
-    date: "Updated On: September 1, 2026 @ 10:28 AM",
+    version: "2.2.1-ada-lovelace-lts-u53",
+    date: "Updated On: September 1, 2026 @ 07:59 PM",
 
     sections: [
+        {
+            "title": "System Information Banner",
+            "items": [
+                "Introduced a new professional Zyphor OS terminal banner",
+                "Added the current Zyphor OS build version to the system banner",
+                "Added a clear upgrade message with the recommended Zyphor system upgrade command",
+                "Improved terminal startup presentation with cleaner formatting and visual hierarchy"
+            ]
+        },
         {
             "title": "GRUB Bootloader Theme",
             "items": [
@@ -43,15 +52,6 @@ const releaseNotes = {
                 "Added the official Zyphor OS archive keyring for APT repository verification",
                 "APT now verifies repository authenticity using the Zyphor archive signing key instead of relying on trusted=yes",
                 "Added automated repository signature generation and verification to the Zyphor build process"
-            ]
-        },
-        {
-            "title": "Zyphor System Upgrade — Linux Kernel 7.1.5",
-            "items": [
-                "Updated 8 packages, including hyperv-daemons, Linux kernel components, zyphor-os-release, zyphor-whats-new, and zysh",
-                "Installed 7 new kernel-related dependencies required for Linux kernel 7.1.5+kali-amd64",
-                "Updated Linux kernel image, modules, headers, and build components",
-                "Completed the full upgrade with 0 packages removed and 0 packages left unupgraded"
             ]
         }
     ]

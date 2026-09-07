@@ -138,12 +138,6 @@ add:
 	git add pkg/v2/zyphor-grub-theme/DEBIAN/postinst
 	git commit -m "chore: update zyphor grub theme postinst"
 
-	git add pkg/v2/zysh/DEBIAN/control
-	git commit -m "chore: update zysh package control"
-
-	git add pkg/v2/zysh/usr/share/zysh/prompt.zsh
-	git commit -m "feat: update zysh prompt"
-
 push:
 	git push origin $(branch)
 
@@ -193,8 +187,8 @@ release:
 # 	zyphor build package pkg/v2/zyphor-archive-keyring
 # 	mv pkg/v2/zyphor-archive-keyring.deb zyphor-archive-keyring.deb
 
-	zyphor build package pkg/v2/zysh
-	mv pkg/v2/zysh.deb zysh.deb
+# 	zyphor build package pkg/v2/zysh
+# 	mv pkg/v2/zysh.deb zysh.deb
 
 # 	zyphor build package pkg/v2/zcc-web
 # 	mv pkg/v2/zcc-web.deb zyphor-command-center-web.deb

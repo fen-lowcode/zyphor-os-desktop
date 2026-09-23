@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+CONF="/etc/lightdm/lightdm-gtk-greeter.conf"
+
+if [ -f "$CONF" ]; then
+    chown root:root "$CONF"
+    chmod 644 "$CONF"
+fi
+
+exit 0

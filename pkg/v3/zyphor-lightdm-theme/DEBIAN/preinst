@@ -1,0 +1,32 @@
+#!/bin/sh
+set -e
+
+# Debian's lightdm-gtk-greeter ships this same path. Divert it so apt
+# upgrades of that package unpack into the .debian file and leave the
+# Zyphor greeter config in place.
+FILE="/etc/lightdm/lightdm-gtk-greeter.conf"
+DIVERTED="/etc/lightdm/lightdm-gtk-greeter.conf.debian"
+
+case "$1" in
+    install)
+        # Fresh install: Debian's file is already on disk. Move it aside
+        # before this package unpacks the Zyphor config onto the real path.
+        dpkg-divert \
+            --package zyphor-lightdm-theme \
+            --add \
+            --rename \
+            --divert "$DIVERTED" \
+            "$FILE"
+        ;;
+    upgrade)
+        # Already installed: the live file is the Zyphor config. Register
+        # the diversion without --rename so that file is not moved aside.
+        dpkg-divert \
+            --package zyphor-lightdm-theme \
+            --add \
+            --divert "$DIVERTED" \
+            "$FILE"
+        ;;
+esac
+
+exit 0

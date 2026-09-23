@@ -1,0 +1,12 @@
+Package: zyphor-lightdm-theme
+Version: 1.0.0-r1-alpha
+Section: x11
+Priority: optional
+Architecture: all
+Maintainer: Mark Jason Espelita <markjasonespelita@gmail.com>
+Depends: lightdm-gtk-greeter, zyphor-background-themes, zyphor-desktop-environment
+Description: Zyphor OS LightDM greeter theme
+ Zyphor OS LightDM greeter configuration and branding.
+ Provides the default Zyphor OS login screen theme,
+ icon set, and background, matching the GRUB and
+ Plymouth boot branding.

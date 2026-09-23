@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+FILE="/etc/lightdm/lightdm-gtk-greeter.conf"
+DIVERTED="/etc/lightdm/lightdm-gtk-greeter.conf.debian"
+
+case "$1" in
+    remove|abort-install|abort-upgrade|disappear)
+        # Drop the diversion and move Debian's greeter config back so
+        # LightDM uses the stock file after this package is gone.
+        dpkg-divert \
+            --package zyphor-lightdm-theme \
+            --rename \
+            --divert "$DIVERTED" \
+            --remove \
+            "$FILE"
+        ;;
+esac
+
+exit 0

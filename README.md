@@ -68,6 +68,7 @@ Contributors are not limited to software developers. Some collaborators contribu
 | <img src="https://github.com/Dfaulthexa.png?size=60" width="60" height="60"> | [Louie Nhelson Puno](https://github.com/Dfaulthexa) | Graphic Designer |
 | <img src="https://github.com/JanRey36.png?size=60" width="60" height="60"> | [John Rey A. Castillo](https://github.com/JanRey36) | Full Stack Web Developer |
 | <img src="https://github.com/Vincere20.png?size=60" width="60" height="60"> | [Remy A. Lingaya](https://github.com/Vincere20) | Social Media Manager |
+| <img src="https://github.com/dvbondoy.png?size=60" width="60" height="60"> | [Dioscoro Valenzuela Bondoy III](https://github.com/dvbondoy) | Core OS Developer |
 
 ---
 

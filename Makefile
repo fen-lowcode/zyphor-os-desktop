@@ -133,11 +133,11 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v3/zyphor-background-themes/DEBIAN/control
-	git commit -m "chore: update zyphor background themes control"
+	git add pkg/v3/zyphor-plymouth-live/
+	git commit -m "feat: add zyphor Plymouth live package"
 
-	git add pkg/v3/zyphor-background-themes/DEBIAN/postrm
-	git commit -m "feat: add zyphor background themes postrm"
+	git add scripts/
+	git commit -m "feat: add build scripts"
 
 push:
 	git push origin $(branch)
@@ -225,14 +225,17 @@ release:
 # 	zyphor build package pkg/v3/zyphor-fastfetch-config
 # 	mv pkg/v3/zyphor-fastfetch-config.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
-	zyphor build package pkg/v3/zyphor-background-themes
-	mv pkg/v3/zyphor-background-themes.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+# 	zyphor build package pkg/v3/zyphor-background-themes
+# 	mv pkg/v3/zyphor-background-themes.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	zyphor build package pkg/v3/zyphor-bashrc-config
 # 	mv pkg/v3/zyphor-bashrc-config.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	zyphor build package pkg/v3/zyphor-plymouth
 # 	mv pkg/v3/zyphor-plymouth.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+
+	zyphor build package pkg/v3/zyphor-plymouth-live
+	mv pkg/v3/zyphor-plymouth-live.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	zyphor build package pkg/v3/zyphor-lightdm-theme
 # 	mv pkg/v3/zyphor-lightdm-theme.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose

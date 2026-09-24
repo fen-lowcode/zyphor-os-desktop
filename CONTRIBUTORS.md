@@ -4,7 +4,7 @@ All contributors will be credited in this project.
 
 Contributions (code, design, ideas, testing, documentation) will be recorded in the CONTRIBUTORS file and commit history whenever possible.
 
-Contributors and their Contributions
+Official Contributors and their Contributions
 
 ---
 
@@ -66,5 +66,17 @@ https://github.com/JanRey36
 - Removed AI image watermark in /usr/share/backgrounds/zyphor-grub-bootloader-screensavers/zyphor-full.png
 - Removed AI image watermark in https://zyphor-os.github.io/assets/images/logo.png
 - Creator and Lead Maintainer of the new Zyphor OS Website and Documentation: https://zyphor-os.vercel.app
+
+---
+
+**Dioscoro Valenzuela Bondoy III**  
+https://github.com/dvbondoy  
+**Core OS Developer**
+
+### Contributions
+
+- Fixed Zywin launching by using an absolute path and removing the which subprocess.
+- Contributed to the Zyphor LightDM theme.
+- Configured and fixed v3 Live Mode settings.
 
 ---

@@ -133,9 +133,6 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add README.md
-	git commit -m "docs: update README"
-
 	git add pkg/v2/updater/zor/DEBIAN/control
 	git commit -m "chore: update zor updater control"
 

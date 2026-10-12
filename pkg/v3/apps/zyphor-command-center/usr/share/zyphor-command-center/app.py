@@ -1,88 +1,67 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout
+import traceback
 
-from ui.home import HomePage
+from PyQt6.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QStackedWidget, QWidget
+
+from core import registry
+from ui.components.base_page import BasePage
+from ui.components.console import Console
 from ui.sidebar import Sidebar
-# system
-from ui.system.upgrade import UpgradePage
-from ui.system.clean import CleanPage
-from ui.system.info import SysInfoPage
-# doctor
-from ui.doctor.fix import DoctorFixPage
-from ui.doctor.report import DoctorReportPage
-from ui.doctor.scan import DoctorScanPage
-# packages
-from ui.pkg.list import PkgListPage
-from ui.pkg.search import PkgSearchPage
-from ui.pkg.install import PkgInstallPage
-from ui.pkg.remove import PkgRemovePage
-# profile
-from ui.profile.profile import ProfilePage
+
+
+class _ErrorPage(BasePage):
+    """Shown instead of a page that crashed while opening, so the app keeps running."""
+
+    show_header = False
+
+    def __init__(self, title: str, details: str):
+        super().__init__()
+        heading = QLabel(f"Could not open “{title}”")
+        heading.setObjectName("pageTitle")
+        console = Console()
+        console.write(details, "danger")
+        self.body.addWidget(heading)
+        self.body.addWidget(console, 1)
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("Zyphor Command Center")
-        self.setGeometry(100, 100, 1000, 600)
+        self.resize(1120, 700)
+        self.setMinimumSize(900, 560)
 
-        main_widget = QWidget()
-        self.setCentralWidget(main_widget)
+        registry.discover()                 # finds every file in pages/
+        self.page_infos = registry.all_pages()
+        self._widgets: dict[str, QWidget] = {}
 
-        layout = QHBoxLayout()
-        main_widget.setLayout(layout)
+        self.sidebar = Sidebar(self.page_infos)
+        self.sidebar.page_selected.connect(self.switch)
 
-        # Sidebar
-        self.sidebar = Sidebar()
+        self.stack = QStackedWidget()
 
-        # Content container
-        self.container = QVBoxLayout()
-        self.wrapper = QWidget()
-        self.wrapper.setLayout(self.container)
-
-        # Pages
-        self.pages = {
-            "home": HomePage(),
-            "upgrade": UpgradePage(),
-            "clean": CleanPage(),
-            "sysinfo": SysInfoPage(),
-            "doctor_fix": DoctorFixPage(),
-            "doctor_report": DoctorReportPage(),
-            "doctor_scan": DoctorScanPage(),
-            "pkg_list": PkgListPage(),
-            "pkg_search": PkgSearchPage(),
-            "pkg_install": PkgInstallPage(),
-            "pkg_remove": PkgRemovePage(),
-            "profile_page": ProfilePage()
-        }
-
-        # Signals
-        self.sidebar.home_clicked.connect(lambda: self.switch("home"))
-        # system
-        self.sidebar.upgrade_clicked.connect(lambda: self.switch("upgrade"))
-        self.sidebar.clean_clicked.connect(lambda: self.switch("clean"))
-        self.sidebar.sysinfo_clicked.connect(lambda: self.switch("sysinfo"))
-        # doctor
-        self.sidebar.doctor_fix_clicked.connect(lambda: self.switch("doctor_fix"))
-        self.sidebar.doctor_report_clicked.connect(lambda: self.switch("doctor_report"))
-        self.sidebar.doctor_scan_clicked.connect(lambda: self.switch("doctor_scan"))
-        # packages
-        self.sidebar.pkg_list_clicked.connect(lambda: self.switch("pkg_list"))
-        self.sidebar.pkg_search_clicked.connect(lambda: self.switch("pkg_search"))
-        self.sidebar.pkg_install_clicked.connect(lambda: self.switch("pkg_install"))
-        self.sidebar.pkg_remove_clicked.connect(lambda: self.switch("pkg_remove"))
-        # profile
-        self.sidebar.profile_clicked.connect(lambda: self.switch("profile_page"))
-
+        central = QWidget()
+        layout = QHBoxLayout(central)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         layout.addWidget(self.sidebar)
-        layout.addWidget(self.wrapper)
+        layout.addWidget(self.stack, 1)
+        self.setCentralWidget(central)
 
-        self.switch("home")
+        if self.page_infos:
+            self.switch(self.page_infos[0].id)
 
-    def switch(self, name):
-        while self.container.count():
-            item = self.container.takeAt(0)
-            if item.widget():
-                item.widget().setParent(None)
+    def switch(self, page_id: str):
+        """Show a page. Pages are created the first time they are opened."""
+        widget = self._widgets.get(page_id)
+        if widget is None:
+            info = registry.get(page_id)
+            try:
+                widget = info.cls()
+            except Exception:
+                widget = _ErrorPage(info.title, traceback.format_exc())
+            self._widgets[page_id] = widget
+            self.stack.addWidget(widget)
 
-        self.container.addWidget(self.pages[name])
+        self.stack.setCurrentWidget(widget)
+        self.sidebar.select(page_id)
+        widget.notify_shown()

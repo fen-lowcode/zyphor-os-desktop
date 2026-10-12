@@ -170,20 +170,65 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/staging/zyphor-desktop-environment.deb
-	git commit -m "chore: remove staged Zyphor desktop environment package"
+# 1. Debian package metadata
+	git add pkg/v3/apps/zyphor-command-center/DEBIAN/control \
+		pkg/v3/apps/zyphor-command-center/DEBIAN/postinst
+	git commit -m "chore: update Command Center package metadata"
 
-	git add pkg/staging/zyphors-app.deb
-	git commit -m "chore: remove obsolete Zyphors app package"
+	# 2. Application launcher and desktop integration
+	git add pkg/v3/apps/zyphor-command-center/usr/local/bin/zyphor-command-center \
+		pkg/v3/apps/zyphor-command-center/usr/share/applications/zyphor-command-center.desktop
+	git commit -m "chore: update Command Center launcher and desktop entry"
 
-	git add pkg/staging/zyphor-command-center-source.zip
-	git commit -m "build: add Zyphor Command Center source archive"
+	# 3. Main application entry points
+	git add pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/app.py \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/main.py
+	git commit -m "refactor: update Command Center application entry points"
 
-	git add pkg/staging/zyphor-command-center_1.1.0-r1-alpha_all.deb
-	git commit -m "build: add Zyphor Command Center 1.1.0-r1-alpha package"
+	# 4. Core modules
+	git add pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/core/process.py \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/core/paths.py \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/core/registry.py \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/core/webserver.py
+	git commit -m "feat: expand Command Center core modules"
 
-	git add pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/__pycache__/app.cpython-314.pyc
-	git commit -m "chore: add compiled Command Center Python bytecode"
+	# 5. UI components
+	git add pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/components/
+	git commit -m "feat: add reusable Command Center UI components"
+
+	# 6. UI sidebar and theme
+	git add pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/sidebar.py \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/styles/theme.py
+	git commit -m "style: update Command Center sidebar and theme"
+
+	# 7. New application pages
+	git add pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/pages/
+	git commit -m "feat: add Command Center pages"
+
+	# 8. Remove obsolete UI modules
+	git add -u -- \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/doctor/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/pkg/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/profile/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/system/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/home.py
+	git commit -m "refactor: remove obsolete Command Center UI modules"
+
+	# 9. Documentation
+	git add pkg/v3/apps/zyphor-command-center/usr/share/doc/
+	git commit -m "docs: add Command Center documentation"
+
+	# 10. Remove tracked Python bytecode caches
+	git add -u -- \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/__pycache__/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/core/__pycache__/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/__pycache__/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/components/__pycache__/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/doctor/__pycache__/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/pkg/__pycache__/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/profile/__pycache__/ \
+		pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/ui/system/__pycache__/
+	git commit -m "chore: remove tracked Python bytecode caches"
 
 push:
 	git push origin $(branch)
@@ -206,11 +251,11 @@ release:
 # 	zyphor build package pkg/v2/legacy/updater/updates
 # 	mv pkg/v2/legacy/updater/updates.deb zyphor-updates.deb
 
-	zyphor build package pkg/v2/legacy/updater/zor
-	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
+# 	zyphor build package pkg/v2/legacy/updater/zor
+# 	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
 
-	zyphor build package pkg/v2/legacy/updater/zwn
-	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
+# 	zyphor build package pkg/v2/legacy/updater/zwn
+# 	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/legacy/zywin/zywin
 # 	mv pkg/v2/legacy/zywin/zywin.deb zywin.deb
@@ -245,8 +290,8 @@ release:
 # 	zyphor build package pkg/v2/legacy/zou/grub-screensaver-1
 # 	mv pkg/v2/legacy/zou/grub-screensaver-1.deb grub-screensaver-1.deb
 
-	zyphor build package pkg/v2/legacy/zyphor-grub-theme
-	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
+# 	zyphor build package pkg/v2/legacy/zyphor-grub-theme
+# 	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
 
 # V2 Reforged UPDATES ====================================================
 
@@ -372,15 +417,16 @@ release:
 # 	zyphor build package pkg/v3/apps/zyphor-command-center-web
 # 	mv pkg/v3/apps/zyphor-command-center-web.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
-# 	zyphor build package pkg/v3/apps/zyphor-command-center
+	zyphor build package pkg/v3/apps/zyphor-command-center
 # 	mv pkg/v3/apps/zyphor-command-center.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
+	mv pkg/v3/apps/zyphor-command-center.deb pkg/staging
 
 # 	zyphor build package pkg/v3/apps/zyphor-whats-new
 # 	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
 # 	---
 
-	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
+# 	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
 
 # 	mv ./*.deb ../zyphor-os.github.io/bethany-lts/pool/main/z --verbose
 

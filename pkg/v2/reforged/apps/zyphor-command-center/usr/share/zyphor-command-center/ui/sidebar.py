@@ -1,81 +1,88 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import (
+    QButtonGroup, QFrame, QHBoxLayout, QLabel, QPushButton, QScrollArea, QVBoxLayout, QWidget,
+)
+
+from core.paths import ICON_PATH
+
 
 class Sidebar(QFrame):
-    home_clicked = pyqtSignal()
+    """Navigation menu. It is built automatically from the registered pages."""
 
-    upgrade_clicked = pyqtSignal()
-    clean_clicked = pyqtSignal()
-    sysinfo_clicked = pyqtSignal()
+    page_selected = pyqtSignal(str)   # emits the page id
 
-    doctor_fix_clicked = pyqtSignal()
-    doctor_report_clicked = pyqtSignal()
-    doctor_scan_clicked = pyqtSignal()
-
-    pkg_list_clicked = pyqtSignal()
-    pkg_search_clicked = pyqtSignal()
-    pkg_install_clicked = pyqtSignal()
-    pkg_remove_clicked = pyqtSignal()
-
-    profile_clicked = pyqtSignal()
-
-    def __init__(self):
+    def __init__(self, pages):
         super().__init__()
-        self.setFixedWidth(220)
-        self.setStyleSheet("background-color:#2c3e50;")
+        self.setObjectName("sidebar")
+        self.setFixedWidth(250)
+        self._buttons: dict[str, QPushButton] = {}
 
-        layout = QVBoxLayout()
-        self.setLayout(layout)
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(14, 18, 14, 14)
+        outer.setSpacing(10)
+        outer.addWidget(self._build_brand())
 
-        btn_home = QPushButton("Home")
-        # profile
-        btn_profile = QPushButton("User Management")
-        # system
-        btn_upgrade = QPushButton("System Upgrade")
-        btn_clean = QPushButton("System Clean")
-        btn_sysinfo = QPushButton("System Info")
-        # doctor
-        btn_doctor_fix = QPushButton("Doctor Fix")
-        btn_doctor_report = QPushButton("Doctor Report")
-        btn_doctor_scan = QPushButton("Doctor Scan")
-        # pkg
-        btn_pkg_list = QPushButton("Packages/Apps")
-        btn_pkg_search = QPushButton("Search Packages/Apps")
-        btn_pkg_install = QPushButton("Install Packages/Apps")
-        btn_pkg_remove = QPushButton("Uninstall Packages/Apps")
+        # Scrollable list, so the menu keeps working however many pages you add.
+        host = QWidget()
+        host.setObjectName("navHost")
+        nav = QVBoxLayout(host)
+        nav.setContentsMargins(0, 0, 0, 0)
+        nav.setSpacing(2)
 
-        btn_home.clicked.connect(self.home_clicked)
-        # profile
-        btn_profile.clicked.connect(self.profile_clicked)
-        # system
-        btn_upgrade.clicked.connect(self.upgrade_clicked)
-        btn_clean.clicked.connect(self.clean_clicked)
-        btn_sysinfo.clicked.connect(self.sysinfo_clicked)
-        # doctor
-        btn_doctor_fix.clicked.connect(self.doctor_fix_clicked)
-        btn_doctor_report.clicked.connect(self.doctor_report_clicked)
-        btn_doctor_scan.clicked.connect(self.doctor_scan_clicked)
-        # pkg
-        btn_pkg_list.clicked.connect(self.pkg_list_clicked)
-        btn_pkg_search.clicked.connect(self.pkg_search_clicked)
-        btn_pkg_install.clicked.connect(self.pkg_install_clicked)
-        btn_pkg_remove.clicked.connect(self.pkg_remove_clicked)
+        group = QButtonGroup(self)
+        group.setExclusive(True)
 
-        layout.addWidget(btn_home)
-        # profile
-        layout.addWidget(btn_profile)
-        # system
-        layout.addWidget(btn_upgrade)
-        layout.addWidget(btn_clean)
-        layout.addWidget(btn_sysinfo)
-        # doctor
-        layout.addWidget(btn_doctor_fix)
-        layout.addWidget(btn_doctor_report)
-        layout.addWidget(btn_doctor_scan)
-        # pkg
-        layout.addWidget(btn_pkg_list)
-        layout.addWidget(btn_pkg_search)
-        layout.addWidget(btn_pkg_install)
-        layout.addWidget(btn_pkg_remove)
+        current_section = None
+        for info in pages:
+            if info.section != current_section:
+                current_section = info.section
+                if current_section:
+                    nav.addWidget(QLabel(current_section.upper(), objectName="navSection"))
 
-        layout.addStretch()
+            btn = QPushButton(f"{info.icon}   {info.title}")
+            btn.setObjectName("navButton")
+            btn.setCheckable(True)
+            btn.setCursor(Qt.CursorShape.PointingHandCursor)
+            btn.clicked.connect(lambda _checked=False, pid=info.id: self.page_selected.emit(pid))
+            group.addButton(btn)
+            nav.addWidget(btn)
+            self._buttons[info.id] = btn
+
+        nav.addStretch()
+
+        scroll = QScrollArea()
+        scroll.setObjectName("navScroll")
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll.setWidget(host)
+        outer.addWidget(scroll, 1)
+
+    def _build_brand(self) -> QWidget:
+        brand = QWidget()
+        row = QHBoxLayout(brand)
+        row.setContentsMargins(6, 0, 6, 8)
+        row.setSpacing(10)
+
+        logo = QLabel()
+        pixmap = QPixmap(str(ICON_PATH))
+        if not pixmap.isNull():
+            logo.setPixmap(
+                pixmap.scaled(34, 34, Qt.AspectRatioMode.KeepAspectRatio,
+                              Qt.TransformationMode.SmoothTransformation)
+            )
+        row.addWidget(logo)
+
+        text = QVBoxLayout()
+        text.setSpacing(0)
+        text.addWidget(QLabel("Zyphor", objectName="brandTitle"))
+        text.addWidget(QLabel("Command Center", objectName="brandSub"))
+        row.addLayout(text)
+        row.addStretch()
+        return brand
+
+    def select(self, page_id: str):
+        """Highlight a page in the menu (does not emit page_selected)."""
+        if page_id in self._buttons:
+            self._buttons[page_id].setChecked(True)

@@ -170,23 +170,20 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v2/legacy/updater/zor/DEBIAN/control
-	git commit -m "chore: update legacy ZOR package control"
+	git add pkg/staging/zyphor-desktop-environment.deb
+	git commit -m "chore: remove staged Zyphor desktop environment package"
 
-	git add pkg/v2/legacy/updater/zor/DEBIAN/postinst
-	git commit -m "chore: update legacy ZOR postinst script"
+	git add pkg/staging/zyphors-app.deb
+	git commit -m "chore: remove obsolete Zyphors app package"
 
-	git add pkg/v2/legacy/updater/zwn/DEBIAN/control
-	git commit -m "chore: update legacy ZWN package control"
+	git add pkg/staging/zyphor-command-center-source.zip
+	git commit -m "build: add Zyphor Command Center source archive"
 
-	git add pkg/v2/legacy/updater/zwn/usr/share/zyphor-whats-new/release.js
-	git commit -m "chore: update legacy Zyphor What's New release script"
+	git add pkg/staging/zyphor-command-center_1.1.0-r1-alpha_all.deb
+	git commit -m "build: add Zyphor Command Center 1.1.0-r1-alpha package"
 
-	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/control
-	git commit -m "chore: update legacy Zyphor GRUB theme package control"
-
-	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/postinst
-	git commit -m "chore: update legacy Zyphor GRUB theme postinst script"
+	git add pkg/v3/apps/zyphor-command-center/usr/share/zyphor-command-center/__pycache__/app.cpython-314.pyc
+	git commit -m "chore: add compiled Command Center Python bytecode"
 
 push:
 	git push origin $(branch)

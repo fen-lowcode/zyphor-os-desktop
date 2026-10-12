@@ -170,17 +170,8 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v3/apps/zyphor-whats-new/DEBIAN/control
-	git commit -m "chore: update zyphor-whats-new package control"
-
-	git add pkg/v3/apps/zyphor-whats-new/usr/share/zyphor-whats-new/release.js
-	git commit -m "feat: update Zyphor OS release information"
-
-	git add pkg/v3/zyphor-os-release/DEBIAN/control
-	git commit -m "chore: update zyphor-os-release package control"
-
-	git add pkg/v3/zyphor-os-release/etc/os-release
-	git commit -m "chore: update Zyphor OS release metadata"
+	git ls-files -d -z -- 'pkg/v2/reforged/apps/zyphor-command-center/' | grep -zE 'pycache/.*.pyc$$' | xargs -0 -r git add --
+	git commit -m "chore: remove Python bytecode cache files"
 
 push:
 	git push origin $(branch)

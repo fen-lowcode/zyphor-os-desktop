@@ -1,5 +1,5 @@
 Package: zyphor-os-release
-Version: 2.0.0-r3
+Version: 3.0.0-r4
 Section: base
 Priority: required
 Architecture: all

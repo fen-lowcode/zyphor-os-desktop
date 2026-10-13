@@ -170,8 +170,62 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git ls-files -d -z -- 'pkg/v2/reforged/apps/zyphor-command-center/' | grep -zE 'pycache/.*.pyc$$' | xargs -0 -r git add --
-	git commit -m "chore: remove Python bytecode cache files"
+	git add pkg/v2/reforged/apps/zyphor-whats-new/DEBIAN/control
+	git commit -m "chore: update zyphor-whats-new package control"
+
+	git add pkg/v2/reforged/apps/zyphor-whats-new/usr/share/zyphor-whats-new/release.js
+	git commit -m "chore: update zyphor-whats-new release information"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/DEBIAN/control
+	git commit -m "chore: update zyphor-desktop-environment package control"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/desktop/accels.scm
+	git commit -m "chore: update XFCE desktop accelerators"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/notes/gtk.css
+	git commit -m "chore: update XFCE notes styling"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-13/17891875681.desktop
+	git commit -m "chore: update XFCE panel launcher 13"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-14/17891875692.desktop
+	git commit -m "chore: update XFCE panel launcher 14"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-15/17891875693.desktop
+	git commit -m "chore: update XFCE panel launcher 15"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
+	git commit -m "chore: update XFCE display settings"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+	git commit -m "chore: update Thunar settings"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-appfinder.xml
+	git commit -m "chore: update XFCE application finder settings"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
+	git commit -m "chore: update XFCE keyboard shortcuts"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml
+	git commit -m "chore: update XFCE notification settings"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+	git commit -m "chore: update XFCE panel configuration"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
+	git commit -m "chore: update XFCE power manager settings"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-screenshooter.xml
+	git commit -m "chore: update XFCE screenshooter settings"
+
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+	git commit -m "chore: update XFCE appearance settings"
+
+	git add pkg/v2/reforged/zyphor-os-release/DEBIAN/control
+	git commit -m "chore: update zyphor-os-release package control"
+
+	git add pkg/v2/reforged/zyphor-os-release/etc/os-release
+	git commit -m "chore: update Zyphor OS release information"
 
 push:
 	git push origin $(branch)
@@ -264,16 +318,16 @@ release:
 # 	zyphor build package pkg/v2/reforged/zyphor-fastfetch-config
 # 	mv pkg/v2/reforged/zyphor-fastfetch-config.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
-# 	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
-# 	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
+	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
+	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
 # ADA LOVELACE APPS
 
 # 	zyphor build package pkg/v2/reforged/apps/zyphor-cli
 # 	mv pkg/v2/reforged/apps/zyphor-cli.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
 
-	zyphor build package pkg/v2/reforged/apps/zyphor-command-center
-	mv pkg/v2/reforged/apps/zyphor-command-center.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
+# 	zyphor build package pkg/v2/reforged/apps/zyphor-command-center
+# 	mv pkg/v2/reforged/apps/zyphor-command-center.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
 
 # 	zyphor build package pkg/v2/reforged/apps/zyphor-command-center-web
 # 	mv pkg/v2/reforged/apps/zyphor-command-center-web.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose

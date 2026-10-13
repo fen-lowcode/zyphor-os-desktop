@@ -1,9 +1,16 @@
 const releaseNotes = {
     distro: "Zyphor OS 3 \"Bethany\" LTS",
     version: "3.0.0-bethany-lts-u3",
-    date: "Updated On: October 12, 2026 @ 01:50 PM",
+    date: "Updated On: October 13, 2026 @ 03:20 PM",
 
     sections: [
+        {
+            "title": "Windows/Super Key Opens Whisker Menu",
+            "items": [
+                "Configured the Windows/Super key to trigger the XFCE Whisker Menu, providing a familiar Start Menu experience similar to Windows",
+                "Improved keyboard navigation by allowing users to access the application menu directly using the Windows/Super key"
+            ]
+        },
         {
             "title": "Redesigned Zyphor Command Center",
             "items": [

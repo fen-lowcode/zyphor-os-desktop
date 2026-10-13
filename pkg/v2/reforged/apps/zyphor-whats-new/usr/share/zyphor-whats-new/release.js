@@ -1,9 +1,16 @@
 const releaseNotes = {
     distro: "Zyphor OS Ada Lovelace LTS",
-    version: "2.2.1-ada-lovelace-lts-u70",
-    date: "Updated On: October 12, 2026 @ 02:58 PM",
+    version: "2.2.1-ada-lovelace-lts-u71",
+    date: "Updated On: October 13, 2026 @ 11:42 AM",
 
     sections: [
+        {
+            "title": "Windows/Super Key Opens Whisker Menu",
+            "items": [
+                "Configured the Windows/Super key to trigger the XFCE Whisker Menu, providing a familiar Start Menu experience similar to Windows",
+                "Improved keyboard navigation by allowing users to access the application menu directly using the Windows/Super key"
+            ]
+        },
         {
             "title": "Redesigned Zyphor Command Center",
             "items": [

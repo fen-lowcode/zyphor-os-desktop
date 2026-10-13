@@ -59,6 +59,7 @@
     <property name="plugin-6" type="string" value="systray">
       <property name="square-icons" type="bool" value="true"/>
       <property name="known-legacy-items" type="array">
+        <value type="string" value="onboard"/>
         <value type="string" value="networkmanager applet"/>
         <value type="string" value="ethernet network connection “wired connection 1” active"/>
       </property>
@@ -99,6 +100,12 @@
       <property name="category-show-name" type="bool" value="true"/>
       <property name="launcher-icon-size" type="int" value="2"/>
       <property name="menu-opacity" type="int" value="94"/>
+      <property name="recent" type="array">
+        <value type="string" value="onboard.desktop"/>
+        <value type="string" value="xfce-keyboard-settings.desktop"/>
+        <value type="string" value="org.xfce.mousepad.desktop"/>
+        <value type="string" value="xfce-settings-manager.desktop"/>
+      </property>
     </property>
     <property name="plugin-1" type="string" value="launcher">
       <property name="items" type="array">

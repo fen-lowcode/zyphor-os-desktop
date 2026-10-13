@@ -170,62 +170,58 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	git add pkg/v2/reforged/apps/zyphor-whats-new/DEBIAN/control
-	git commit -m "chore: update zyphor-whats-new package control"
+	# Zyphor What's New package
+	git add pkg/v3/apps/zyphor-whats-new/DEBIAN/control \
+		pkg/v3/apps/zyphor-whats-new/usr/share/zyphor-whats-new/release.js
+	git commit -m "chore: update Zyphor What's New release information"
 
-	git add pkg/v2/reforged/apps/zyphor-whats-new/usr/share/zyphor-whats-new/release.js
-	git commit -m "chore: update zyphor-whats-new release information"
+	# Desktop environment package metadata
+	git add pkg/v3/zyphor-desktop-environment/DEBIAN/control
+	git commit -m "chore: update desktop environment package metadata"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/DEBIAN/control
-	git commit -m "chore: update zyphor-desktop-environment package control"
+	# XFCE keyboard shortcuts and desktop behavior
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/desktop/accels.scm \
+		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml \
+		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-appfinder.xml
+	git commit -m "chore: update XFCE shortcuts and application finder defaults"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/desktop/accels.scm
-	git commit -m "chore: update XFCE desktop accelerators"
+	# XFCE notes styling
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/notes/gtk.css
+	git commit -m "style: update XFCE notes appearance"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/notes/gtk.css
-	git commit -m "chore: update XFCE notes styling"
+	# XFCE panel launchers
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-13/17891875681.desktop \
+		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-14/17891875692.desktop \
+		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-15/17891875693.desktop
+	git commit -m "chore: update default XFCE panel launchers"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-13/17891875681.desktop
-	git commit -m "chore: update XFCE panel launcher 13"
+	# Display configuration
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
+	git commit -m "chore: update default display configuration"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-14/17891875692.desktop
-	git commit -m "chore: update XFCE panel launcher 14"
+	# XFCE notifications and power management
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml \
+		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
+	git commit -m "chore: update XFCE notification and power defaults"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-15/17891875693.desktop
-	git commit -m "chore: update XFCE panel launcher 15"
+	# XFCE panel and screenshooter settings
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml \
+		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-screenshooter.xml
+	git commit -m "chore: update XFCE panel and screenshot settings"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
-	git commit -m "chore: update XFCE display settings"
+	# XFCE appearance settings
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+	git commit -m "chore: update XFCE appearance defaults"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
-	git commit -m "chore: update Thunar settings"
+	# XFCE settings utilities
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-editor.xml \
+		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-manager.xml
+	git commit -m "chore: add XFCE settings utility defaults"
 
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-appfinder.xml
-	git commit -m "chore: update XFCE application finder settings"
-
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
-	git commit -m "chore: update XFCE keyboard shortcuts"
-
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml
-	git commit -m "chore: update XFCE notification settings"
-
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
-	git commit -m "chore: update XFCE panel configuration"
-
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
-	git commit -m "chore: update XFCE power manager settings"
-
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-screenshooter.xml
-	git commit -m "chore: update XFCE screenshooter settings"
-
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
-	git commit -m "chore: update XFCE appearance settings"
-
-	git add pkg/v2/reforged/zyphor-os-release/DEBIAN/control
-	git commit -m "chore: update zyphor-os-release package control"
-
-	git add pkg/v2/reforged/zyphor-os-release/etc/os-release
-	git commit -m "chore: update Zyphor OS release information"
+	# Zyphor OS release metadata
+	git add pkg/v3/zyphor-os-release/DEBIAN/control \
+		pkg/v3/zyphor-os-release/etc/os-release
+	git commit -m "chore: update Zyphor OS release metadata"
 
 push:
 	git push origin $(branch)
@@ -300,8 +296,8 @@ release:
 # 	zyphor build package pkg/v2/reforged/zyphor-repo-config
 # 	mv pkg/v2/reforged/zyphor-repo-config.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
-	zyphor build package pkg/v2/reforged/zyphor-os-release
-	mv pkg/v2/reforged/zyphor-os-release.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
+# 	zyphor build package pkg/v2/reforged/zyphor-os-release
+# 	mv pkg/v2/reforged/zyphor-os-release.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
 # 	zyphor build package pkg/v2/reforged/zyphor-plymouth
 # 	mv pkg/v2/reforged/zyphor-plymouth.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
@@ -318,8 +314,8 @@ release:
 # 	zyphor build package pkg/v2/reforged/zyphor-fastfetch-config
 # 	mv pkg/v2/reforged/zyphor-fastfetch-config.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
-	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
-	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
+# 	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
+# 	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
 # ADA LOVELACE APPS
 
@@ -332,8 +328,8 @@ release:
 # 	zyphor build package pkg/v2/reforged/apps/zyphor-command-center-web
 # 	mv pkg/v2/reforged/apps/zyphor-command-center-web.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
 
-	zyphor build package pkg/v2/reforged/apps/zyphor-whats-new
-	mv pkg/v2/reforged/apps/zyphor-whats-new.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
+# 	zyphor build package pkg/v2/reforged/apps/zyphor-whats-new
+# 	mv pkg/v2/reforged/apps/zyphor-whats-new.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
 	
 # 	zyphor build package pkg/v2/reforged/apps/zycamera-launcher/zycamera-launcher
 # 	mv pkg/v2/reforged/apps/zycamera-launcher/zycamera-launcher.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
@@ -357,15 +353,15 @@ release:
 # 	zyphor build package pkg/v3/zyphor-archive-keyring
 # 	mv pkg/v3/zyphor-archive-keyring.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
-# 	zyphor build package pkg/v3/zyphor-desktop-environment
-# 	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+	zyphor build package pkg/v3/zyphor-desktop-environment
+	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	TEST>>>
 # 	zyphor build package pkg/v3/testing/zyphor-desktop-environment
 # 	mv pkg/v3/testing/zyphor-desktop-environment.deb pkg/staging --verbose
 
-# 	zyphor build package pkg/v3/zyphor-os-release
-# 	mv pkg/v3/zyphor-os-release.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+	zyphor build package pkg/v3/zyphor-os-release
+	mv pkg/v3/zyphor-os-release.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	zyphor build package pkg/v3/zyphor-grub-theme
 # 	mv pkg/v3/zyphor-grub-theme.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
@@ -418,8 +414,8 @@ release:
 # 	mv pkg/v3/apps/zyphor-command-center.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 # 	mv pkg/v3/apps/zyphor-command-center.deb pkg/staging
 
-# 	zyphor build package pkg/v3/apps/zyphor-whats-new
-# 	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
+	zyphor build package pkg/v3/apps/zyphor-whats-new
+	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
 # 	---
 

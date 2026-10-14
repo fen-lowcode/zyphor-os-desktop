@@ -452,3 +452,9 @@ bootCDROM:
 
 clean:
 	rm -f vmInit bootHardDisk bootCDROM
+
+update:
+	@echo "\n--- FETCHING ORIGIN REPOSITORY ---\n";
+	git fetch origin
+	@echo "\n--- UPDATING MAIN ---\n";
+	git pull origin main

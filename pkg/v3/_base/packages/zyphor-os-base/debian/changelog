@@ -1,0 +1,11 @@
+zyphor-os-base (1.1) trixie; urgency=medium
+
+  * Recommend dosfstools, for checking the EFI system partition.
+
+ -- Mark Jason Espelita <markjasonespelita@gmail.com>  Wed, 30 Sep 2026 15:25:16 +0800
+
+zyphor-os-base (1.0) trixie; urgency=medium
+
+  * Initial release.
+
+ -- Mark Jason Espelita <markjasonespelita@gmail.com>  Wed, 30 Sep 2026 11:41:34 +0800

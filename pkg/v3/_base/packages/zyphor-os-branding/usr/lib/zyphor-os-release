@@ -1,0 +1,22 @@
+# The distro's identity: the single source of its name and version.
+# - zyphor-os-branding generates /usr/lib/os-release (/etc/os-release),
+#   /etc/issue and /etc/issue.net from this file and Debian's originals.
+# - tools/build-iso.sh and auto/config use it for the ISO's file name and label.
+# Bump DISTRO_VERSION for each release, together with a changelog entry for
+# this package (dch -i -D trixie "Version X.Y.").
+
+NAME="Zyphor OS 3 Bethany LTS v3.0.0-bethany-lts-u4"
+PRETTY_NAME="Zyphor OS 3 Bethany LTS"
+ID=zyphor-os
+ID_LIKE=debian
+VERSION_ID="3.0"
+VERSION="3 (Bethany LTS)"
+VERSION_CODENAME=bethany-lts
+
+HOME_URL="https://zyphor-os.github.io"
+SUPPORT_URL="https://www.facebook.com/profile.php?id=61573426796629"
+BUG_REPORT_URL="https://github.com/zyphor-os/zyphor-os-3-bethany-lts/issues"
+
+DISTRO_ID=zyphor-os
+DISTRO_NAME="Zyphor OS"
+DISTRO_VERSION="1.0"

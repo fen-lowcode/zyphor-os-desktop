@@ -1,0 +1,4 @@
+# Run by Calamares and the menu entry only; no manual pages.
+zyphor-os-installer: no-manual-page [usr/bin/zyphor-os-install]
+# The diverted file belongs to calamares, which is a Depends.
+zyphor-os-installer: diversion-for-unknown-file

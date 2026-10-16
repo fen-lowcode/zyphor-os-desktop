@@ -1,15 +1,131 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0f2027"/>
-      <stop offset="0.5" stop-color="#203a43"/>
-      <stop offset="1" stop-color="#2c5364"/>
+    <!-- Deep Space/Tech Radial Gradient -->
+    <radialGradient id="bg-radial" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#082f49" />
+      <stop offset="45%" stop-color="#0f172a" />
+      <stop offset="85%" stop-color="#020617" />
+      <stop offset="100%" stop-color="#000000" />
+    </radialGradient>
+
+    <!-- Cyan Brand Gradients -->
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#0284c7" />
     </linearGradient>
+
+    <linearGradient id="cyan-bright" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="50%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#67e8f9" />
+    </linearGradient>
+
+    <linearGradient id="beam-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0" />
+      <stop offset="30%" stop-color="#22d3ee" stop-opacity="0.8" />
+      <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Patterns -->
+    <pattern id="hex-grid" width="40" height="69.282" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 20 11.547 L 0 0 L 0 23.094 L 20 34.641 L 40 23.094 Z M 0 34.641 L 20 46.188 L 0 57.735 L 0 80.829 L 20 92.376 L 40 80.829 L 40 57.735 L 20 46.188 Z" 
+            fill="none" stroke="#0891b2" stroke-width="0.75" stroke-opacity="0.15" />
+    </pattern>
+
+    <pattern id="dot-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#38bdf8" opacity="0.15" />
+    </pattern>
+
+    <!-- Glowing Filters -->
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur1" />
+      <feGaussianBlur stdDeviation="20" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="ambient-blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="80" />
+    </filter>
   </defs>
-  <rect width="1920" height="1080" fill="url(#sky)"/>
-  <path d="M0 778 C 480 626, 1056 929, 1920 713 L 1920 1080 L 0 1080 Z"
-        fill="#4a90d9" fill-opacity="0.18"/>
-  <path d="M0 886 C 576 778, 1152 1026, 1920 842 L 1920 1080 L 0 1080 Z"
-        fill="#4a90d9" fill-opacity="0.22"/>
+
+  <!-- Background Layer -->
+  <rect width="100%" height="100%" fill="url(#bg-radial)" />
+
+  <!-- Ambient Light Orbs -->
+  <circle cx="960" cy="540" r="450" fill="#0891b2" opacity="0.2" filter="url(#ambient-blur)" />
+  <circle cx="400" cy="300" r="300" fill="#0284c7" opacity="0.15" filter="url(#ambient-blur)" />
+  <circle cx="1500" cy="750" r="350" fill="#06b6d4" opacity="0.18" filter="url(#ambient-blur)" />
+
+  <!-- Grid Overlays -->
+  <rect width="100%" height="100%" fill="url(#hex-grid)" />
+  <rect width="100%" height="100%" fill="url(#dot-grid)" />
+
+  <!-- Perspective Speed Beams / Tech Rays -->
+  <g filter="url(#neon-glow)">
+    <path d="M -100 850 L 700 850 L 900 650 L 2020 650" fill="none" stroke="url(#beam-grad)" stroke-width="2" />
+    <path d="M -100 200 L 500 200 L 750 450 L 2020 450" fill="none" stroke="url(#beam-grad)" stroke-width="1.5" />
+    <path d="M -100 450 L 1100 450 L 1300 250 L 2020 250" fill="none" stroke="url(#beam-grad)" stroke-width="2.5" />
+    <path d="M -100 950 L 400 950 L 700 650 L 2020 650" fill="none" stroke="url(#beam-grad)" stroke-width="1" opacity="0.5" />
+  </g>
+
+  <!-- Central Sci-Fi HUD / Network Core Element -->
+  <g transform="translate(960, 540)">
+    <!-- Outer Rotating Circuit Ring -->
+    <circle cx="0" cy="0" r="320" fill="none" stroke="#0891b2" stroke-width="1" stroke-dasharray="8 12 4 12" opacity="0.4" />
+    <circle cx="0" cy="0" r="300" fill="none" stroke="url(#cyan-glow)" stroke-width="2" stroke-dasharray="180 20 60 20" opacity="0.7" filter="url(#neon-glow)" />
+    <circle cx="0" cy="0" r="260" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="40 40" opacity="0.5" />
+    
+    <!-- Geometric Tech Frame -->
+    <polygon points="0,-220 190,-110 190,110 0,220 -190,110 -190,-110" fill="none" stroke="url(#cyan-bright)" stroke-width="1.5" opacity="0.6" />
+    <polygon points="0,-180 155,-90 155,90 0,180 -155,90 -155,-90" fill="none" stroke="#06b6d4" stroke-width="1" stroke-dasharray="10 15" opacity="0.4" />
+
+    <!-- Corner Target Reticles -->
+    <path d="M -220 -130 L -220 -160 L -190 -160" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.8" />
+    <path d="M 220 -130 L 220 -160 L 190 -160" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.8" />
+    <path d="M -220 130 L -220 160 L -190 160" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.8" />
+    <path d="M 220 130 L 220 160 L 190 160" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.8" />
+
+    <!-- Node Connectors -->
+    <circle cx="0" cy="-220" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+    <circle cx="190" cy="-110" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+    <circle cx="190" cy="110" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+    <circle cx="0" cy="220" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+    <circle cx="-190" cy="110" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+    <circle cx="-190" cy="-110" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+
+    <!-- Inner Glowing Core -->
+    <circle cx="0" cy="0" r="90" fill="url(#cyan-glow)" opacity="0.15" filter="url(#ambient-blur)" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#67e8f9" stroke-width="2" filter="url(#neon-glow)" />
+    <circle cx="0" cy="0" r="8" fill="#ffffff" filter="url(#neon-glow)" />
+  </g>
+
+  <!-- High-Tech Micro Details / Floating Data Nodes -->
+  <g fill="#38bdf8">
+    <circle cx="500" cy="200" r="3" filter="url(#neon-glow)" />
+    <circle cx="750" cy="450" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+    <circle cx="1100" cy="450" r="3" filter="url(#neon-glow)" />
+    <circle cx="1300" cy="250" r="4" fill="#67e8f9" filter="url(#neon-glow)" />
+    <circle cx="700" cy="650" r="3" filter="url(#neon-glow)" />
+    <circle cx="900" cy="650" r="5" fill="#ffffff" filter="url(#neon-glow)" />
+  </g>
+
+  <!-- Framing / Interface UI Edges -->
+  <g stroke="#06b6d4" stroke-width="1" opacity="0.4">
+    <!-- Top Left UI -->
+    <path d="M 40 60 L 160 60 L 190 90 L 300 90" fill="none" />
+    <rect x="40" y="45" width="8" height="8" fill="#06b6d4" />
+    <rect x="55" y="45" width="8" height="8" fill="#06b6d4" opacity="0.5" />
+    <rect x="70" y="45" width="8" height="8" fill="#06b6d4" opacity="0.2" />
+
+    <!-- Bottom Right UI -->
+    <path d="M 1880 1020 L 1760 1020 L 1730 990 L 1620 990" fill="none" />
+    <circle cx="1875" cy="1000" r="3" fill="#22d3ee" />
+    <circle cx="1855" cy="1000" r="3" fill="#22d3ee" opacity="0.5" />
+  </g>
 </svg>

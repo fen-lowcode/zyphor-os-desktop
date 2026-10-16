@@ -170,29 +170,44 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Update ZOR updater package control
-	git add pkg/v2/legacy/updater/zor/DEBIAN/control
-	git commit -m "chore: update ZOR updater package metadata"
+	# Update GRUB 16:9 background
+	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/grub/grub-16x9.png
+	git commit -m "artwork: update GRUB 16:9 background"
 
-	# Update ZOR updater post-install script
-	git add pkg/v2/legacy/updater/zor/DEBIAN/postinst
-	git commit -m "fix: update ZOR updater post-install script"
+	# Update GRUB 4:3 background
+	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/grub/grub-4x3.png
+	git commit -m "artwork: update GRUB 4:3 background"
 
-	# Update Zyphor What's New package control
-	git add pkg/v2/legacy/updater/zwn/DEBIAN/control
-	git commit -m "chore: update Zyphor What's New package metadata"
+	# Update lock screen background
+	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/lockscreen/contents/images/1920x1080.svg
+	git commit -m "artwork: update lock screen background"
 
-	# Update Zyphor What's New release information
-	git add pkg/v2/legacy/updater/zwn/usr/share/zyphor-whats-new/release.js
-	git commit -m "chore: update Zyphor What's New release information"
+	# Update login backgrounds
+	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/login/background-nologo.svg
+	git commit -m "artwork: update login background without logo"
 
-	# Update Zyphor GRUB theme package control
-	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/control
-	git commit -m "chore: update Zyphor GRUB theme package metadata"
+	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/login/background.svg
+	git commit -m "artwork: update login background"
 
-	# Update Zyphor GRUB theme post-install script
-	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/postinst
-	git commit -m "fix: update Zyphor GRUB theme post-install script"
+	# Update default wallpaper
+	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/wallpaper/contents/images/1920x1080.svg
+	git commit -m "artwork: update default wallpaper"
+
+	# Update Zyphor OS application icon
+	git add core/v3/packages/zyphor-os-artwork/usr/share/icons/hicolor/scalable/apps/zyphor-os-logo.svg
+	git commit -m "artwork: update Zyphor OS logo icon"
+
+	# Update Calamares installer logo
+	git add core/v3/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/logo.png
+	git commit -m "artwork: update installer logo"
+
+	# Update Calamares installer slideshow
+	git add core/v3/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/slide.png
+	git commit -m "artwork: update installer slideshow image"
+
+	# Update Calamares installer welcome image
+	git add core/v3/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/welcome.png
+	git commit -m "artwork: update installer welcome image"
 
 push:
 	git push origin $(branch)

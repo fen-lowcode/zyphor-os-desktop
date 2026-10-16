@@ -170,58 +170,25 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Zyphor What's New package
-	git add pkg/v3/apps/zyphor-whats-new/DEBIAN/control \
-		pkg/v3/apps/zyphor-whats-new/usr/share/zyphor-whats-new/release.js
-	git commit -m "chore: update Zyphor What's New release information"
+	# Remove DEBUGING.txt
+	git add -u -- DOCUMENTATION/DEBUGING.txt
+	git commit -m "docs: remove DEBUGING.txt"
 
-	# Desktop environment package metadata
-	git add pkg/v3/zyphor-desktop-environment/DEBIAN/control
-	git commit -m "chore: update desktop environment package metadata"
+	# Remove OPERATING-SYSTEM.txt
+	git add -u -- DOCUMENTATION/OPERATING-SYSTEM.txt
+	git commit -m "docs: remove OPERATING-SYSTEM.txt"
 
-	# XFCE keyboard shortcuts and desktop behavior
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/desktop/accels.scm \
-		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml \
-		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-appfinder.xml
-	git commit -m "chore: update XFCE shortcuts and application finder defaults"
+	# Remove PACKAGE.txt
+	git add -u -- DOCUMENTATION/PACKAGE.txt
+	git commit -m "docs: remove PACKAGE.txt"
 
-	# XFCE notes styling
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/notes/gtk.css
-	git commit -m "style: update XFCE notes appearance"
+	# Remove PENDINGS.txt
+	git add -u -- DOCUMENTATION/PENDINGS.txt
+	git commit -m "docs: remove PENDINGS.txt"
 
-	# XFCE panel launchers
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-13/17891875681.desktop \
-		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-14/17891875692.desktop \
-		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/panel/launcher-15/17891875693.desktop
-	git commit -m "chore: update default XFCE panel launchers"
-
-	# Display configuration
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
-	git commit -m "chore: update default display configuration"
-
-	# XFCE notifications and power management
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml \
-		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
-	git commit -m "chore: update XFCE notification and power defaults"
-
-	# XFCE panel and screenshooter settings
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml \
-		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-screenshooter.xml
-	git commit -m "chore: update XFCE panel and screenshot settings"
-
-	# XFCE appearance settings
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
-	git commit -m "chore: update XFCE appearance defaults"
-
-	# XFCE settings utilities
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-editor.xml \
-		pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-manager.xml
-	git commit -m "chore: add XFCE settings utility defaults"
-
-	# Zyphor OS release metadata
-	git add pkg/v3/zyphor-os-release/DEBIAN/control \
-		pkg/v3/zyphor-os-release/etc/os-release
-	git commit -m "chore: update Zyphor OS release metadata"
+	# Remove package-list
+	git add -u -- DOCUMENTATION/package-list
+	git commit -m "docs: remove package-list"
 
 push:
 	git push origin $(branch)
@@ -344,26 +311,6 @@ release:
 # 	mv pkg/v2/reforged/apps/zywin-ui/zywin-ui.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
 
 # V3 UPDATES ===========================================================
-
-# BETHANY BASE
-
-	zyphor build package pkg/v3/_base/packages/zyphor-os-artwork
-	mv pkg/v3/_base/packages/zyphor-os-artwork.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
-
-	zyphor build package pkg/v3/_base/packages/zyphor-os-base
-	mv pkg/v3/_base/packages/zyphor-os-base.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
-
-	zyphor build package pkg/v3/_base/packages/zyphor-os-branding
-	mv pkg/v3/_base/packages/zyphor-os-branding.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
-
-	zyphor build package pkg/v3/_base/packages/zyphor-os-desktop-xfce
-	mv pkg/v3/_base/packages/zyphor-os-desktop-xfce.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
-
-	zyphor build package pkg/v3/_base/packages/zyphor-os-installer
-	mv pkg/v3/_base/packages/zyphor-os-installer.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
-
-	zyphor build package pkg/v3/_base/packages/zyphor-os-settings-xfce
-	mv pkg/v3/_base/packages/zyphor-os-settings-xfce.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # BETHANY MAIN
 

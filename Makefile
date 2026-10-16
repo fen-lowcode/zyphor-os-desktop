@@ -65,8 +65,8 @@ devinit:
 	@echo "\n--- Extract squashfs filesystem ---\n";
 	sudo unsquashfs -d extract mount/live/filesystem.squashfs
 	@echo "\n--- EXTRACTING INSTALLER ---\n";
-	@(cd initrd && gzip -dc ../iso/install/initrd.gz | cpio -idmv)
-	@(cd initrd-gtk && gzip -dc ../iso/install/gtk/initrd.gz | cpio -idmv)
+# 	@(cd initrd && gzip -dc ../iso/install/initrd.gz | cpio -idmv)
+# 	@(cd initrd-gtk && gzip -dc ../iso/install/gtk/initrd.gz | cpio -idmv)
 	@echo "\n--- MOUNTING CHROOT ENVIRONMENT ---\n";
 	sudo mount --bind /dev extract/dev
 	sudo mount --bind /proc extract/proc
@@ -89,8 +89,8 @@ devbuild:
 	@echo "\n--- REMOVING OLD SQUASHFS FILE ---\n";
 	sudo rm -rf iso/live/filesystem.squashfs --verbose
 	@echo "\n--- REPACKAGING THE INITRD INSTALLERS ---\n";
-	@(cd initrd && find . | cpio --create --format=newc | gzip -9 | sudo tee ../iso/install/initrd.gz > /dev/null)
-	@(cd initrd-gtk && find . | cpio --create --format=newc | gzip -9 | sudo tee ../iso/install/gtk/initrd.gz > /dev/null)
+# 	@(cd initrd && find . | cpio --create --format=newc | gzip -9 | sudo tee ../iso/install/initrd.gz > /dev/null)
+# 	@(cd initrd-gtk && find . | cpio --create --format=newc | gzip -9 | sudo tee ../iso/install/gtk/initrd.gz > /dev/null)
 	@echo "\n--- REBUILDING NEW SQUASHFS FILE ---\n";
 	sudo mksquashfs extract iso/live/filesystem.squashfs -comp xz
 	@echo "\n--- REBUILDING NEW ISO FILE ---\n";
@@ -147,7 +147,7 @@ devlive:
 vmcreate:
 	rm -rf new-iso/*.qcow2 --verbose
 # 	rm -rf new-iso/*.iso --verbose
-	sudo qemu-img create -f qcow2 new-iso/zyphor.qcow2 15G
+	sudo qemu-img create -f qcow2 new-iso/zyphor.qcow2 25G
 
 install-cdrom:
 	sudo qemu-system-x86_64 --enable-kvm --cdrom new-iso/*.iso -m 4028 --hda new-iso/zyphor.qcow2 --boot d

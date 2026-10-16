@@ -1,15 +1,102 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0f2027"/>
-      <stop offset="0.5" stop-color="#203a43"/>
-      <stop offset="1" stop-color="#2c5364"/>
+    <!-- Deep Space Cyber Gradient -->
+    <linearGradient id="cyber-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020912" />
+      <stop offset="40%" stop-color="#041826" />
+      <stop offset="80%" stop-color="#0a2c40" />
+      <stop offset="100%" stop-color="#020d18" />
     </linearGradient>
+
+    <!-- Glowing Cyan & Purple Accents -->
+    <linearGradient id="neon-cyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f2ff" stop-opacity="1" />
+      <stop offset="50%" stop-color="#0088ff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#7000ff" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="text-neon" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#e0ffff" />
+      <stop offset="100%" stop-color="#00f2ff" />
+    </linearGradient>
+
+    <!-- Isometric Hexagon Grid -->
+    <pattern id="hex-grid" width="56" height="97" patternUnits="userSpaceOnUse">
+      <path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z M28 97 L56 81 L56 49 L28 33 L0 49 L0 81 Z" fill="none" stroke="#00f2ff" stroke-width="1" stroke-opacity="0.05" />
+    </pattern>
+
+    <!-- Intense Neon Glow Filter -->
+    <filter id="neon-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur1" />
+      <feGaussianBlur stdDeviation="20" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#00f2ff" flood-opacity="0.3" />
+    </filter>
   </defs>
-  <rect width="1920" height="1080" fill="url(#sky)"/>
-  <path d="M0 778 C 480 626, 1056 929, 1920 713 L 1920 1080 L 0 1080 Z"
-        fill="#4a90d9" fill-opacity="0.18"/>
-  <path d="M0 886 C 576 778, 1152 1026, 1920 842 L 1920 1080 L 0 1080 Z"
-        fill="#4a90d9" fill-opacity="0.22"/>
+
+  <!-- Background Base -->
+  <rect width="100%" height="100%" fill="url(#cyber-bg)" />
+
+  <!-- Hexagonal Tech Mesh Overlay -->
+  <rect width="100%" height="100%" fill="url(#hex-grid)" />
+
+  <!-- Dynamic Cybernetic Aperture Rings (Center Focus) -->
+  <g transform="translate(960, 540)">
+    <!-- Outer Segmented Ring -->
+    <circle cx="0" cy="0" r="380" fill="none" stroke="#00f2ff" stroke-width="1.5" stroke-dasharray="20 10 5 10 40 15" stroke-opacity="0.3" />
+    <circle cx="0" cy="0" r="350" fill="none" stroke="#7000ff" stroke-width="2" stroke-dasharray="120 40 80 40" stroke-opacity="0.4" />
+    
+    <!-- Rotating Tech Corners / Brackets -->
+    <path d="M -450 -250 L -450 -300 L -400 -300" fill="none" stroke="#00f2ff" stroke-width="3" opacity="0.6" />
+    <path d="M 450 -250 L 450 -300 L 400 -300" fill="none" stroke="#00f2ff" stroke-width="3" opacity="0.6" />
+    <path d="M -450 250 L -450 300 L -400 300" fill="none" stroke="#00f2ff" stroke-width="3" opacity="0.6" />
+    <path d="M 450 250 L 450 300 L 400 300" fill="none" stroke="#00f2ff" stroke-width="3" opacity="0.6" />
+
+    <!-- Central Radial Light Flare -->
+    <circle cx="0" cy="0" r="280" fill="#00f2ff" opacity="0.08" filter="url(#neon-glow)" />
+  </g>
+
+  <!-- Perspective Horizon Grid Lines (Top & Bottom Sweeps) -->
+  <g stroke="url(#neon-cyan)" stroke-width="1.5" fill="none">
+    <path d="M 0 150 L 600 150 L 800 350 L 1120 350 L 1320 150 L 1920 150" opacity="0.5" />
+    <path d="M 0 930 L 600 930 L 800 730 L 1120 730 L 1320 930 L 1920 930" opacity="0.5" />
+    
+    <!-- Floating Data Nodes -->
+    <circle cx="800" cy="350" r="4" fill="#00f2ff" filter="url(#neon-glow)" />
+    <circle cx="1120" cy="350" r="4" fill="#00f2ff" filter="url(#neon-glow)" />
+    <circle cx="800" cy="730" r="4" fill="#00f2ff" filter="url(#neon-glow)" />
+    <circle cx="1120" cy="730" r="4" fill="#00f2ff" filter="url(#neon-glow)" />
+  </g>
+
+  <!-- High-Tech Framing Elements & Micro Data -->
+  <g fill="#00f2ff" opacity="0.5" font-family="'Courier New', monospace" font-size="12" letter-spacing="3">
+    <text x="80" y="100">[ SYSTEM: READY ]</text>
+    <text x="80" y="120">CORE: ACTIVE</text>
+    <text x="1700" y="100" text-anchor="end">SYS_VER // 2.0</text>
+    <text x="1700" y="120" text-anchor="end">0x00F2FF_CYAN</text>
+  </g>
+
+  <!-- CENTER TYPOGRAPHY -->
+  <g text-anchor="middle">
+    <!-- Glowing Accent Underline Bar -->
+    <path d="M 680 620 L 1240 620" stroke="url(#neon-cyan)" stroke-width="4" filter="url(#neon-glow)" />
+    
+    <!-- Main Title -->
+    <text x="960" y="525" font-family="'Orbitron', 'Montserrat', 'Segoe UI', sans-serif" font-weight="900" font-size="105" letter-spacing="18" fill="url(#text-neon)" filter="url(#shadow)">
+      ZYPHOR OS
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="960" y="580" font-family="'Orbitron', 'Segoe UI', 'Arial', sans-serif" font-weight="700" font-size="20" letter-spacing="22" fill="#00f2ff" filter="url(#neon-glow)">
+      NEXT GENERATION OPERATING SYSTEM
+    </text>
+  </g>
 </svg>

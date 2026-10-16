@@ -3,7 +3,7 @@ Section: misc
 Priority: optional
 Maintainer: Mark Jason Espelita <markjasonespelita@gmail.com>
 Build-Depends: debhelper-compat (= 13)
-Standards-Version: 5.0.1
+Standards-Version: 4.7.0
 Rules-Requires-Root: no
 
 Package: zyphor-os-branding

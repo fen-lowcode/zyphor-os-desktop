@@ -345,6 +345,26 @@ release:
 
 # V3 UPDATES ===========================================================
 
+# BETHANY BASE
+
+	zyphor build package pkg/v3/_base/packages/zyphor-os-artwork
+	mv pkg/v3/_base/packages/zyphor-os-artwork.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+
+	zyphor build package pkg/v3/_base/packages/zyphor-os-base
+	mv pkg/v3/_base/packages/zyphor-os-base.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+
+	zyphor build package pkg/v3/_base/packages/zyphor-os-branding
+	mv pkg/v3/_base/packages/zyphor-os-branding.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+
+	zyphor build package pkg/v3/_base/packages/zyphor-os-desktop-xfce
+	mv pkg/v3/_base/packages/zyphor-os-desktop-xfce.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+
+	zyphor build package pkg/v3/_base/packages/zyphor-os-installer
+	mv pkg/v3/_base/packages/zyphor-os-installer.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+
+	zyphor build package pkg/v3/_base/packages/zyphor-os-settings-xfce
+	mv pkg/v3/_base/packages/zyphor-os-settings-xfce.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+
 # BETHANY MAIN
 
 # 	zyphor build package pkg/v3/zyphor-repo-config
@@ -353,15 +373,15 @@ release:
 # 	zyphor build package pkg/v3/zyphor-archive-keyring
 # 	mv pkg/v3/zyphor-archive-keyring.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
-	zyphor build package pkg/v3/zyphor-desktop-environment
-	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+# 	zyphor build package pkg/v3/zyphor-desktop-environment
+# 	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	TEST>>>
 # 	zyphor build package pkg/v3/testing/zyphor-desktop-environment
 # 	mv pkg/v3/testing/zyphor-desktop-environment.deb pkg/staging --verbose
 
-	zyphor build package pkg/v3/zyphor-os-release
-	mv pkg/v3/zyphor-os-release.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+# 	zyphor build package pkg/v3/zyphor-os-release
+# 	mv pkg/v3/zyphor-os-release.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	zyphor build package pkg/v3/zyphor-grub-theme
 # 	mv pkg/v3/zyphor-grub-theme.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
@@ -414,8 +434,8 @@ release:
 # 	mv pkg/v3/apps/zyphor-command-center.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 # 	mv pkg/v3/apps/zyphor-command-center.deb pkg/staging
 
-	zyphor build package pkg/v3/apps/zyphor-whats-new
-	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
+# 	zyphor build package pkg/v3/apps/zyphor-whats-new
+# 	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
 # 	---
 

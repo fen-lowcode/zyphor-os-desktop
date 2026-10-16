@@ -1,15 +1,81 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0f2027"/>
-      <stop offset="0.5" stop-color="#203a43"/>
-      <stop offset="1" stop-color="#2c5364"/>
+    <!-- Background Gradient -->
+    <radialGradient id="bg-glow" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#083047" />
+      <stop offset="50%" stop-color="#031624" />
+      <stop offset="100%" stop-color="#010a12" />
+    </radialGradient>
+
+    <!-- Glowing Lines Gradient -->
+    <linearGradient id="line-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f2ff" stop-opacity="0" />
+      <stop offset="50%" stop-color="#00f2ff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#6e00ff" stop-opacity="0" />
     </linearGradient>
+
+    <!-- Text Fill Gradient -->
+    <linearGradient id="text-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#b3f3ff" />
+    </linearGradient>
+
+    <!-- Tech Grid Pattern -->
+    <pattern id="tech-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#00f2ff" stroke-width="1" stroke-opacity="0.08" />
+      <circle cx="80" cy="0" r="1.5" fill="#00f2ff" fill-opacity="0.2" />
+    </pattern>
+
+    <!-- Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="15" stdDeviation="20" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
   </defs>
-  <rect width="1920" height="1080" fill="url(#sky)"/>
-  <path d="M0 778 C 480 626, 1056 929, 1920 713 L 1920 1080 L 0 1080 Z"
-        fill="#4a90d9" fill-opacity="0.18"/>
-  <path d="M0 886 C 576 778, 1152 1026, 1920 842 L 1920 1080 L 0 1080 Z"
-        fill="#4a90d9" fill-opacity="0.22"/>
+
+  <!-- Base Dark Background -->
+  <rect width="100%" height="100%" fill="url(#bg-glow)" />
+
+  <!-- Grid Pattern Overlay -->
+  <rect width="100%" height="100%" fill="url(#tech-grid)" />
+
+  <!-- Background Glow Orbs -->
+  <circle cx="960" cy="540" r="350" fill="#00f2ff" opacity="0.12" filter="url(#glow)" />
+  <circle cx="960" cy="540" r="250" fill="#4100f2" opacity="0.1" filter="url(#glow)" />
+
+  <!-- Circuit Background Lines -->
+  <g stroke="url(#line-glow)" stroke-width="2" fill="none" opacity="0.6">
+    <path d="M 100 540 L 500 540 L 650 390 L 800 390" />
+    <path d="M 200 740 L 550 740 L 700 590 L 850 590" />
+    <path d="M 1820 540 L 1420 540 L 1270 390 L 1120 390" />
+    <path d="M 1720 740 L 1370 740 L 1220 590 L 1070 590" />
+    <path d="M 960 140 L 960 290" />
+  </g>
+
+  <!-- Circuit Nodes -->
+  <g fill="#00f2ff" filter="url(#glow)">
+    <circle cx="500" cy="540" r="4" />
+    <circle cx="650" cy="390" r="4" />
+    <circle cx="550" cy="740" r="4" />
+    <circle cx="1420" cy="540" r="4" />
+    <circle cx="1270" cy="390" r="4" />
+    <circle cx="1370" cy="740" r="4" />
+  </g>
+
+  <!-- TYPOGRAPHY: ZYPHOR OS (CENTERED) -->
+  <g text-anchor="middle" filter="url(#soft-shadow)">
+    <text x="960" y="540" font-family="'Segoe UI', 'Montserrat', 'Arial', sans-serif" font-weight="900" font-size="96" letter-spacing="14" fill="url(#text-grad)">
+      ZYPHOR OS
+    </text>
+    <text x="960" y="595" font-family="'Segoe UI', 'Montserrat', 'Arial', sans-serif" font-weight="600" font-size="22" letter-spacing="18" fill="#00f2ff" opacity="0.85">
+      NEXT GEN OPERATING SYSTEM
+    </text>
+  </g>
 </svg>

@@ -170,25 +170,29 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Remove DEBUGING.txt
-	git add -u -- DOCUMENTATION/DEBUGING.txt
-	git commit -m "docs: remove DEBUGING.txt"
+	# Update ZOR updater package control
+	git add pkg/v2/legacy/updater/zor/DEBIAN/control
+	git commit -m "chore: update ZOR updater package metadata"
 
-	# Remove OPERATING-SYSTEM.txt
-	git add -u -- DOCUMENTATION/OPERATING-SYSTEM.txt
-	git commit -m "docs: remove OPERATING-SYSTEM.txt"
+	# Update ZOR updater post-install script
+	git add pkg/v2/legacy/updater/zor/DEBIAN/postinst
+	git commit -m "fix: update ZOR updater post-install script"
 
-	# Remove PACKAGE.txt
-	git add -u -- DOCUMENTATION/PACKAGE.txt
-	git commit -m "docs: remove PACKAGE.txt"
+	# Update Zyphor What's New package control
+	git add pkg/v2/legacy/updater/zwn/DEBIAN/control
+	git commit -m "chore: update Zyphor What's New package metadata"
 
-	# Remove PENDINGS.txt
-	git add -u -- DOCUMENTATION/PENDINGS.txt
-	git commit -m "docs: remove PENDINGS.txt"
+	# Update Zyphor What's New release information
+	git add pkg/v2/legacy/updater/zwn/usr/share/zyphor-whats-new/release.js
+	git commit -m "chore: update Zyphor What's New release information"
 
-	# Remove package-list
-	git add -u -- DOCUMENTATION/package-list
-	git commit -m "docs: remove package-list"
+	# Update Zyphor GRUB theme package control
+	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/control
+	git commit -m "chore: update Zyphor GRUB theme package metadata"
+
+	# Update Zyphor GRUB theme post-install script
+	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/postinst
+	git commit -m "fix: update Zyphor GRUB theme post-install script"
 
 push:
 	git push origin $(branch)
@@ -211,11 +215,11 @@ release:
 # 	zyphor build package pkg/v2/legacy/updater/updates
 # 	mv pkg/v2/legacy/updater/updates.deb zyphor-updates.deb
 
-# 	zyphor build package pkg/v2/legacy/updater/zor
-# 	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
+	zyphor build package pkg/v2/legacy/updater/zor
+	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
 
-# 	zyphor build package pkg/v2/legacy/updater/zwn
-# 	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
+	zyphor build package pkg/v2/legacy/updater/zwn
+	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/legacy/zywin/zywin
 # 	mv pkg/v2/legacy/zywin/zywin.deb zywin.deb
@@ -250,8 +254,8 @@ release:
 # 	zyphor build package pkg/v2/legacy/zou/grub-screensaver-1
 # 	mv pkg/v2/legacy/zou/grub-screensaver-1.deb grub-screensaver-1.deb
 
-# 	zyphor build package pkg/v2/legacy/zyphor-grub-theme
-# 	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
+	zyphor build package pkg/v2/legacy/zyphor-grub-theme
+	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
 
 # V2 Reforged UPDATES ====================================================
 
@@ -386,7 +390,7 @@ release:
 
 # 	---
 
-# 	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
 
 # 	mv ./*.deb ../zyphor-os.github.io/bethany-lts/pool/main/z --verbose
 

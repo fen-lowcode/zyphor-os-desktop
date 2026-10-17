@@ -170,44 +170,13 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Update GRUB 16:9 background
-	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/grub/grub-16x9.png
-	git commit -m "artwork: update GRUB 16:9 background"
+	# Update desktop environment package metadata
+	git add pkg/v3/zyphor-desktop-environment/DEBIAN/control
+	git commit -m "chore: update desktop environment package metadata"
 
-	# Update GRUB 4:3 background
-	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/grub/grub-4x3.png
-	git commit -m "artwork: update GRUB 4:3 background"
-
-	# Update lock screen background
-	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/lockscreen/contents/images/1920x1080.svg
-	git commit -m "artwork: update lock screen background"
-
-	# Update login backgrounds
-	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/login/background-nologo.svg
-	git commit -m "artwork: update login background without logo"
-
-	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/login/background.svg
-	git commit -m "artwork: update login background"
-
-	# Update default wallpaper
-	git add core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/wallpaper/contents/images/1920x1080.svg
-	git commit -m "artwork: update default wallpaper"
-
-	# Update Zyphor OS application icon
-	git add core/v3/packages/zyphor-os-artwork/usr/share/icons/hicolor/scalable/apps/zyphor-os-logo.svg
-	git commit -m "artwork: update Zyphor OS logo icon"
-
-	# Update Calamares installer logo
-	git add core/v3/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/logo.png
-	git commit -m "artwork: update installer logo"
-
-	# Update Calamares installer slideshow
-	git add core/v3/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/slide.png
-	git commit -m "artwork: update installer slideshow image"
-
-	# Update Calamares installer welcome image
-	git add core/v3/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/welcome.png
-	git commit -m "artwork: update installer welcome image"
+	# Update XFCE panel configuration
+	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+	git commit -m "chore: update default XFCE panel configuration"
 
 push:
 	git push origin $(branch)
@@ -230,11 +199,11 @@ release:
 # 	zyphor build package pkg/v2/legacy/updater/updates
 # 	mv pkg/v2/legacy/updater/updates.deb zyphor-updates.deb
 
-	zyphor build package pkg/v2/legacy/updater/zor
-	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
+# 	zyphor build package pkg/v2/legacy/updater/zor
+# 	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
 
-	zyphor build package pkg/v2/legacy/updater/zwn
-	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
+# 	zyphor build package pkg/v2/legacy/updater/zwn
+# 	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/legacy/zywin/zywin
 # 	mv pkg/v2/legacy/zywin/zywin.deb zywin.deb
@@ -269,8 +238,8 @@ release:
 # 	zyphor build package pkg/v2/legacy/zou/grub-screensaver-1
 # 	mv pkg/v2/legacy/zou/grub-screensaver-1.deb grub-screensaver-1.deb
 
-	zyphor build package pkg/v2/legacy/zyphor-grub-theme
-	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
+# 	zyphor build package pkg/v2/legacy/zyphor-grub-theme
+# 	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
 
 # V2 Reforged UPDATES ====================================================
 
@@ -339,8 +308,8 @@ release:
 # 	zyphor build package pkg/v3/zyphor-archive-keyring
 # 	mv pkg/v3/zyphor-archive-keyring.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
-# 	zyphor build package pkg/v3/zyphor-desktop-environment
-# 	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+	zyphor build package pkg/v3/zyphor-desktop-environment
+	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	TEST>>>
 # 	zyphor build package pkg/v3/testing/zyphor-desktop-environment
@@ -405,7 +374,7 @@ release:
 
 # 	---
 
-	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
+# 	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
 
 # 	mv ./*.deb ../zyphor-os.github.io/bethany-lts/pool/main/z --verbose
 

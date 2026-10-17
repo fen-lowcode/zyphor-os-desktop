@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# download: https://raw.githubusercontent.com/zyphor-os/zyphor-os-desktop/main/scripts/_base_v3.sh
+
 apt install wget
 
 wget https://github.com/zyphor-os/zyphor-os.github.io/raw/refs/heads/main/bethany-lts/bethany/pool/main/z/zyphor-archive-keyring.deb
@@ -33,3 +35,5 @@ rm -rf ./zyphor-repo-config.deb
 zy system upgrade
 
 zy system clean
+
+rm -rf ./_base_v3.sh

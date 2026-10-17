@@ -1,3 +1,5 @@
+#!/bin/sh
+
 apt install wget
 
 wget https://github.com/zyphor-os/zyphor-os.github.io/raw/refs/heads/main/bethany-lts/bethany/pool/main/z/zyphor-archive-keyring.deb

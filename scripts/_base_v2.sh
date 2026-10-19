@@ -4,9 +4,9 @@
 
 apt install wget
 
-wget https://github.com/zyphor-os/zyphor-os.github.io/raw/refs/heads/main/ada-lovelace-lts/ada-lovelace/pool/main/z/zyphor-archive-keyring.deb
+wget https://github.com/zyphor-os/zyphor-os.github.io/raw/refs/heads/main/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z/zyphor-archive-keyring.deb
 
-wget https://github.com/zyphor-os/zyphor-os.github.io/raw/refs/heads/main/ada-lovelace-lts/ada-lovelace/pool/main/z/zyphor-repo-config.deb
+wget https://github.com/zyphor-os/zyphor-os.github.io/raw/refs/heads/main/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z/zyphor-repo-config.deb
 
 apt install ./zyphor-archive-keyring.deb -y
 

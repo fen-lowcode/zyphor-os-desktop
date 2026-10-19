@@ -170,13 +170,57 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Update desktop environment package metadata
-	git add pkg/v3/zyphor-desktop-environment/DEBIAN/control
-	git commit -m "chore: update desktop environment package metadata"
+	# Update GRUB 16:9 background for v2
+	git add core/v2/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/grub/grub-16x9.png
+	git commit -m "artwork: update v2 GRUB 16:9 background"
 
-	# Update XFCE panel configuration
-	git add pkg/v3/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
-	git commit -m "chore: update default XFCE panel configuration"
+	# Update GRUB 4:3 background for v2
+	git add core/v2/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/grub/grub-4x3.png
+	git commit -m "artwork: update v2 GRUB 4:3 background"
+
+	# Update v2 lock screen background
+	git add core/v2/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/lockscreen/contents/images/1920x1080.svg
+	git commit -m "artwork: update v2 lock screen background"
+
+	# Update v2 login background without logo
+	git add core/v2/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/login/background-nologo.svg
+	git commit -m "artwork: update v2 login background without logo"
+
+	# Update v2 login background
+	git add core/v2/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/login/background.svg
+	git commit -m "artwork: update v2 login background"
+
+	# Update v2 default wallpaper
+	git add core/v2/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/wallpaper/contents/images/1920x1080.svg
+	git commit -m "artwork: update v2 default wallpaper"
+
+	# Update v2 Zyphor OS logo icon
+	git add core/v2/packages/zyphor-os-artwork/usr/share/icons/hicolor/scalable/apps/zyphor-os-logo.svg
+	git commit -m "artwork: update v2 Zyphor OS logo icon"
+
+	# Update v2 release branding script
+	git add core/v2/packages/zyphor-os-branding/usr/lib/zyphor-os-release
+	git commit -m "chore: update v2 release branding"
+
+	# Update Calamares GRUB configuration
+	git add core/v2/packages/zyphor-os-installer/etc/calamares/modules/grubcfg.conf
+	git commit -m "fix: update v2 Calamares GRUB configuration"
+
+	# Remove v3 GRUB 4:3 background
+	git add -u -- core/v3/packages/zyphor-os-artwork/usr/share/desktop-base/zyphor-os-theme/grub/grub-4x3.png
+	git commit -m "artwork: remove v3 GRUB 4:3 background"
+
+	# Add v2 ISO customization files
+	git add core/v2/_iso_custom/
+	git commit -m "build: add v2 ISO customization files"
+
+	# Add v2 base build script
+	git add scripts/_base_v2.sh
+	git commit -m "build: add v2 base build script"
+
+	# Add v2 ISO build script
+	git add scripts/_base_v2_iso.sh
+	git commit -m "build: add v2 ISO build script"
 
 push:
 	git push origin $(branch)

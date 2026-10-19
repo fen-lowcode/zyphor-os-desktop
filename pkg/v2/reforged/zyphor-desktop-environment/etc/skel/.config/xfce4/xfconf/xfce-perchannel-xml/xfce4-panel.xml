@@ -63,6 +63,9 @@
         <value type="string" value="networkmanager applet"/>
         <value type="string" value="ethernet network connection “wired connection 1” active"/>
       </property>
+      <property name="known-items" type="array">
+        <value type="string" value="org.guido-berhoerster.code.package-update-indicator"/>
+      </property>
     </property>
     <property name="plugin-8" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
@@ -89,7 +92,7 @@
     </property>
     <property name="plugin-10" type="string" value="showdesktop"/>
     <property name="plugin-11" type="string" value="whiskermenu">
-      <property name="button-icon" type="string" value="zyphor-logo"/>
+      <property name="button-icon" type="string" value="zyphor-os-logo"/>
       <property name="button-single-row" type="bool" value="false"/>
       <property name="position-profile-alternate" type="bool" value="true"/>
       <property name="position-search-alternate" type="bool" value="false"/>

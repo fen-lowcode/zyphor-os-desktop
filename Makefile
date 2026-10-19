@@ -170,17 +170,17 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Update Calamares installer logo
-	git add core/v2/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/logo.png
-	git commit -m "artwork: update v2 installer logo"
+	# Update Reforged desktop environment package metadata
+	git add pkg/v2/reforged/zyphor-desktop-environment/DEBIAN/control
+	git commit -m "chore: update Reforged desktop environment metadata"
 
-	# Update Calamares installer slideshow
-	git add core/v2/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/slide.png
-	git commit -m "artwork: update v2 installer slideshow image"
+	# Update Reforged XFCE panel configuration
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+	git commit -m "chore: update Reforged XFCE panel configuration"
 
-	# Update Calamares installer welcome image
-	git add core/v2/packages/zyphor-os-installer/usr/share/calamares/branding/zyphor-os/welcome.png
-	git commit -m "artwork: update v2 installer welcome image"
+	# Add new Reforged XFCE panel configuration
+	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml.new
+	git commit -m "chore: add new Reforged XFCE panel configuration"
 
 push:
 	git push origin $(branch)
@@ -273,8 +273,8 @@ release:
 # 	zyphor build package pkg/v2/reforged/zyphor-fastfetch-config
 # 	mv pkg/v2/reforged/zyphor-fastfetch-config.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
-# 	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
-# 	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
+	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
+	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
 # ADA LOVELACE APPS
 
@@ -312,8 +312,8 @@ release:
 # 	zyphor build package pkg/v3/zyphor-archive-keyring
 # 	mv pkg/v3/zyphor-archive-keyring.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
-	zyphor build package pkg/v3/zyphor-desktop-environment
-	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
+# 	zyphor build package pkg/v3/zyphor-desktop-environment
+# 	mv pkg/v3/zyphor-desktop-environment.deb ../zyphor-os.github.io/bethany-lts/bethany/pool/main/z --verbose
 
 # 	TEST>>>
 # 	zyphor build package pkg/v3/testing/zyphor-desktop-environment

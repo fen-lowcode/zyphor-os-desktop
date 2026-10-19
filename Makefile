@@ -170,17 +170,29 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Update Reforged desktop environment package metadata
-	git add pkg/v2/reforged/zyphor-desktop-environment/DEBIAN/control
-	git commit -m "chore: update Reforged desktop environment metadata"
+	# Update ZOR updater package metadata
+	git add pkg/v2/legacy/updater/zor/DEBIAN/control
+	git commit -m "chore: update ZOR updater package metadata"
 
-	# Update Reforged XFCE panel configuration
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
-	git commit -m "chore: update Reforged XFCE panel configuration"
+	# Update ZOR updater post-install script
+	git add pkg/v2/legacy/updater/zor/DEBIAN/postinst
+	git commit -m "fix: update ZOR updater post-install script"
 
-	# Add new Reforged XFCE panel configuration
-	git add pkg/v2/reforged/zyphor-desktop-environment/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml.new
-	git commit -m "chore: add new Reforged XFCE panel configuration"
+	# Update Zyphor What's New package metadata
+	git add pkg/v2/legacy/updater/zwn/DEBIAN/control
+	git commit -m "chore: update Zyphor What's New package metadata"
+
+	# Update Zyphor What's New release information
+	git add pkg/v2/legacy/updater/zwn/usr/share/zyphor-whats-new/release.js
+	git commit -m "chore: update Zyphor What's New release information"
+
+	# Update Zyphor GRUB theme package metadata
+	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/control
+	git commit -m "chore: update Zyphor GRUB theme package metadata"
+
+	# Update Zyphor GRUB theme post-install script
+	git add pkg/v2/legacy/zyphor-grub-theme/DEBIAN/postinst
+	git commit -m "fix: update Zyphor GRUB theme post-install script"
 
 push:
 	git push origin $(branch)
@@ -203,11 +215,11 @@ release:
 # 	zyphor build package pkg/v2/legacy/updater/updates
 # 	mv pkg/v2/legacy/updater/updates.deb zyphor-updates.deb
 
-# 	zyphor build package pkg/v2/legacy/updater/zor
-# 	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
+	zyphor build package pkg/v2/legacy/updater/zor
+	mv pkg/v2/legacy/updater/zor.deb zyphor-os-release.deb
 
-# 	zyphor build package pkg/v2/legacy/updater/zwn
-# 	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
+	zyphor build package pkg/v2/legacy/updater/zwn
+	mv pkg/v2/legacy/updater/zwn.deb zyphor-whats-new.deb
 
 # 	zyphor build package pkg/v2/legacy/zywin/zywin
 # 	mv pkg/v2/legacy/zywin/zywin.deb zywin.deb
@@ -242,8 +254,8 @@ release:
 # 	zyphor build package pkg/v2/legacy/zou/grub-screensaver-1
 # 	mv pkg/v2/legacy/zou/grub-screensaver-1.deb grub-screensaver-1.deb
 
-# 	zyphor build package pkg/v2/legacy/zyphor-grub-theme
-# 	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
+	zyphor build package pkg/v2/legacy/zyphor-grub-theme
+	mv pkg/v2/legacy/zyphor-grub-theme.deb zyphor-grub-theme.deb
 
 # V2 Reforged UPDATES ====================================================
 
@@ -273,8 +285,8 @@ release:
 # 	zyphor build package pkg/v2/reforged/zyphor-fastfetch-config
 # 	mv pkg/v2/reforged/zyphor-fastfetch-config.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
-	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
-	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
+# 	zyphor build package pkg/v2/reforged/zyphor-desktop-environment
+# 	mv pkg/v2/reforged/zyphor-desktop-environment.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace/pool/main/z --verbose
 
 # ADA LOVELACE APPS
 
@@ -378,7 +390,7 @@ release:
 
 # 	---
 
-# 	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
+	mv ./*.deb ../zyphor-os.github.io/ada-lovelace-lts/pool/main/z --verbose
 
 # 	mv ./*.deb ../zyphor-os.github.io/bethany-lts/pool/main/z --verbose
 

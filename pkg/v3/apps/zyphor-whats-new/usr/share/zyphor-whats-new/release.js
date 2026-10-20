@@ -1,9 +1,21 @@
 const releaseNotes = {
     distro: "Zyphor OS 3 \"Bethany\" LTS",
-    version: "3.0.0-bethany-lts-u3",
-    date: "Updated On: October 13, 2026 @ 03:20 PM",
+    version: "3.2.0-bethany-lts-u4",
+    date: "Updated On: October 20, 2026 @ 09:52 AM",
 
     sections: [
+        {
+            "title": "New Zyphor CLI Features",
+            "items": [
+                "Added the new 'zyphor setup dev <target>' command, which sets up a complete development environment in one step with targets for PHP, Git, Node.js, Composer, Android Studio with Flutter, and OS development",
+                "The PHP target now installs PHP together with the GD, cURL, mbstring, XML, SQLite, Zip, Intl, BCMath and MySQL extensions, then installs Composer and Node.js 20 and verifies that each extension loaded correctly",
+                "The Git target configures your name and email, generates an SSH key in your own home directory (even when run with sudo), and tests the connection to GitHub",
+                "The Android Studio target installs Android Studio and Flutter from the archives you download, detects them automatically in your Downloads folder, supports optional SHA-256 checksum verification, and sets up your PATH for you",
+                "The OS target installs everything needed to build kernels, initramfs images, bootable ISOs, and live-build projects, including QEMU and OVMF for testing in a virtual machine",
+                "Improved security of the setup tools: the Composer installer is verified against its official signature, and the NodeSource script is downloaded to a file before it runs instead of being piped directly into the shell",
+                "Added helpful messages and clear error handling across all setup targets, with automatic detection of your real user account so files are never written to the root account by mistake"
+            ]
+        },
         {
             "title": "Windows/Super Key Opens Whisker Menu",
             "items": [

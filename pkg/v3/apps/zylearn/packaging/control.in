@@ -1,0 +1,10 @@
+Package: zylearn
+Version: @VERSION@
+Section: utils
+Priority: optional
+Architecture: @ARCH@
+Depends: libc6, libstdc++6, git
+Maintainer: Mark Jason Espelita <markjasonespelita@gmail.com>
+Description: Zyphor OS Learning CLI
+ Guided Linux lessons, progress tracking and a learning skeleton
+ environment for students and new Linux users on Zyphor OS.

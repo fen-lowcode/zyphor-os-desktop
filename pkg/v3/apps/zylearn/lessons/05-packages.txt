@@ -1,0 +1,21 @@
+# Package management with apt
+
+Zyphor OS is Debian-based, so software is installed with apt - a trusted
+catalogue, instead of downloading random installers.
+
+Try it:
+  apt search tree | head      search for a package
+  apt show tree               read what a package does
+  sudo apt update             refresh the list of available software
+  sudo apt install tree       install it
+  sudo apt remove tree        uninstall it (your files stay)
+
+Good habits:
+  - Run "sudo apt update" before installing.
+  - Read what apt is about to do before you press Y.
+  - Only use sudo when you understand why the command needs it.
+
+Challenge (verify with: zylearn check 05-packages)
+  1. Install the "tree" program:  sudo apt install tree
+  2. Save 20 installed packages:
+       apt list --installed 2>/dev/null | head -20 > ~/zylearn-practice/packages.txt

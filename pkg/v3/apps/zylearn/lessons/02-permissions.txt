@@ -1,0 +1,25 @@
+# Permissions: who can read, write and run a file
+
+Run "ls -l" and look at the first column, e.g.  -rwxr-xr--
+
+  rwx  r-x  r--
+  |    |    '-- everyone else
+  |    '------- the file's group
+  '------------ the owner
+
+r = read (4)   w = write (2)   x = execute (1)
+Add the numbers per group: rwx = 7, r-x = 5, r-- = 4, rw- = 6.
+
+Try it:
+  mkdir -p ~/zylearn-practice && cd ~/zylearn-practice
+  touch demo.sh             create an empty file
+  chmod 755 demo.sh         owner: rwx, group: r-x, others: r-x
+  chmod u-x demo.sh         remove execute from the owner
+  ls -l demo.sh             check the result
+
+Remember: chmod changes permissions, chown changes the owner.
+Never run "chmod -R 777" on a system folder - it removes all protection.
+
+Challenge (verify with: zylearn check 02-permissions)
+  1. Create ~/zylearn-practice/hello.sh that everyone can run, but only you can edit (755)
+  2. Create ~/zylearn-practice/secret.txt that ONLY you can read or write (600)

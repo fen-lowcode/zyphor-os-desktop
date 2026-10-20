@@ -1,0 +1,22 @@
+# The Linux filesystem: where everything lives
+
+Linux has ONE tree that starts at "/" (called root). There are no C: or D: drives.
+
+Key directories:
+  /home      your personal files (e.g. /home/yourname)
+  /etc       system-wide configuration files
+  /usr/bin   most installed programs
+  /var/log   logs written by the system and services
+  /tmp       temporary files, cleared on reboot
+
+Try it:
+  pwd                 where am I right now?
+  ls -la              list files, including hidden ones (starting with ".")
+  cd /etc && ls       go to /etc and look around
+  cd                  with no argument, jump back to your home directory
+
+Challenge (verify with: zylearn check 01-filesystem)
+  1. Create a folder path:   mkdir -p ~/zylearn-practice/projects/notes
+  2. Create an empty file:   touch ~/zylearn-practice/projects/notes/todo.txt
+  3. Save a listing of /etc into a file with the ">" symbol:
+       ls -la /etc > ~/zylearn-practice/etc-list.txt

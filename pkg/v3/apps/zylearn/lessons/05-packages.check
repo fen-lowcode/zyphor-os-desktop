@@ -1,0 +1,2 @@
+Install the tree package | command | tree | hint: sudo apt update && sudo apt install tree
+packages.txt lists installed packages | lines-at-least | ~/zylearn-practice/packages.txt | 5 | hint: apt list --installed 2>/dev/null | head -20 > file

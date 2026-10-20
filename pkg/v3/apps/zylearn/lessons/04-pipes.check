@@ -1,0 +1,3 @@
+greeting.txt contains "hello linux" | contains | ~/zylearn-practice/greeting.txt | hello linux | hint: echo "hello linux" > greeting.txt
+shout.txt contains the capitals version | contains | ~/zylearn-practice/shout.txt | HELLO LINUX | hint: pipe cat into tr a-z A-Z, then redirect with >
+etc-count.txt holds a number | nonempty | ~/zylearn-practice/etc-count.txt | hint: ls /etc | wc -l > etc-count.txt

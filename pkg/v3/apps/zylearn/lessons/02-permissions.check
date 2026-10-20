@@ -1,0 +1,2 @@
+Create hello.sh with mode 755 | mode | ~/zylearn-practice/hello.sh | 755 | hint: touch hello.sh && chmod 755 hello.sh
+Create secret.txt with mode 600 | mode | ~/zylearn-practice/secret.txt | 600 | hint: touch secret.txt && chmod 600 secret.txt

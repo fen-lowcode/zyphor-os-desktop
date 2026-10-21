@@ -153,7 +153,7 @@ case "$CATEGORY" in
   # ================= SETUP =================
   setup)
     source /usr/lib/zyphor/setup/dev
-    source /usr/lib/zyphor/setup/theme
+    # source /usr/lib/zyphor/setup/theme
     source /usr/lib/zyphor/setup/wine
     source /usr/lib/zyphor/setup/pentest
     source /usr/lib/zyphor/setup/web-server
@@ -162,9 +162,9 @@ case "$CATEGORY" in
       dev)
         zyphor_setup_dev "$@"
       ;;
-      theme)
-        zyphor_setup_theme "$@"
-      ;;
+      # theme)
+      #   zyphor_setup_theme "$@"
+      # ;;
       wine)
         zyphor_setup_wine
       ;;

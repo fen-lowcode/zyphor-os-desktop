@@ -1,5 +1,5 @@
 Package: zyphor-cli
-Version: 3.1.0-r7-alpha
+Version: 4.0.0-r8-alpha
 Section: utils
 Priority: optional
 Architecture: all

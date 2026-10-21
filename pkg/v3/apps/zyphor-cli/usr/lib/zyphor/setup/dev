@@ -3,7 +3,17 @@
 # zyphor_setup_dev — dev environment bootstrapper for Zyphor OS
 #
 # Usage: zyphor setup dev <target>
-# Targets: php, git, node, composer, android-studio (with flutter), os
+# Targets: php, git, node, composer, android-studio (with flutter), os, version, undo
+#
+# Version management:
+#   zyphor setup dev version                 # overview (php + node)
+#   zyphor setup dev version php             # list PHP versions
+#   sudo zyphor setup dev version php 8.3    # install + switch to PHP 8.3
+#   zyphor setup dev version node            # list Node.js versions
+#   sudo zyphor setup dev version node 22    # install + switch to Node.js 22 (or 22.5)
+#
+# Undo a setup:
+#   sudo zyphor setup dev undo php|node|composer|git|android-studio|os
 #
 
 # ======================================================================
@@ -142,30 +152,38 @@ _zyphor_resolve_and_confirm_user() {
   fi
 }
 
-# Install Node.js 20 via NodeSource (downloads the setup script to a file
-# first instead of piping straight into bash). Skips if Node 20 is present.
-_zyphor_install_node20() {
+# Install Node.js <major> via NodeSource (downloads the setup script to a
+# file first instead of piping straight into bash). Skips if that major is
+# already present. Defaults to Node.js 20.
+_zyphor_install_node() {
+  local want="${1:-20}"
+
   if command -v node >/dev/null 2>&1; then
     local major
     major="$(node -v | sed 's/^v//' | cut -d. -f1)"
-    if [ "$major" = "20" ]; then
-      echo "Zyphor: Node.js 20 already installed — skipping"
+    if [ "$major" = "$want" ]; then
+      echo "Zyphor: Node.js $want already installed — skipping"
       return 0
     fi
-    echo "Zyphor: Found Node.js v$major, replacing with Node.js 20..."
+    echo "Zyphor: Found Node.js v$major, replacing with Node.js $want..."
     apt remove nodejs -y || true
   fi
 
   local setup_script
   setup_script="$(mktemp)" || return 1
-  curl -fsSL https://deb.nodesource.com/setup_20.x -o "$setup_script" || {
-    echo "Zyphor: ✖ Failed downloading NodeSource setup script"
+  curl -fsSL "https://deb.nodesource.com/setup_${want}.x" -o "$setup_script" || {
+    echo "Zyphor: ✖ Failed downloading NodeSource setup script for Node.js $want"
     rm -f "$setup_script"
     return 1
   }
   bash "$setup_script" || { rm -f "$setup_script"; return 1; }
   rm -f "$setup_script"
   apt install -y nodejs
+}
+
+# Kept so existing callers (php / node targets) keep working.
+_zyphor_install_node20() {
+  _zyphor_install_node 20
 }
 
 # Install Composer with the official installer signature check.
@@ -618,28 +636,736 @@ _zyphor_setup_os() {
 }
 
 # ======================================================================
+# VERSION TARGET (list / switch PHP and Node.js versions)
+# ======================================================================
+
+# ---------------------------- PHP helpers -----------------------------
+
+# Active CLI version as "X.Y" (empty if php is not installed)
+_zyphor_php_active_version() {
+  command -v php >/dev/null 2>&1 || return 1
+  php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;' 2>/dev/null
+}
+
+# Installed php-cli versions, one per line (e.g. 8.2, 8.3)
+_zyphor_php_installed_versions() {
+  dpkg-query -W -f='${Package}\t${Status}\n' 2>/dev/null |
+    awk -F'\t' '$1 ~ /^php[0-9]+\.[0-9]+-cli$/ && $2 ~ /install ok installed/ {
+      sub(/^php/, "", $1); sub(/-cli$/, "", $1); print $1
+    }' | sort -V
+}
+
+# Versions installable from the currently configured apt sources
+_zyphor_php_available_versions() {
+  apt-cache pkgnames php 2>/dev/null |
+    sed -n 's/^php\([0-9]\+\.[0-9]\+\)-cli$/\1/p' | sort -Vu
+}
+
+_zyphor_php_sury_configured() {
+  grep -rqs "packages.sury.org/php" /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null
+}
+
+# Add the Sury PHP repo (the standard source for multiple PHP versions on
+# Debian). Asks first, since it's a third-party repository.
+_zyphor_php_add_sury_repo() {
+  _zyphor_php_sury_configured && return 0
+
+  echo ""
+  echo "Zyphor: ⚠ That PHP version isn't in your configured repositories."
+  echo "         It can be installed from the Sury PHP repo (packages.sury.org),"
+  echo "         the usual third-party source for multiple PHP versions on Debian."
+  local ADD_SURY
+  read -rp "Add the Sury PHP repository? [y/N]: " ADD_SURY
+  case "$ADD_SURY" in
+    y|Y) ;;
+    *) echo "Zyphor: Skipping — no repository added"; return 1 ;;
+  esac
+
+  apt install -y curl ca-certificates >/dev/null 2>&1 || {
+    echo "Zyphor: ✖ Failed installing curl/ca-certificates"
+    return 1
+  }
+
+  local codename
+  codename="$(. /etc/os-release 2>/dev/null; echo "${VERSION_CODENAME:-}")"
+
+  if [ -z "$codename" ] || ! curl -fsI "https://packages.sury.org/php/dists/$codename/Release" >/dev/null 2>&1; then
+    echo "Zyphor: ⚠ Could not match '${codename:-unknown}' to a Sury-supported Debian release"
+    read -rp "Debian codename to use [trixie]: " codename
+    codename="${codename:-trixie}"
+    if ! curl -fsI "https://packages.sury.org/php/dists/$codename/Release" >/dev/null 2>&1; then
+      echo "Zyphor: ✖ Sury has no repo for '$codename'"
+      return 1
+    fi
+  fi
+
+  local key_tmp
+  key_tmp="$(mktemp)" || return 1
+  curl -fsSL https://packages.sury.org/php/apt.gpg -o "$key_tmp" || {
+    echo "Zyphor: ✖ Failed downloading the Sury signing key"
+    rm -f "$key_tmp"
+    return 1
+  }
+  install -m 644 "$key_tmp" /usr/share/keyrings/deb.sury.org-php.gpg
+  rm -f "$key_tmp"
+
+  echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $codename main" \
+    > /etc/apt/sources.list.d/zyphor-php-sury.list
+
+  apt update -qq || {
+    echo "Zyphor: ✖ apt update failed after adding the Sury repo"
+    return 1
+  }
+  echo "Zyphor: ✔ Sury PHP repository added ($codename)"
+}
+
+_zyphor_version_list_php() {
+  local active installed available v tag
+  active="$(_zyphor_php_active_version)"
+  installed="$(_zyphor_php_installed_versions)"
+  available="$(_zyphor_php_available_versions)"
+
+  echo ""
+  echo "Zyphor: PHP versions"
+  echo "  Active → ${active:-none (php not installed)}"
+  echo ""
+
+  if [ -z "$available" ] && [ -z "$installed" ]; then
+    echo "  No PHP versions found. Try: sudo apt update"
+  else
+    echo "  Available (X = installed, * = active):"
+    # Union of installed + available, so nothing installed gets hidden
+    for v in $(printf '%s\n%s\n' "$installed" "$available" | grep -v '^$' | sort -Vu); do
+      tag="  "
+      grep -qx "$v" <<<"$installed" && tag="X "
+      [ "$v" = "$active" ] && tag="*X"
+      printf '    %s php %s\n' "$tag" "$v"
+    done
+  fi
+
+  echo ""
+  if ! _zyphor_php_sury_configured; then
+    echo "  Only versions from your current repos are shown. Other versions can"
+    echo "  be offered via the Sury repo when you set one."
+    echo ""
+  fi
+  echo "  Set a version: sudo zyphor setup dev version php <X.Y>"
+  echo ""
+}
+
+_zyphor_version_set_php() {
+  local ver="$1"
+
+  if ! [[ "$ver" =~ ^[0-9]+\.[0-9]+$ ]]; then
+    echo "Zyphor: ✖ Invalid PHP version '$ver' (expected X.Y, e.g. 8.3)"
+    return 1
+  fi
+
+  if [ "$(_zyphor_php_active_version)" = "$ver" ]; then
+    echo "Zyphor: PHP $ver is already the active version — nothing to do"
+    return 0
+  fi
+
+  apt update -qq
+
+  if ! apt-cache show "php${ver}-cli" >/dev/null 2>&1; then
+    _zyphor_php_add_sury_repo || return 1
+    if ! apt-cache show "php${ver}-cli" >/dev/null 2>&1; then
+      echo "Zyphor: ✖ PHP $ver is not available (see: zyphor setup dev version php)"
+      return 1
+    fi
+  fi
+
+  # Same extension set as the 'php' target. Install only what exists for
+  # this version. Deliberately NOT the 'php8.x' metapackage: it can pull
+  # in Apache.
+  local pkgs=("php${ver}-cli") ext
+  for ext in gd curl mbstring xml sqlite3 zip intl bcmath mysql; do
+    if apt-cache show "php${ver}-${ext}" >/dev/null 2>&1; then
+      pkgs+=("php${ver}-${ext}")
+    else
+      echo "Zyphor: ⚠ php${ver}-${ext} not available — skipping"
+    fi
+  done
+
+  echo ""
+  echo "Zyphor: Installing PHP $ver..."
+  apt install -y "${pkgs[@]}" || {
+    echo "Zyphor: ✖ Failed installing PHP $ver"
+    return 1
+  }
+
+  # Point the unversioned commands at the chosen version
+  local alt
+  for alt in php phar phar.phar phpize php-config phpdbg; do
+    if [ -x "/usr/bin/${alt}${ver}" ]; then
+      update-alternatives --set "$alt" "/usr/bin/${alt}${ver}" >/dev/null 2>&1 ||
+        echo "Zyphor: ⚠ Could not switch '$alt' to $ver"
+    fi
+  done
+  hash -r 2>/dev/null
+
+  local now
+  now="$(_zyphor_php_active_version)"
+  if [ "$now" = "$ver" ]; then
+    echo "Zyphor: ✔ PHP $ver is now the active version"
+    php -v | head -n1
+  else
+    echo "Zyphor: ⚠ PHP $ver installed, but 'php' still reports ${now:-nothing}"
+    echo "         Try: sudo update-alternatives --set php /usr/bin/php${ver}"
+    return 1
+  fi
+  echo "Zyphor: Note: Apache/FPM are not switched. Use libapache2-mod-php${ver} or php${ver}-fpm if you need them."
+}
+
+# ---------------------------- Node helpers ----------------------------
+
+_zyphor_node_installed_version() {
+  command -v node >/dev/null 2>&1 || return 1
+  node -v | sed 's/^v//'
+}
+
+# Latest release of each recent major, from nodejs.org (marks LTS lines)
+_zyphor_node_remote_versions() {
+  local json lts_majors v major tag
+  json="$(curl -fsSL --max-time 15 https://nodejs.org/dist/index.json 2>/dev/null)" || return 1
+  [ -n "$json" ] || return 1
+
+  lts_majors="$(grep '"lts":"' <<<"$json" | grep -o '"version":"v[0-9]*' | sed 's/.*v//' | sort -u)"
+
+  while read -r v; do
+    major="${v%%.*}"
+    tag=""
+    grep -qx "$major" <<<"$lts_majors" && tag=" (LTS)"
+    printf '    node %s%s\n' "$v" "$tag"
+  done < <(grep -o '"version":"v[0-9.]*"' <<<"$json" | sed 's/.*v//; s/"//' | awk -F. '!seen[$1]++' | head -n 8)
+}
+
+_zyphor_version_list_node() {
+  local current
+  current="$(_zyphor_node_installed_version)"
+
+  echo ""
+  echo "Zyphor: Node.js versions"
+  echo "  Installed → ${current:-none}"
+  echo ""
+  echo "  Latest release of each recent major:"
+  _zyphor_node_remote_versions || echo "    ⚠ Could not reach nodejs.org (check your connection)"
+  echo ""
+  echo "  Set a version: sudo zyphor setup dev version node <major>   (e.g. 22)"
+  echo "  A minor is accepted too (e.g. 22.5) and is pinned if NodeSource still has it."
+  echo ""
+}
+
+_zyphor_version_set_node() {
+  local input="$1" major minor=""
+
+  if ! [[ "$input" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "Zyphor: ✖ Invalid Node.js version '$input' (expected e.g. 22 or 22.5)"
+    return 1
+  fi
+
+  major="${input%%.*}"
+  [[ "$input" == *.* ]] && minor="${input#*.}"
+
+  if ! curl -fsI "https://deb.nodesource.com/setup_${major}.x" >/dev/null 2>&1; then
+    echo "Zyphor: ✖ NodeSource has no Node.js $major.x (see: zyphor setup dev version node)"
+    return 1
+  fi
+
+  _zyphor_install_node "$major" || return 1
+
+  if [ -n "$minor" ]; then
+    local current pin
+    current="$(_zyphor_node_installed_version)"
+    if [[ "$current" != "$major.$minor."* ]]; then
+      pin="$(apt-cache madison nodejs 2>/dev/null | awk '{print $3}' | grep -E "^${major}\.${minor}\." | head -n1)"
+      if [ -n "$pin" ]; then
+        apt install -y --allow-downgrades "nodejs=$pin" || {
+          echo "Zyphor: ✖ Failed pinning Node.js $pin"
+          return 1
+        }
+      else
+        echo "Zyphor: ⚠ NodeSource no longer offers $major.$minor.x — staying on the latest $major.x"
+      fi
+    fi
+  fi
+
+  hash -r 2>/dev/null
+  echo "Zyphor: ✔ Node.js $(_zyphor_node_installed_version) is now installed"
+  npm -v >/dev/null 2>&1 && echo "Zyphor: npm $(npm -v)"
+}
+
+# ---------------------------- Version dispatcher ----------------------
+
+_zyphor_setup_version() {
+  local sub="$1" ver="$2"
+
+  case "$sub" in
+    "")
+      _zyphor_version_list_php
+      _zyphor_version_list_node
+      ;;
+    php)
+      if [ -z "$ver" ]; then
+        _zyphor_version_list_php
+      else
+        _zyphor_require_root "version php $ver" || return 1
+        _zyphor_version_set_php "$ver"
+      fi
+      ;;
+    node)
+      if [ -z "$ver" ]; then
+        _zyphor_version_list_node
+      else
+        _zyphor_require_root "version node $ver" || return 1
+        _zyphor_version_set_node "$ver"
+      fi
+      ;;
+    *)
+      echo ""
+      echo "Zyphor: ✖ Unknown version target → $sub"
+      echo "Usage: zyphor setup dev version [php|node] [version]"
+      echo ""
+      return 1
+      ;;
+  esac
+}
+
+# ======================================================================
+# UNDO TARGET (reverse a dev setup)
+# ======================================================================
+#
+# Safety rules:
+#   * Every undo asks for confirmation before changing anything.
+#   * apt is run WITHOUT -y, so it lists everything it is about to remove
+#     (including anything that depends on those packages) and asks again.
+#   * Base-system packages the setup only *used* (git, curl, python3, ...)
+#     are never removed.
+#   * Personal data (SSH keys, Android SDK) is only deleted if you answer
+#     yes to its own separate question (default: no).
+
+# y/N prompt. Returns 0 only on y/Y.
+_zyphor_confirm() {
+  local answer
+  read -rp "$1 [y/N]: " answer
+  case "$answer" in
+    y|Y) return 0 ;;
+    *)   return 1 ;;
+  esac
+}
+
+# Print only the packages from the argument list that are installed.
+_zyphor_filter_installed() {
+  local p
+  for p in "$@"; do
+    if dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q "install ok installed"; then
+      echo "$p"
+    fi
+  done
+}
+
+# ---------------------------- PHP -------------------------------------
+
+_zyphor_undo_php() {
+  _zyphor_require_root "undo php" || return 1
+
+  echo ""
+  echo "Zyphor: ↩ Undoing PHP setup"
+  echo ""
+
+  # Every PHP package, any version (php, php-cli, php8.3-gd, mod-php, ...),
+  # including ones whose config files are still on disk.
+  local pkgs=()
+  mapfile -t pkgs < <(
+    dpkg-query -W -f='${Package}\t${Status}\n' 2>/dev/null |
+      awk -F'\t' '$2 ~ /ok (installed|config-files)$/ {print $1}' |
+      grep -E '^(php([0-9]+\.[0-9]+)?(-.*)?|libapache2-mod-php[0-9.]*)$'
+  )
+
+  if [ "${#pkgs[@]}" -gt 0 ]; then
+    echo "Zyphor: These PHP packages will be purged (config files included):"
+    printf '  %s\n' "${pkgs[@]}"
+    echo ""
+    _zyphor_confirm "Zyphor: Remove PHP?" || {
+      echo "Zyphor: Cancelled — nothing changed"
+      return 0
+    }
+    apt purge "${pkgs[@]}" || {
+      echo "Zyphor: ✖ PHP removal was aborted or failed"
+      return 1
+    }
+    echo "Zyphor: ✔ PHP packages removed"
+  else
+    echo "Zyphor: No PHP packages found"
+  fi
+
+  # Composer needs PHP and was installed by the php target
+  if [ -f /usr/local/bin/composer ]; then
+    echo ""
+    if _zyphor_confirm "Zyphor: Also remove Composer (/usr/local/bin/composer)?"; then
+      rm -f /usr/local/bin/composer
+      echo "Zyphor: ✔ Composer removed"
+    fi
+  fi
+
+  # Sury repo added by 'zyphor setup dev version php'
+  if [ -f /etc/apt/sources.list.d/zyphor-php-sury.list ]; then
+    echo ""
+    if _zyphor_confirm "Zyphor: Also remove the Sury PHP repository Zyphor added?"; then
+      rm -f /etc/apt/sources.list.d/zyphor-php-sury.list /usr/share/keyrings/deb.sury.org-php.gpg
+      apt update -qq
+      echo "Zyphor: ✔ Sury repository removed"
+    fi
+  fi
+
+  echo ""
+  echo "Zyphor: Note: the php target also installs Node.js 20. Undo it with:"
+  echo "         sudo zyphor setup dev undo node"
+  echo ""
+}
+
+# ---------------------------- Node.js ---------------------------------
+
+_zyphor_undo_node() {
+  _zyphor_require_root "undo node" || return 1
+
+  echo ""
+  echo "Zyphor: ↩ Undoing Node.js setup"
+  echo ""
+
+  local pkgs=()
+  mapfile -t pkgs < <(_zyphor_filter_installed nodejs)
+
+  if [ "${#pkgs[@]}" -gt 0 ]; then
+    echo "Zyphor: Node.js $(node -v 2>/dev/null) (package: nodejs) will be purged"
+    echo ""
+    _zyphor_confirm "Zyphor: Remove Node.js?" || {
+      echo "Zyphor: Cancelled — nothing changed"
+      return 0
+    }
+    apt purge "${pkgs[@]}" || {
+      echo "Zyphor: ✖ Node.js removal was aborted or failed"
+      return 1
+    }
+    echo "Zyphor: ✔ Node.js removed"
+  else
+    echo "Zyphor: Node.js package not installed"
+  fi
+
+  # NodeSource repo files
+  local f repo_files=()
+  for f in \
+    /etc/apt/sources.list.d/nodesource.list \
+    /etc/apt/sources.list.d/nodesource.sources \
+    /etc/apt/keyrings/nodesource.gpg \
+    /usr/share/keyrings/nodesource.gpg \
+    /etc/apt/preferences.d/nodejs \
+    /etc/apt/preferences.d/nsolid; do
+    [ -e "$f" ] && repo_files+=("$f")
+  done
+
+  if [ "${#repo_files[@]}" -gt 0 ]; then
+    echo ""
+    echo "Zyphor: NodeSource repository files found:"
+    printf '  %s\n' "${repo_files[@]}"
+    if _zyphor_confirm "Zyphor: Remove them?"; then
+      rm -f "${repo_files[@]}"
+      apt update -qq
+      echo "Zyphor: ✔ NodeSource repository removed"
+    fi
+  fi
+
+  echo ""
+  echo "Zyphor: Note: globally installed npm packages and per-user caches (~/.npm)"
+  echo "         are left alone."
+  echo ""
+}
+
+# ---------------------------- Composer --------------------------------
+
+_zyphor_undo_composer() {
+  _zyphor_require_root "undo composer" || return 1
+
+  echo ""
+  echo "Zyphor: ↩ Undoing Composer setup"
+  echo ""
+
+  if [ ! -f /usr/local/bin/composer ]; then
+    echo "Zyphor: Composer not found at /usr/local/bin/composer — nothing to do"
+    echo ""
+    return 0
+  fi
+
+  _zyphor_confirm "Zyphor: Remove /usr/local/bin/composer?" || {
+    echo "Zyphor: Cancelled — nothing changed"
+    return 0
+  }
+  rm -f /usr/local/bin/composer
+  echo "Zyphor: ✔ Composer removed"
+  echo "Zyphor: Note: per-user Composer caches/config (~/.composer, ~/.config/composer) are left alone."
+  echo ""
+}
+
+# ---------------------------- Git -------------------------------------
+
+_zyphor_undo_git() {
+  _zyphor_require_root "undo git" || return 1
+
+  echo ""
+  echo "Zyphor: ↩ Undoing Git setup"
+
+  local ORIGINAL_USER ORIGINAL_HOME
+  _zyphor_resolve_and_confirm_user "undo git" || return 1
+
+  # --- git global config set by the setup ---------------------------
+  echo "Zyphor: Current global Git settings for $ORIGINAL_USER:"
+  local key val any=0
+  for key in user.name user.email init.defaultBranch; do
+    val="$(sudo -H -u "$ORIGINAL_USER" git config --global --get "$key" 2>/dev/null)"
+    if [ -n "$val" ]; then
+      echo "  $key = $val"
+      any=1
+    fi
+  done
+
+  if [ "$any" -eq 1 ]; then
+    echo ""
+    if _zyphor_confirm "Zyphor: Remove these settings (user.name, user.email, init.defaultBranch)?"; then
+      for key in user.name user.email init.defaultBranch; do
+        sudo -H -u "$ORIGINAL_USER" git config --global --unset "$key" 2>/dev/null
+      done
+      echo "Zyphor: ✔ Git settings removed"
+    fi
+  else
+    echo "  (none set)"
+  fi
+
+  # --- SSH keys -----------------------------------------------------
+  # Each key is asked about separately; these may be used for more than
+  # GitHub, so the default is to keep them.
+  local k found_key=0
+  for k in "$ORIGINAL_HOME"/.ssh/id_*; do
+    [[ "$k" == *.pub ]] && continue
+    [ -f "$k" ] || continue
+    found_key=1
+    echo ""
+    echo "Zyphor: ⚠ SSH key found: $k"
+    echo "         Deleting it is permanent and anything using it will lose access."
+    if _zyphor_confirm "Zyphor: Delete this key pair?"; then
+      rm -f "$k" "${k}.pub"
+      echo "Zyphor: ✔ Deleted $k"
+      echo "         Also remove it from GitHub: https://github.com/settings/keys"
+    fi
+  done
+  [ "$found_key" -eq 0 ] && echo "Zyphor: No SSH keys (id_*) found in $ORIGINAL_HOME/.ssh"
+
+  echo ""
+  echo "Zyphor: Note: the git and openssh-client packages are left installed (the system uses them)."
+  echo ""
+}
+
+# ---------------------------- Android Studio + Flutter ----------------
+
+_zyphor_undo_android_studio() {
+  _zyphor_require_root "undo android-studio" || return 1
+
+  echo ""
+  echo "Zyphor: ↩ Undoing Android Studio + Flutter setup"
+
+  local ORIGINAL_USER ORIGINAL_HOME
+  _zyphor_resolve_and_confirm_user "undo android-studio" || return 1
+
+  local RC_FILE
+  RC_FILE="$(_zyphor_resolve_rc_file "$ORIGINAL_USER" "$ORIGINAL_HOME")"
+
+  local found=0
+  echo "Zyphor: Found:"
+  [ -d /opt/android-studio ]               && { echo "  /opt/android-studio";                 found=1; }
+  [ -L /usr/local/bin/android-studio ]     && { echo "  /usr/local/bin/android-studio (link)"; found=1; }
+  [ -d /opt/flutter ]                      && { echo "  /opt/flutter";                         found=1; }
+  grep -q "# ZYPHOR: android-studio/flutter" "$RC_FILE" 2>/dev/null \
+                                           && { echo "  PATH block in $RC_FILE";               found=1; }
+
+  if [ "$found" -eq 1 ]; then
+    echo ""
+    _zyphor_confirm "Zyphor: Remove these?" || {
+      echo "Zyphor: Cancelled — nothing changed"
+      return 0
+    }
+
+    [ -d /opt/android-studio ] && rm -rf /opt/android-studio
+    [ -L /usr/local/bin/android-studio ] && rm -f /usr/local/bin/android-studio
+    [ -d /opt/flutter ] && rm -rf /opt/flutter
+
+    if grep -q "# ZYPHOR: android-studio/flutter" "$RC_FILE" 2>/dev/null; then
+      # Backup first; then delete only the exact lines the setup added.
+      sudo -u "$ORIGINAL_USER" cp "$RC_FILE" "${RC_FILE}.zyphor-bak"
+      sudo -u "$ORIGINAL_USER" sed -i \
+        -e '/^# ZYPHOR: android-studio\/flutter$/d' \
+        -e '\|^export PATH="\$PATH:/opt/flutter/bin"$|d' \
+        -e '\|^export ANDROID_HOME="\$HOME/Android/Sdk"$|d' \
+        -e '\|^export PATH="\$PATH:\$ANDROID_HOME/platform-tools"$|d' \
+        "$RC_FILE"
+      echo "Zyphor: ✔ PATH block removed from $RC_FILE (backup: ${RC_FILE}.zyphor-bak)"
+    fi
+    echo "Zyphor: ✔ Android Studio + Flutter removed"
+  else
+    echo "  (nothing found)"
+  fi
+
+  # --- Android SDK (can be several GB, may hold your emulators) ------
+  if [ -n "$ORIGINAL_HOME" ] && [ "$ORIGINAL_HOME" != "/" ] && [ -d "$ORIGINAL_HOME/Android/Sdk" ]; then
+    echo ""
+    echo "Zyphor: Android SDK found: $ORIGINAL_HOME/Android/Sdk ($(du -sh "$ORIGINAL_HOME/Android/Sdk" 2>/dev/null | cut -f1))"
+    if _zyphor_confirm "Zyphor: Delete the Android SDK too?"; then
+      rm -rf "$ORIGINAL_HOME/Android/Sdk"
+      echo "Zyphor: ✔ Android SDK deleted"
+    fi
+  fi
+
+  # --- Packages installed for this target ----------------------------
+  # git, curl, unzip, zip, xz-utils and pkg-config are shared with the
+  # rest of the system, so they stay.
+  local deps=()
+  mapfile -t deps < <(_zyphor_filter_installed default-jdk adb fastboot clang cmake ninja-build libgtk-3-dev libglu1-mesa)
+  if [ "${#deps[@]}" -gt 0 ]; then
+    echo ""
+    echo "Zyphor: Packages the setup installed for Android/Flutter builds:"
+    printf '  %s\n' "${deps[@]}"
+    if _zyphor_confirm "Zyphor: Remove them too?"; then
+      apt remove "${deps[@]}" || echo "Zyphor: ⚠ Package removal was aborted or failed"
+    fi
+  fi
+
+  echo ""
+  echo "Zyphor: Note: ~/.android, ~/.gradle and ~/.pub-cache are left alone."
+  echo "Zyphor: Open a new terminal so the PATH change takes effect."
+  echo ""
+}
+
+# ---------------------------- OS tooling ------------------------------
+
+_zyphor_undo_os() {
+  _zyphor_require_root "undo os" || return 1
+
+  echo ""
+  echo "Zyphor: ↩ Undoing OS development tooling"
+  echo ""
+
+  local all=(
+    make build-essential bc bison flex
+    libssl-dev libelf-dev dwarves pkg-config libncurses-dev libdw-dev
+    busybox-static grub-pc-bin xorriso cpio gzip squashfs-tools
+    isolinux syslinux-common qemu-system-x86 qemu-utils rsync
+    live-build debhelper dpkg-dev devscripts lintian
+    wget ovmf python3
+  )
+  # Packages the base system (bootloader, initramfs, apt, Zyphor tools...)
+  # relies on. Removing them could break the machine, so they are kept.
+  local protected=(make pkg-config busybox-static grub-pc-bin cpio gzip rsync wget python3)
+
+  local p want=()
+  for p in "${all[@]}"; do
+    printf '%s\n' "${protected[@]}" | grep -qx "$p" || want+=("$p")
+  done
+
+  local installed=()
+  mapfile -t installed < <(_zyphor_filter_installed "${want[@]}")
+
+  if [ "${#installed[@]}" -eq 0 ]; then
+    echo "Zyphor: None of the OS-development packages are installed — nothing to do"
+    echo ""
+    return 0
+  fi
+
+  echo "Zyphor: These packages will be removed:"
+  printf '  %s\n' "${installed[@]}"
+  echo ""
+  echo "Zyphor: Kept on purpose (shared with the base system):"
+  echo "  ${protected[*]}"
+  echo ""
+
+  _zyphor_confirm "Zyphor: Remove the OS development tools?" || {
+    echo "Zyphor: Cancelled — nothing changed"
+    return 0
+  }
+
+  apt remove "${installed[@]}" || {
+    echo "Zyphor: ✖ Package removal was aborted or failed"
+    return 1
+  }
+
+  echo ""
+  echo "Zyphor: ✔ OS development tools removed"
+  echo "Zyphor: Note: compilers pulled in by build-essential (gcc, g++, libc-dev) may remain."
+  echo "         'sudo apt autoremove' can clean those up — read its list before confirming."
+  echo ""
+}
+
+# ---------------------------- Undo dispatcher -------------------------
+
+_zyphor_setup_undo() {
+  local sub="$1"
+
+  case "$sub" in
+    php)             _zyphor_undo_php ;;
+    node)            _zyphor_undo_node ;;
+    composer)        _zyphor_undo_composer ;;
+    git)             _zyphor_undo_git ;;
+    android-studio)  _zyphor_undo_android_studio ;;
+    os)              _zyphor_undo_os ;;
+    "")
+      echo ""
+      echo "Zyphor: ✖ Missing undo target"
+      echo "Usage: sudo zyphor setup dev undo <target>"
+      echo "Targets: php, node, composer, git, android-studio, os"
+      echo ""
+      return 1
+      ;;
+    *)
+      echo ""
+      echo "Zyphor: ✖ Unknown undo target → $sub"
+      echo "Targets: php, node, composer, git, android-studio, os"
+      echo ""
+      return 1
+      ;;
+  esac
+}
+
+# ======================================================================
 # MAIN ENTRY POINT
 # ======================================================================
 
 zyphor_setup_dev() {
-  # Called as: zyphor_setup_dev setup dev <target>  (target is $3)
+  # Called as: zyphor_setup_dev setup dev <target> [args...]
   # Also accepts a bare target as $1 for direct calls.
-  local TARGET="${3:-$1}"
-  local status
+  if [ "$1" = "setup" ] && [ "$2" = "dev" ]; then
+    shift 2
+  fi
+
+  local TARGET="$1"
+  [ $# -gt 0 ] && shift
+  local status QUIET=0
+  case "$TARGET" in version|undo) QUIET=1 ;; esac
 
   if [ -z "$TARGET" ]; then
     echo ""
     echo "Zyphor: ✖ Missing dev target"
     echo "Usage: zyphor setup dev <target>"
-    echo "Targets: php, git, node, composer, android-studio, os"
+    echo "Targets: php, git, node, composer, android-studio, os, version, undo"
     echo "Example: zyphor setup dev php"
+    echo "         zyphor setup dev version php 8.3"
+    echo "         sudo zyphor setup dev undo php"
     echo ""
     return 1
   fi
 
-  echo ""
-  echo "Zyphor: 🚀 Setting up dev environment → $TARGET"
-  echo ""
+  if [ "$QUIET" -eq 0 ]; then
+    echo ""
+    echo "Zyphor: 🚀 Setting up dev environment → $TARGET"
+    echo ""
+  fi
 
   case "$TARGET" in
     php)             _zyphor_setup_php ;;
@@ -648,6 +1374,8 @@ zyphor_setup_dev() {
     composer)        _zyphor_setup_composer ;;
     android-studio)  _zyphor_setup_android_studio ;;
     os)              _zyphor_setup_os ;;
+    version)         _zyphor_setup_version "$@" ;;
+    undo)            _zyphor_setup_undo "$@" ;;
     *)
       echo ""
       echo "Zyphor: ✖ Unknown dev target → $TARGET"
@@ -658,9 +1386,11 @@ zyphor_setup_dev() {
   status=$?
 
   if [ "$status" -eq 0 ]; then
-    echo ""
-    echo "Zyphor: ✔ Dev setup '$TARGET' completed"
-    echo ""
+    if [ "$QUIET" -eq 0 ]; then
+      echo ""
+      echo "Zyphor: ✔ Dev setup '$TARGET' completed"
+      echo ""
+    fi
   else
     echo ""
     echo "Zyphor: ✖ Dev setup failed → $TARGET"

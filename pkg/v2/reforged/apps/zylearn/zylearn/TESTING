@@ -1,3 +1,0 @@
-make
-ZYLEARN_LESSONS_DIR=$PWD/lessons ./build/zylearn lesson list
-ZYLEARN_LESSONS_DIR=$PWD/lessons ./build/zylearn check 06-users

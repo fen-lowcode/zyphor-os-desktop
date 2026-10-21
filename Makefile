@@ -170,25 +170,101 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
+	# Update Makefile
+	git add Makefile
+	git commit -m "chore: update Makefile"
+
+	# Update ZyLearn .gitignore
+	git add pkg/v2/reforged/apps/zylearn/.gitignore
+	git commit -m "chore(zylearn): update gitignore"
+
+	# Update ZyLearn Makefile
+	git add pkg/v2/reforged/apps/zylearn/Makefile
+	git commit -m "build(zylearn): update build configuration"
+
+	# Remove ZyLearn Makefile backup
+	git add -u pkg/v2/reforged/apps/zylearn/Makefile-Backup
+	git commit -m "chore(zylearn): remove Makefile backup"
+
+	# Remove ZyLearn legacy source backup
+	git add -u pkg/v2/reforged/apps/zylearn/main-backup.c
+	git commit -m "chore(zylearn): remove legacy source backup"
+
+	# Update ZyLearn main application
+	git add pkg/v2/reforged/apps/zylearn/main.cpp
+	git commit -m "feat(zylearn): update main application"
+
+	# Remove legacy ZyLearn Debian control file
+	git add -u pkg/v2/reforged/apps/zylearn/zylearn/DEBIAN/control
+	git commit -m "refactor(zylearn): remove legacy Debian control file"
+
+	# Remove legacy ZyLearn post-install script
+	git add -u pkg/v2/reforged/apps/zylearn/zylearn/DEBIAN/postinst
+	git commit -m "refactor(zylearn): remove legacy post-install script"
+
+	# Remove old ZyLearn testing file
+	git add -u pkg/v2/reforged/apps/zylearn/zylearn/TESTING
+	git commit -m "chore(zylearn): remove legacy testing file"
+
+	# Add ZyLearn lessons documentation
+	git add pkg/v2/reforged/apps/zylearn/LESSONS.md
+	git commit -m "docs(zylearn): add lessons documentation"
+
+	# Add ZyLearn testing instructions
+	git add pkg/v2/reforged/apps/zylearn/TESTING
+	git commit -m "test(zylearn): add testing instructions"
+
+	# Add ZyLearn lessons
+	git add pkg/v2/reforged/apps/zylearn/lessons/
+	git commit -m "feat(zylearn): add guided lessons"
+
+	# Add ZyLearn packaging configuration
+	git add pkg/v2/reforged/apps/zylearn/packaging/
+	git commit -m "build(zylearn): add packaging configuration"
+
+	# Add ZyLearn v3 testing file
+	git add pkg/v3/apps/zylearn/TESTING
+	git commit -m "test(zylearn): add v3 testing instructions"
+
 	# Update Zyphor CLI package control
-	git add pkg/v3/apps/zyphor-cli/DEBIAN/control
+	git add pkg/v2/reforged/apps/zyphor-cli/DEBIAN/control
 	git commit -m "build(zyphor-cli): update package control"
 
 	# Update Zyphor CLI help
-	git add pkg/v3/apps/zyphor-cli/usr/lib/zyphor/core/help
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/core/help
 	git commit -m "docs(zyphor-cli): update command help"
 
-	# Update Zyphor CLI development setup
-	git add pkg/v3/apps/zyphor-cli/usr/lib/zyphor/setup/dev
+	# Update Zyphor package cache command
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/pkg/cache
+	git commit -m "feat(zyphor-cli): update package cache command"
+
+	# Update Zyphor package list command
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/pkg/list
+	git commit -m "feat(zyphor-cli): update package list command"
+
+	# Update Zyphor package removal command
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/pkg/remove
+	git commit -m "feat(zyphor-cli): update package removal command"
+
+	# Update Zyphor package search command
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/pkg/search
+	git commit -m "feat(zyphor-cli): update package search command"
+
+	# Update Zyphor development setup
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/setup/dev
 	git commit -m "feat(zyphor-cli): update development setup"
 
-	# Update Zyphor What's New package control
-	git add pkg/v3/apps/zyphor-whats-new/DEBIAN/control
-	git commit -m "build(zyphor-whats-new): update package control"
+	# Remove old Zyphor theme setup file
+	git add -u pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/setup/theme
+	git commit -m "refactor(zyphor-cli): remove legacy theme setup"
 
-	# Update Zyphor What's New release information
-	git add pkg/v3/apps/zyphor-whats-new/usr/share/zyphor-whats-new/release.js
-	git commit -m "feat(zyphor-whats-new): update release information"
+	# Add disabled Zyphor theme setup file
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/lib/zyphor/setup/theme.disabled
+	git commit -m "chore(zyphor-cli): add disabled theme setup"
+
+	# Update Zyphor CLI executable
+	git add pkg/v2/reforged/apps/zyphor-cli/usr/local/bin/zyphor
+	git commit -m "feat(zyphor-cli): update command-line interface"
 
 push:
 	git push origin $(branch)
@@ -286,8 +362,8 @@ release:
 
 # ADA LOVELACE APPS
 
-# 	zyphor build package pkg/v2/reforged/apps/zyphor-cli
-# 	mv pkg/v2/reforged/apps/zyphor-cli.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
+	zyphor build package pkg/v2/reforged/apps/zyphor-cli
+	mv pkg/v2/reforged/apps/zyphor-cli.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
 
 # 	zyphor build package pkg/v2/reforged/apps/zyphor-command-center
 # 	mv pkg/v2/reforged/apps/zyphor-command-center.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
@@ -301,8 +377,10 @@ release:
 # 	zyphor build package pkg/v2/reforged/apps/zycamera-launcher/zycamera-launcher
 # 	mv pkg/v2/reforged/apps/zycamera-launcher/zycamera-launcher.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
 	
-# 	zyphor build package pkg/v2/reforged/apps/zylearn/zylearn
-# 	mv pkg/v2/reforged/apps/zylearn/zylearn.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
+	make -C pkg/v2/reforged/apps/zylearn clean
+	make -C pkg/v2/reforged/apps/zylearn
+	make -C pkg/v2/reforged/apps/zylearn deb
+	mv pkg/v2/reforged/apps/zylearn/zylearn.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z/ --verbose
 	
 # 	zyphor build package pkg/v2/reforged/apps/zywin/zywin
 # 	mv pkg/v2/reforged/apps/zywin/zywin.deb ../zyphor-os.github.io/ada-lovelace-lts-reforged/ada-lovelace-apps/pool/main/z --verbose
@@ -359,8 +437,8 @@ release:
 
 # BETHANY APPS
 
-	zyphor build package pkg/v3/apps/zyphor-cli
-	mv pkg/v3/apps/zyphor-cli.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
+# 	zyphor build package pkg/v3/apps/zyphor-cli
+# 	mv pkg/v3/apps/zyphor-cli.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
 # 	make -C pkg/v3/apps/zylearn clean
 # 	make -C pkg/v3/apps/zylearn
@@ -383,8 +461,8 @@ release:
 # 	mv pkg/v3/apps/zyphor-command-center.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 # 	mv pkg/v3/apps/zyphor-command-center.deb pkg/staging
 
-	zyphor build package pkg/v3/apps/zyphor-whats-new
-	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
+# 	zyphor build package pkg/v3/apps/zyphor-whats-new
+# 	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
 # 	---
 

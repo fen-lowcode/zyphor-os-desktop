@@ -170,10 +170,6 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Update Makefile
-	git add Makefile
-	git commit -m "chore: update Makefile"
-
 	# Update ZyLearn .gitignore
 	git add pkg/v2/reforged/apps/zylearn/.gitignore
 	git commit -m "chore(zylearn): update gitignore"

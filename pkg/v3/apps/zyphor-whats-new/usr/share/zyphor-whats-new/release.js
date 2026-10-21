@@ -5,6 +5,17 @@ const releaseNotes = {
 
     sections: [
         {
+            "title": "Dev Environment Version Management and Undo",
+            "items": [
+                "Added the new 'zyphor setup dev version' command, which lists the PHP and Node.js versions available on your system and shows which one is currently installed or active",
+                "Use 'zyphor setup dev version php <X.Y>' to install a specific PHP version (for example 8.3) together with the common extensions and switch the php command to it, with an optional prompt to add the Sury PHP repository when the version is not available in your current sources",
+                "Use 'zyphor setup dev version node <version>' to install and switch to a specific Node.js version (for example 22), and a minor version such as 22.5 is also accepted and pinned when it is still available",
+                "Added the new 'zyphor setup dev undo <target>' command, which reverses a development setup for PHP, Node.js, Composer, Git, Android Studio with Flutter, and OS development",
+                "Every undo asks for confirmation first, shows exactly what will be removed before anything changes, and keeps packages the base system depends on so the machine is never left in a broken state",
+                "Your personal data is protected: SSH keys and the Android SDK are only deleted when you confirm them separately, and your shell configuration is backed up before the PATH entries added by the setup are removed"
+            ]
+        },
+        {
             "title": "New Zyphor CLI Features",
             "items": [
                 "Added the new 'zyphor setup dev <target>' command, which sets up a complete development environment in one step with targets for PHP, Git, Node.js, Composer, Android Studio with Flutter, and OS development",

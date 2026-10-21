@@ -1,0 +1,2 @@
+Save the process list to processes.txt | contains | ~/zylearn-practice/processes.txt | PID | hint: ps aux > ~/zylearn-practice/processes.txt
+Save your shell's PID to shell-pid.txt | nonempty | ~/zylearn-practice/shell-pid.txt | hint: echo $$ > ~/zylearn-practice/shell-pid.txt

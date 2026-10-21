@@ -1,0 +1,20 @@
+# Pipes and redirection: connecting commands
+
+Linux programs are small and do one job. You combine them:
+
+  >    send output to a file (replaces the file's content)
+  >>   add output to the end of a file
+  |    send one command's output into the next command
+
+Try it:
+  cd ~/zylearn-practice
+  echo "hello linux" > greeting.txt
+  cat greeting.txt
+  echo "second line" >> greeting.txt
+  ls /etc | wc -l                     how many entries are in /etc?
+  cat greeting.txt | tr a-z A-Z       turn the text into capitals
+
+Challenge (verify with: zylearn check 04-pipes)
+  1. echo "hello linux" > ~/zylearn-practice/greeting.txt
+  2. cat ~/zylearn-practice/greeting.txt | tr a-z A-Z > ~/zylearn-practice/shout.txt
+  3. ls /etc | wc -l > ~/zylearn-practice/etc-count.txt

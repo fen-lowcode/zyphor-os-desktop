@@ -1,0 +1,17 @@
+# Processes: programs that are running
+
+Every running program is a process with a number called a PID.
+
+Try it:
+  ps aux | head       list running processes
+  top                 live view (press q to quit)
+  sleep 300 &         start a background process
+  jobs                see it in your shell's job list
+  pgrep sleep         find the PID by name
+  kill <PID>          politely ask a process to stop (SIGTERM)
+  kill -9 <PID>       force it to stop (last resort)
+  echo $$             the PID of your current shell
+
+Challenge (verify with: zylearn check 03-processes)
+  1. Save the process list:  ps aux > ~/zylearn-practice/processes.txt
+  2. Save your shell's PID:  echo $$ > ~/zylearn-practice/shell-pid.txt

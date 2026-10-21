@@ -1,0 +1,4 @@
+# zylearn checks: description | type | args | hint: text
+Create the folder ~/zylearn-practice/projects/notes | dir | ~/zylearn-practice/projects/notes | hint: mkdir -p creates every folder in the path at once
+Create todo.txt inside it | exists | ~/zylearn-practice/projects/notes/todo.txt | hint: touch creates an empty file
+Save a listing of /etc to etc-list.txt | lines-at-least | ~/zylearn-practice/etc-list.txt | 5 | hint: ls -la /etc > file

@@ -170,45 +170,25 @@ add:
 	git add Makefile
 	git commit -m "build: update repository automation"
 
-	# Update ZyLearn .gitignore
-	git add pkg/v3/apps/zylearn/.gitignore
-	git commit -m "chore(zylearn): update gitignore"
+	# Update Zyphor CLI package control
+	git add pkg/v3/apps/zyphor-cli/DEBIAN/control
+	git commit -m "build(zyphor-cli): update package control"
 
-	# Update ZyLearn Makefile
-	git add pkg/v3/apps/zylearn/Makefile
-	git commit -m "build(zylearn): update build configuration"
+	# Update Zyphor CLI help
+	git add pkg/v3/apps/zyphor-cli/usr/lib/zyphor/core/help
+	git commit -m "docs(zyphor-cli): update command help"
 
-	# Remove ZyLearn Makefile backup
-	git add -u pkg/v3/apps/zylearn/Makefile-Backup
-	git commit -m "chore(zylearn): remove Makefile backup"
+	# Update Zyphor CLI development setup
+	git add pkg/v3/apps/zyphor-cli/usr/lib/zyphor/setup/dev
+	git commit -m "feat(zyphor-cli): update development setup"
 
-	# Remove ZyLearn main.cpp backup
-	git add -u pkg/v3/apps/zylearn/main-backup.c
-	git commit -m "chore(zylearn): remove legacy source backup"
+	# Update Zyphor What's New package control
+	git add pkg/v3/apps/zyphor-whats-new/DEBIAN/control
+	git commit -m "build(zyphor-whats-new): update package control"
 
-	# Update ZyLearn main.cpp
-	git add pkg/v3/apps/zylearn/main.cpp
-	git commit -m "feat(zylearn): update main application"
-
-	# Remove old ZyLearn Debian control file
-	git add -u pkg/v3/apps/zylearn/zylearn/DEBIAN/control
-	git commit -m "refactor(zylearn): remove legacy Debian control file"
-
-	# Remove old ZyLearn Debian post-install script
-	git add -u pkg/v3/apps/zylearn/zylearn/DEBIAN/postinst
-	git commit -m "refactor(zylearn): remove legacy post-install script"
-
-	# Add ZyLearn lessons documentation
-	git add pkg/v3/apps/zylearn/LESSONS.md
-	git commit -m "docs(zylearn): add lessons documentation"
-
-	# Add ZyLearn lessons
-	git add pkg/v3/apps/zylearn/lessons/
-	git commit -m "feat(zylearn): add lessons content"
-
-	# Add ZyLearn packaging files
-	git add pkg/v3/apps/zylearn/packaging/
-	git commit -m "build(zylearn): add packaging configuration"
+	# Update Zyphor What's New release information
+	git add pkg/v3/apps/zyphor-whats-new/usr/share/zyphor-whats-new/release.js
+	git commit -m "feat(zyphor-whats-new): update release information"
 
 push:
 	git push origin $(branch)
@@ -379,13 +359,13 @@ release:
 
 # BETHANY APPS
 
-# 	zyphor build package pkg/v3/apps/zyphor-cli
-# 	mv pkg/v3/apps/zyphor-cli.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
+	zyphor build package pkg/v3/apps/zyphor-cli
+	mv pkg/v3/apps/zyphor-cli.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
-	make -C pkg/v3/apps/zylearn clean
-	make -C pkg/v3/apps/zylearn
-	make -C pkg/v3/apps/zylearn deb
-	mv pkg/v3/apps/zylearn/zylearn.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z/ --verbose
+# 	make -C pkg/v3/apps/zylearn clean
+# 	make -C pkg/v3/apps/zylearn
+# 	make -C pkg/v3/apps/zylearn deb
+# 	mv pkg/v3/apps/zylearn/zylearn.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z/ --verbose
 	
 # 	zyphor build package pkg/v3/apps/zywin/zywin
 # 	mv pkg/v3/apps/zywin/zywin.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
@@ -403,8 +383,8 @@ release:
 # 	mv pkg/v3/apps/zyphor-command-center.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 # 	mv pkg/v3/apps/zyphor-command-center.deb pkg/staging
 
-# 	zyphor build package pkg/v3/apps/zyphor-whats-new
-# 	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
+	zyphor build package pkg/v3/apps/zyphor-whats-new
+	mv pkg/v3/apps/zyphor-whats-new.deb ../zyphor-os.github.io/bethany-lts/bethany-apps/pool/main/z --verbose
 
 # 	---
 

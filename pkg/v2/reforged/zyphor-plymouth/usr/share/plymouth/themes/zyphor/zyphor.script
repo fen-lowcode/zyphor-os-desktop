@@ -1,19 +1,131 @@
-// Screen size
-screen_width = Window.GetWidth();
-screen_height = Window.GetHeight();
+// Zyphor OS 2 "Ada Lovelace" LTS Reforged - Plymouth theme
+// Needs ONLY zyphor.png. Loader is a row of bouncing circles (text glyphs).
 
-// Background color
-Window.SetBackgroundTopColor(0.05, 0.05, 0.07);
-Window.SetBackgroundBottomColor(0.05, 0.05, 0.07);
+Window.SetBackgroundTopColor(0.02, 0.03, 0.08);
+Window.SetBackgroundBottomColor(0.08, 0.04, 0.16);
 
-// Load logo
-logo_image = Image("zyphor.png");
-logo_sprite = Sprite(logo_image);
+sw = Window.GetWidth();
+sh = Window.GetHeight();
+cx = sw / 2;
+cy = sh / 2 - 70;
 
-// Center the logo
-logo_x = (screen_width - logo_image.GetWidth()) / 2;
-logo_y = (screen_height - logo_image.GetHeight()) / 2 - 40;
+// ---------- Logo ----------
+logo.image  = Image("zyphor.png");
+logo.sprite = Sprite(logo.image);
+logo.w = logo.image.GetWidth();
+logo.h = logo.image.GetHeight();
+logo.sprite.SetX(cx - logo.w / 2);
+logo.sprite.SetY(cy - logo.h / 2);
+logo.sprite.SetZ(10);
+logo.sprite.SetOpacity(0);
 
-logo_sprite.SetX(logo_x);
-logo_sprite.SetY(logo_y);
-logo_sprite.SetOpacity(1);
+// ---------- Circle loader (text glyph, no extra images) ----------
+CIRCLES = 5;
+for (i = 0; i < CIRCLES; i++) {
+    t = i / (CIRCLES - 1);
+    circ_img[i] = Image.Text("●", 0.49 - 0.18 * t, 0.36 + 0.46 * t, 1, 1, "Sans 30");
+    circ_spr[i] = Sprite(circ_img[i]);
+    circ_spr[i].SetZ(5);
+    circ_spr[i].SetOpacity(0);
+}
+circ.w = circ_img[0].GetWidth();
+circ.h = circ_img[0].GetHeight();
+circ.step = circ.w + 18;
+circ.bounce = 16;
+wave.cy = cy + logo.h / 2 + 60;
+wave.x0 = cx - ((CIRCLES - 1) * circ.step) / 2;
+
+// ---------- Percent text ----------
+pct.last = -1;
+pct.sprite = Sprite();
+pct.sprite.SetZ(20);
+
+// ---------- Footer label ----------
+label.image  = Image.Text("Zyphor OS 2  -  Ada Lovelace  -  LTS Reforged", 0.62, 0.64, 0.80, 1, "Sans 11");
+label.sprite = Sprite(label.image);
+label.sprite.SetX(cx - label.image.GetWidth() / 2);
+label.sprite.SetY(wave.cy + 80);
+label.sprite.SetZ(20);
+label.sprite.SetOpacity(0);
+
+// ---------- Animation ----------
+frame = 0;
+
+fun refresh_callback() {
+    frame++;
+
+    fade = Math.Min(1, frame / 60);
+    breathe = 0.90 + 0.10 * Math.Sin(frame / 22);
+    logo.sprite.SetOpacity(fade * breathe);
+    label.sprite.SetOpacity(Math.Min(1, Math.Max(0, (frame - 30) / 60)));
+
+    // Bouncing circles: each one pulses a beat after its neighbour
+    for (i = 0; i < CIRCLES; i++) {
+        phase = frame * 0.14 - i * 0.7;
+        level = 0.5 + 0.5 * Math.Sin(phase);
+        sc = 0.70 + 0.30 * level;
+        cw = Math.Int(circ.w * sc);
+        ch = Math.Int(circ.h * sc);
+        if (cw < 2) cw = 2;
+        if (ch < 2) ch = 2;
+        circ_spr[i].SetImage(circ_img[i].Scale(cw, ch));
+        circ_spr[i].SetX(wave.x0 + i * circ.step - cw / 2);
+        circ_spr[i].SetY(wave.cy - ch / 2 - circ.bounce * level);
+        circ_spr[i].SetOpacity(fade * (0.35 + 0.65 * level));
+    }
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+// ---------- Boot progress (percent text) ----------
+fun boot_progress_callback(time, progress) {
+    p = Math.Int(progress * 100);
+    if (p > 100) p = 100;
+    if (p != pct.last) {
+        pct.last = p;
+        t = Image.Text(p + "%", 0.55, 0.82, 1, 1, "Sans 12");
+        pct.sprite.SetImage(t);
+        pct.sprite.SetX(cx - t.GetWidth() / 2);
+        pct.sprite.SetY(wave.cy + 42);
+    }
+}
+Plymouth.SetBootProgressFunction(boot_progress_callback);
+
+// ---------- Disk encryption password prompt ----------
+pw.prompt_sprite = Sprite();
+pw.stars_sprite  = Sprite();
+pw.prompt_sprite.SetZ(30);
+pw.stars_sprite.SetZ(30);
+
+fun display_password_callback(prompt, bullets) {
+    pp = Image.Text(prompt, 0.9, 0.92, 1, 1, "Sans 12");
+    pw.prompt_sprite.SetImage(pp);
+    pw.prompt_sprite.SetX(cx - pp.GetWidth() / 2);
+    pw.prompt_sprite.SetY(wave.cy + 120);
+    pw.prompt_sprite.SetOpacity(1);
+
+    stars = "";
+    for (k = 0; k < bullets; k++) stars += "*";
+    ps = Image.Text(stars + " ", 0.5, 0.8, 1, 1, "Sans 16");
+    pw.stars_sprite.SetImage(ps);
+    pw.stars_sprite.SetX(cx - ps.GetWidth() / 2);
+    pw.stars_sprite.SetY(wave.cy + 150);
+    pw.stars_sprite.SetOpacity(1);
+}
+Plymouth.SetDisplayPasswordFunction(display_password_callback);
+
+fun display_normal_callback() {
+    pw.prompt_sprite.SetOpacity(0);
+    pw.stars_sprite.SetOpacity(0);
+}
+Plymouth.SetDisplayNormalFunction(display_normal_callback);
+
+// ---------- Status / error messages ----------
+msg.sprite = Sprite();
+msg.sprite.SetZ(30);
+fun message_callback(text) {
+    mm = Image.Text(text, 0.95, 0.75, 0.4, 1, "Sans 10");
+    msg.sprite.SetImage(mm);
+    msg.sprite.SetX(cx - mm.GetWidth() / 2);
+    msg.sprite.SetY(sh - 60);
+}
+Plymouth.SetMessageFunction(message_callback);

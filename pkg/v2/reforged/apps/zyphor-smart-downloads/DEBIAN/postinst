@@ -1,0 +1,37 @@
+#!/bin/sh
+set -e
+
+CRON_FILE=/etc/cron.d/zyphor-smart-downloads
+
+case "$1" in
+    configure)
+        mkdir -p /var/lib/zyphor-smart-downloads
+
+        # Add the cron entry: run every minute. The runner itself decides
+        # (from SCAN_INTERVAL in the config) whether it is time to scan.
+        cat > "$CRON_FILE" <<'CRON'
+# Managed by the zyphor-smart-downloads package - do not edit.
+# Change the scan interval in /etc/zyphor-smart-downloads/zyphor-smart-downloads.conf
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+* * * * * root /usr/lib/zyphor-smart-downloads/zsd-cron >/dev/null 2>&1
+CRON
+        chmod 0644 "$CRON_FILE"
+
+        # Activate cron: enable at boot and make sure it is running now.
+        if [ -d /run/systemd/system ] && command -v systemctl >/dev/null 2>&1; then
+            systemctl enable cron.service >/dev/null 2>&1 || true
+            systemctl start cron.service >/dev/null 2>&1 || true
+        elif command -v invoke-rc.d >/dev/null 2>&1; then
+            invoke-rc.d cron start >/dev/null 2>&1 || true
+        fi
+        ;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+    *)
+        echo "postinst called with unknown argument '$1'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

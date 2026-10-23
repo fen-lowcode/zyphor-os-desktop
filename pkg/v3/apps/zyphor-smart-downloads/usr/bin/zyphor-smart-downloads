@@ -1,0 +1,59 @@
+#!/bin/bash
+# Control tool for zyphor-smart-downloads.
+LIB=/usr/lib/zyphor-smart-downloads
+# shellcheck source=/usr/lib/zyphor-smart-downloads/common.sh
+. "$LIB/common.sh"
+
+usage() {
+cat <<USAGE
+Usage: zyphor-smart-downloads <command>
+
+  status                 show configuration, cron entry and last scan
+  run                    organize your Downloads folder right now
+  log                    show your recent activity log
+  set-interval <time>    change scan interval, e.g. 15s, 30s, 1m, 5m, 1h   (root)
+  set <KEY> <VALUE>      change any config key                               (root)
+  enable | disable       turn automatic organizing on or off                 (root)
+USAGE
+}
+
+setkey() { # KEY VALUE
+    [ "$(id -u)" -eq 0 ] || { echo "This needs root: sudo zyphor-smart-downloads $*" >&2; exit 1; }
+    case $1 in
+        ENABLED|SCAN_INTERVAL|MIN_FILE_AGE|STABILITY_WAIT|DATE_SOURCE|DATE_FORMAT|INCLUDE_USERS|EXCLUDE_USERS|UNKNOWN_FILES|DAMAGED_ACTION) ;;
+        *) echo "Unknown key: $1" >&2; exit 1 ;;
+    esac
+    case $1 in
+        SCAN_INTERVAL|MIN_FILE_AGE|STABILITY_WAIT)
+            to_seconds "$2" >/dev/null || { echo "Invalid duration '$2' (use 30s, 5m, 1h)" >&2; exit 1; } ;;
+    esac
+    local val=$2 esc
+    case $1 in INCLUDE_USERS|EXCLUDE_USERS) val="\"$2\"" ;; esac
+    esc=$(printf '%s' "$val" | sed -e 's/[\/&|]/\\&/g')
+    if grep -q "^$1=" "$ZSD_CONF"; then sed -i "s|^$1=.*|$1=$esc|" "$ZSD_CONF"; else echo "$1=$val" >> "$ZSD_CONF"; fi
+    echo "$1 set to $2"
+}
+
+case ${1:-} in
+    status)
+        load_config
+        echo "Enabled        : $ENABLED"
+        echo "Scan interval  : $SCAN_INTERVAL ($(to_seconds "$SCAN_INTERVAL" 2>/dev/null || echo '?')s)"
+        echo "Min file age   : $MIN_FILE_AGE   Stability wait: $STABILITY_WAIT"
+        echo "Date source    : $DATE_SOURCE   Format: $DATE_FORMAT"
+        [ -f /etc/cron.d/zyphor-smart-downloads ] && echo "Cron entry     : installed (every minute)" || echo "Cron entry     : MISSING"
+        if command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
+            echo "Cron service   : $(systemctl is-active cron.service 2>/dev/null)"
+        fi
+        ts=$(cat /var/lib/zyphor-smart-downloads/last-run 2>/dev/null)
+        [[ $ts =~ ^[0-9]+$ ]] && echo "Last scan      : $(date -d "@$ts" '+%F %T')" || echo "Last scan      : never"
+        ;;
+    run)  exec "$LIB/zsd-organize" ;;
+    log)  tail -n "${2:-30}" "$HOME/.local/state/zyphor-smart-downloads/organizer.log" 2>/dev/null || echo "No log yet." ;;
+    set-interval) [ -n "${2:-}" ] || { usage; exit 1; }; setkey SCAN_INTERVAL "$2" ;;
+    set)     [ $# -ge 3 ] || { usage; exit 1; }; setkey "$2" "$3" ;;
+    enable)  setkey ENABLED yes ;;
+    disable) setkey ENABLED no ;;
+    -h|--help|help|"") usage ;;
+    *) usage; exit 1 ;;
+esac

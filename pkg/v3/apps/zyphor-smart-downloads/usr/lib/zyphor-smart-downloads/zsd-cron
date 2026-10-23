@@ -1,0 +1,46 @@
+#!/bin/bash
+# Called by /etc/cron.d/zyphor-smart-downloads every minute (as root).
+# Decides whether a scan is due and runs the organizer as each user.
+set -u
+LIB=/usr/lib/zyphor-smart-downloads
+STATE=/var/lib/zyphor-smart-downloads
+# shellcheck source=common.sh
+. "$LIB/common.sh"
+load_config
+[ "$ENABLED" = yes ] || exit 0
+
+mkdir -p "$STATE"
+exec 9>"$STATE/lock"
+flock -n 9 || exit 0          # a previous run is still busy
+
+interval=$(to_seconds "$SCAN_INTERVAL") || interval=60
+[ "$interval" -lt 5 ] && interval=5
+
+scan_all() {
+    local entry u home
+    while IFS=: read -r u home; do
+        [ -n "$INCLUDE_USERS" ] && [[ " $INCLUDE_USERS " != *" $u "* ]] && continue
+        [[ " $EXCLUDE_USERS " == *" $u "* ]] && continue
+        [ -d "$home" ] || continue
+        runuser -u "$u" -- "$LIB/zsd-organize" >/dev/null 2>&1 || true
+    done < <(getent passwd | awk -F: '$3>=1000 && $3<60000 && $6 ~ /^\// && $7 !~ /(nologin|false)$/ {print $1":"$6}')
+}
+
+now=$(date +%s)
+if [ "$interval" -ge 60 ]; then
+    last=$(cat "$STATE/last-run" 2>/dev/null || echo 0)
+    [[ $last =~ ^[0-9]+$ ]] || last=0
+    # 5s tolerance for cron start-up jitter
+    [ $((now - last)) -lt $((interval - 5)) ] && exit 0
+    echo "$now" > "$STATE/last-run"
+    scan_all
+else
+    echo "$now" > "$STATE/last-run"
+    scan_all
+    # sub-minute interval: keep scanning until the next cron tick
+    while [ $((SECONDS + interval)) -lt 58 ]; do
+        sleep "$interval"
+        scan_all
+    done
+fi
+exit 0

@@ -1,0 +1,17 @@
+Package: zyphor-smart-downloads
+Version: 1.0.0-r1-alpha
+Section: utils
+Priority: optional
+Architecture: all
+Installed-Size: 68
+Depends: bash (>= 4.0), cron | cron-daemon, coreutils, util-linux, findutils, file, unzip
+Suggests: ffmpeg
+Maintainer: Mark Jason Espelita <markjasonespelita@gmail.com>
+Description: Automatically organize the Downloads folder of every user
+ Runs from cron (every minute, installed by postinst) and sorts finished
+ downloads into each user's Pictures, Music, Videos, Documents and
+ Documents/PDFs folders. Files that are still being written, held open by a
+ program, or that look damaged/truncated are never moved into the final
+ folders. Moved files are renamed <date-with-seconds>-<filename>. The scan
+ interval (seconds or minutes) is configurable in
+ /etc/zyphor-smart-downloads/zyphor-smart-downloads.conf.

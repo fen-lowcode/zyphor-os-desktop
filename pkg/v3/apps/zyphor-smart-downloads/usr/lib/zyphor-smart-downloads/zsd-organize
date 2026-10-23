@@ -1,0 +1,174 @@
+#!/bin/bash
+# Per-user worker: organizes ~/Downloads (the XDG download dir). Runs as that user.
+set -u
+shopt -s nullglob
+LIB=/usr/lib/zyphor-smart-downloads
+# shellcheck source=common.sh
+. "$LIB/common.sh"
+load_config
+
+ME=$(id -un)
+HOME=$(getent passwd "$ME" | cut -d: -f6); export HOME
+[ -r "$HOME/.config/zyphor-smart-downloads.conf" ] && . "$HOME/.config/zyphor-smart-downloads.conf"
+[ "$ENABLED" = yes ] || exit 0
+
+# ---- user folders (respect xdg-user-dirs, fall back to defaults) ----------
+XDG_DOWNLOAD_DIR="$HOME/Downloads"; XDG_PICTURES_DIR="$HOME/Pictures"
+XDG_MUSIC_DIR="$HOME/Music";        XDG_VIDEOS_DIR="$HOME/Videos"
+XDG_DOCUMENTS_DIR="$HOME/Documents"
+# shellcheck disable=SC1090
+[ -r "$HOME/.config/user-dirs.dirs" ] && . "$HOME/.config/user-dirs.dirs"
+pick() { # pick <value> <default>: xdg sets unused dirs to $HOME
+    local v=${1%/}; if [ -z "$v" ] || [ "$v" = "${HOME%/}" ]; then echo "$2"; else echo "$v"; fi
+}
+DOWNLOADS=$(pick "$XDG_DOWNLOAD_DIR" "$HOME/Downloads")
+PICTURES=$(pick "$XDG_PICTURES_DIR"  "$HOME/Pictures")
+MUSIC=$(pick "$XDG_MUSIC_DIR"        "$HOME/Music")
+VIDEOS=$(pick "$XDG_VIDEOS_DIR"      "$HOME/Videos")
+DOCUMENTS=$(pick "$XDG_DOCUMENTS_DIR" "$HOME/Documents")
+[ -d "$DOWNLOADS" ] || exit 0
+
+MIN_AGE=$(to_seconds "$MIN_FILE_AGE") || MIN_AGE=10
+WAIT=$(to_seconds "$STABILITY_WAIT") || WAIT=2
+
+# ---- logging ---------------------------------------------------------------
+STATE_DIR="$HOME/.local/state/zyphor-smart-downloads"
+mkdir -p "$STATE_DIR" 2>/dev/null
+LOG="$STATE_DIR/organizer.log"
+log() {
+    [ -f "$LOG" ] && [ "$(stat -c %s "$LOG" 2>/dev/null || echo 0)" -gt 1048576 ] && mv -f "$LOG" "$LOG.1"
+    printf '%s %s\n' "$(date '+%F %T')" "$*" >> "$LOG"
+}
+
+# ---- classification --------------------------------------------------------
+is_partial_ext() {
+    case $1 in
+        part|partial|crdownload|download|opdownload|tmp|temp|aria2|filepart|ytdl|\!qb|swp|lock|crswap|unconfirmed) return 0 ;;
+    esac
+    return 1
+}
+dest_for() { # extension -> destination dir (returns 1 if unknown)
+    case $1 in
+        jpg|jpeg|png|gif|bmp|webp|svg|tif|tiff|heic|heif|avif|ico|raw|cr2|nef|arw|dng) echo "$PICTURES" ;;
+        mp3|flac|wav|ogg|oga|m4a|aac|opus|wma|mid|midi|aiff) echo "$MUSIC" ;;
+        mp4|mkv|avi|mov|webm|flv|wmv|m4v|mpg|mpeg|3gp) echo "$VIDEOS" ;;
+        pdf) echo "$DOCUMENTS/PDFs" ;;
+        doc|docx|odt|rtf|txt|md|xls|xlsx|ods|csv|ppt|pptx|odp|epub|mobi|tex|pages|numbers|key) echo "$DOCUMENTS" ;;
+        zip|tar|gz|tgz|bz2|tbz2|xz|txz|zst|7z|rar) echo "$DOCUMENTS/Archives" ;;
+        deb|rpm|appimage|iso|img|run|flatpakref|snap|exe|msi|dmg|apk) echo "$DOWNLOADS/Software" ;;
+        *) return 1 ;;
+    esac
+}
+
+# ---- "is it in use?" : set of files currently open by this user's processes
+OPEN_FILES=""
+snapshot_open_files() {
+    OPEN_FILES=$(readlink /proc/[0-9]*/fd/* 2>/dev/null | sort -u)
+}
+in_use() { [ -n "$OPEN_FILES" ] && grep -Fxq -- "$1" <<<"$OPEN_FILES"; }
+
+# ---- "is it damaged?" -------------------------------------------------------
+REASON=""
+hex_tail() { tail -c "$2" -- "$1" 2>/dev/null | od -An -v -tx1 | tr '\n' ' '; }
+validate() { # file ext -> 0 ok, 1 damaged (REASON set)
+    local f=$1 ext=$2 mime
+    [ -s "$f" ] || { REASON="empty file"; return 1; }
+    mime=$(file -b --mime-type -- "$f" 2>/dev/null)
+    case $ext in
+        jpg|jpeg)
+            [[ $mime == image/jpeg ]] || { REASON="not a JPEG (is $mime)"; return 1; }
+            [[ $(hex_tail "$f" 64) == *"ff d9"* ]] || { REASON="JPEG truncated (no end marker)"; return 1; } ;;
+        png)
+            [[ $mime == image/png ]] || { REASON="not a PNG (is $mime)"; return 1; }
+            [[ $(hex_tail "$f" 8) == *"49 45 4e 44 ae 42 60 82"* ]] || { REASON="PNG truncated (no IEND)"; return 1; } ;;
+        gif)
+            [[ $mime == image/gif ]] || { REASON="not a GIF (is $mime)"; return 1; }
+            [[ $(hex_tail "$f" 1) == *"3b"* ]] || { REASON="GIF truncated (no trailer)"; return 1; } ;;
+        webp|bmp|tif|tiff|heic|heif|avif|ico)
+            [[ $mime == image/* ]] || { REASON="not an image (is $mime)"; return 1; } ;;
+        pdf)
+            [[ $mime == application/pdf ]] || { REASON="not a PDF (is $mime)"; return 1; }
+            tail -c 2048 -- "$f" | grep -aq '%%EOF' || { REASON="PDF truncated (no %%EOF)"; return 1; } ;;
+        zip|docx|xlsx|pptx|odt|ods|odp|epub)
+            unzip -tqq -- "$f" >/dev/null 2>&1 || { REASON="corrupt ZIP container"; return 1; } ;;
+        gz|tgz)   gzip -t -- "$f" 2>/dev/null  || { REASON="corrupt gzip"; return 1; } ;;
+        bz2|tbz2) bzip2 -t -- "$f" 2>/dev/null || { REASON="corrupt bzip2"; return 1; } ;;
+        xz|txz)   xz -t -- "$f" 2>/dev/null    || { REASON="corrupt xz"; return 1; } ;;
+        zst)      if command -v zstd >/dev/null; then zstd -tq -- "$f" 2>/dev/null || { REASON="corrupt zstd"; return 1; }; fi ;;
+        tar)      tar -tf "$f" >/dev/null 2>&1 || { REASON="corrupt tar"; return 1; } ;;
+        mp3|flac|wav|ogg|oga|m4a|aac|opus|wma|mp4|mkv|avi|mov|webm|flv|wmv|m4v|mpg|mpeg|3gp)
+            if command -v ffprobe >/dev/null; then
+                ffprobe -v error -- "$f" >/dev/null 2>&1 || { REASON="unreadable media (ffprobe)"; return 1; }
+            elif [[ $mime == text/* ]]; then
+                REASON="not a media file (is $mime)"; return 1
+            fi ;;
+    esac
+    return 0
+}
+
+# ---- naming / moving -------------------------------------------------------
+stamp_for() {
+    local f=$1 t
+    case $DATE_SOURCE in
+        now)   t=$(date +%s) ;;
+        mtime) t=$(stat -c %Y -- "$f") ;;
+        *)     t=$(stat -c %W -- "$f" 2>/dev/null)
+               [[ $t =~ ^[0-9]+$ ]] && [ "$t" -gt 0 ] || t=$(stat -c %Y -- "$f") ;;
+    esac
+    date -d "@$t" +"$DATE_FORMAT"
+}
+move_file() { # src destdir
+    local src=$1 dir=$2 name stamp target n=1
+    name=${src##*/}; stamp=$(stamp_for "$src")
+    mkdir -p -- "$dir" || { log "ERROR cannot create $dir"; return 1; }
+    target="$dir/$stamp-$name"
+    while [ -e "$target" ]; do target="$dir/$stamp-$n-$name"; n=$((n + 1)); done
+    if mv -n -- "$src" "$target"; then log "MOVED   $name -> $target"; else log "ERROR   could not move $name"; fi
+}
+
+# ---- pass 1: collect candidates -------------------------------------------
+declare -A size_before
+now=$(date +%s)
+for f in "$DOWNLOADS"/*; do
+    [ -f "$f" ] && [ ! -L "$f" ] || continue
+    name=${f##*/}
+    [[ $name == *.* ]] || continue
+    ext=${name##*.}; ext=${ext,,}
+    is_partial_ext "$ext" && continue
+    skip=0
+    for s in part crdownload download aria2 tmp opdownload; do
+        [ -e "$f.$s" ] && { skip=1; break; }     # browser/aria2 side-file => still downloading
+    done
+    [ "$skip" = 1 ] && continue
+    mt=$(stat -c %Y -- "$f" 2>/dev/null) || continue
+    [ $((now - mt)) -ge "$MIN_AGE" ] || continue  # modified too recently
+    size_before["$f"]=$(stat -c %s -- "$f")
+done
+[ "${#size_before[@]}" -gt 0 ] || exit 0
+
+# ---- pass 2: confirm stability, in-use, integrity, then move ----------------
+sleep "$WAIT"
+snapshot_open_files
+for f in "${!size_before[@]}"; do
+    [ -f "$f" ] || continue
+    [ "$(stat -c %s -- "$f" 2>/dev/null)" = "${size_before[$f]}" ] || continue   # still growing
+    mt=$(stat -c %Y -- "$f" 2>/dev/null) || continue
+    [ $(( $(date +%s) - mt )) -ge "$MIN_AGE" ] || continue
+    in_use "$f" && continue                                                        # held open by a program
+    name=${f##*/}; ext=${name##*.}; ext=${ext,,}
+
+    if dest=$(dest_for "$ext"); then
+        if validate "$f" "$ext"; then
+            move_file "$f" "$dest"
+        elif [ "$DAMAGED_ACTION" = quarantine ]; then
+            log "DAMAGED $name ($REASON) -> quarantine"
+            move_file "$f" "$DOWNLOADS/Damaged"
+        else
+            key="$f:${size_before[$f]}"
+            grep -Fxq -- "$key" "$STATE_DIR/reported" 2>/dev/null || { log "DAMAGED $name ($REASON) left in place"; echo "$key" >> "$STATE_DIR/reported"; }
+        fi
+    elif [ "$UNKNOWN_FILES" = misc ]; then
+        move_file "$f" "$DOWNLOADS/Other"
+    fi
+done
+exit 0
